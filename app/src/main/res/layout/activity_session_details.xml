@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Main session screen layout -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/screen_padding"
+    android:background="@drawable/bg_gradient"
+    >
+
+    <!-- Circular avatar with subtle border / ring behind it -->
+    <!-- NOTE: replace drawable avatar with your uploaded image.
+         Your uploaded file path: /mnt/data/WhatsApp Image 2025-11-22 at 09.45.15_5d8f0e8b.jpg
+         Copy it to res/drawable/avatar.jpg or load via file URI at runtime. -->
+    <FrameLayout
+        android:id="@+id/avatar_container"
+        android:layout_width="@dimen/avatar_outer_size"
+        android:layout_height="@dimen/avatar_outer_size"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/top_margin_avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- ring / circle background -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/avatar_ring" />
+
+        <!-- circular cropped image; using Material ShapeableImageView (supported by Material library) -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/avatar_inner_size"
+            android:layout_height="@dimen/avatar_inner_size"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.CircleImage" />
+
+    </FrameLayout>
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tutor_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/name_priya"
+        android:textSize="32sp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/text_accent"
+        android:letterSpacing="0.02"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/avatar_container"
+        android:layout_marginTop="@dimen/space_small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Subtitle / level -->
+    <TextView
+        android:id="@+id/tutor_level"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/level_intermediate_french"
+        android:textSize="18sp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tutor_name"
+        android:layout_marginTop="@dimen/space_xsmall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Card: Date -->
+    <LinearLayout
+        android:id="@+id/card_date"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/card_height"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/card_padding_h"
+        android:paddingEnd="@dimen/card_padding_h"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/space_large"
+        android:background="@drawable/card_bg"
+        app:layout_constraintTop_toBottomOf="@id/tutor_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_calendar"
+            android:contentDescription="@string/cd_calendar"
+            android:alpha="0.9" />
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date_example"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginStart="@dimen/space_medium"
+            android:textColor="@color/text_accent" />
+
+    </LinearLayout>
+
+    <!-- Card: Time -->
+    <LinearLayout
+        android:id="@+id/card_time"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/card_height"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/card_padding_h"
+        android:paddingEnd="@dimen/card_padding_h"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/space_medium"
+        android:background="@drawable/card_bg"
+        app:layout_constraintTop_toBottomOf="@id/card_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_clock"
+            android:contentDescription="@string/cd_clock"
+            android:alpha="0.9" />
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/time_example"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginStart="@dimen/space_medium"
+            android:textColor="@color/text_accent" />
+
+    </LinearLayout>
+
+    <!-- Card: Mode -->
+    <LinearLayout
+        android:id="@+id/card_mode"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/card_height"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/card_padding_h"
+        android:paddingEnd="@dimen/card_padding_h"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/space_medium"
+        android:background="@drawable/card_bg"
+        app:layout_constraintTop_toBottomOf="@id/card_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_video"
+            android:contentDescription="@string/cd_video"
+            android:alpha="0.9" />
+
+        <TextView
+            android:id="@+id/mode_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mode_online"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginStart="@dimen/space_medium"
+            android:textColor="@color/text_accent" />
+
+    </LinearLayout>
+
+    <!-- Cancel Session Button (neon outline) -->
+    <RelativeLayout
+        android:id="@+id/btn_cancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:background="@drawable/neon_button"
+        app:layout_constraintTop_toBottomOf="@id/card_mode"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_session"
+            android:textSize="22sp"
+            android:fontFamily="@font/nunito_semibold"
+            android:textColor="@color/text_accent"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/screen_padding"
+    android:background="@drawable/bg_gradient">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/help_support"
+        android:textAllCaps="true"
+        android:textSize="@dimen/title_size"
+        android:textColor="@color/teal_light"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <!-- Vertical container for cards -->
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/container_top_margin"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- FAQ Card -->
+        <LinearLayout
+            android:id="@+id/faq_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height_small"
+            android:orientation="vertical"
+            android:padding="@dimen/card_padding"
+            android:background="@drawable/neon_card"
+            android:layout_marginBottom="@dimen/card_margin">
+
+            <TextView
+                android:id="@+id/faq_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/faqs"
+                android:textColor="@color/teal_light"
+                android:textSize="@dimen/card_title_size"/>
+
+            <TextView
+                android:id="@+id/faq_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/faqs_sub"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/card_sub_size"
+                android:layout_marginTop="@dimen/sub_margin_top"/>
+
+        </LinearLayout>
+
+        <!-- Contact support card -->
+        <LinearLayout
+            android:id="@+id/contact_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height_medium"
+            android:orientation="vertical"
+            android:padding="@dimen/card_padding"
+            android:background="@drawable/neon_card"
+            android:layout_marginBottom="@dimen/card_margin">
+
+            <TextView
+                android:id="@+id/contact_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_support"
+                android:textColor="@color/teal_light"
+                android:textSize="@dimen/card_title_size"/>
+
+            <!-- Buttons row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/button_row_margin"
+                android:gravity="center"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:id="@+id/email_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/neon_button_outline"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email_us"
+                        android:textColor="@color/teal_light"
+                        android:textSize="@dimen/button_text_size"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/chat_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_weight="1"
+                    android:background="@drawable/neon_button_outline"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chat_with_us"
+                        android:textSize="@dimen/button_text_size"
+                        android:textColor="@color/teal_light"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Report a problem card -->
+        <LinearLayout
+            android:id="@+id/report_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_height_small"
+            android:orientation="vertical"
+            android:padding="@dimen/card_padding"
+            android:background="@drawable/neon_card"
+            android:layout_marginBottom="@dimen/card_margin">
+
+            <TextView
+                android:id="@+id/report_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/report_problem"
+
+                android:textColor="@color/teal_light"
+                android:textSize="@dimen/card_title_size"/>
+
+            <TextView
+                android:id="@+id/report_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/report_sub"
+
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/card_sub_size"
+                android:layout_marginTop="@dimen/sub_margin_top"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

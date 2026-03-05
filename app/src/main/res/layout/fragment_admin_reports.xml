@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin Reports"
+            android:textColor="@color/neon_green"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"/>
+
+        <!-- CARD 1 : Active Users -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="4.5k"
+                android:textColor="@color/neon_green"
+                android:textSize="26sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Users"
+                android:textColor="@color/neon_green_dim"
+                android:textSize="18sp"
+                />
+        </LinearLayout>
+
+        <!-- CARD 2 : Sessions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1.2k"
+                android:textColor="@color/neon_green"
+                android:textSize="26sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sessions"
+                android:textColor="@color/neon_green_dim"
+                android:textSize="18sp"
+                />
+        </LinearLayout>
+
+        <!-- CARD 3 : Certificates -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="896"
+                android:textColor="@color/neon_green"
+                android:textSize="26sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Certificates\nIssued"
+                android:textColor="@color/neon_green_dim"
+                android:textSize="18sp"
+                />
+        </LinearLayout>
+
+        <!-- FEEDBACK OVERVIEW -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback Overview"
+            android:textColor="@color/neon_green"
+            android:textSize="26sp"
+            android:paddingBottom="10dp"/>
+
+        <!-- Feedback Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Row Template: Stars + ProgressBar + Count -->
+            <!-- 5-star -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="★★★★★"
+                    android:textColor="@color/neon_green_dim"
+                    android:textSize="14sp"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progressbar_neon"
+                    android:progress="80"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="65"
+                    android:textColor="@color/neon_green"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+            <!-- 4-star -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="★★★★"
+                    android:textColor="@color/neon_green_dim"
+                    android:textSize="14sp"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progressbar_neon"
+                    android:progress="10"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="46"
+                    android:textColor="@color/neon_green"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+            <!-- 3-star -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="★★★"
+                    android:textColor="@color/neon_green_dim"
+                    android:textSize="14sp"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progressbar_neon"
+                    android:progress="35"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="78"
+                    android:textColor="@color/neon_green"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+            <!-- 2-star -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="★★"
+                    android:textColor="@color/neon_green_dim"
+                    android:textSize="14sp"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progressbar_neon"
+                    android:progress="90"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="325"
+                    android:textColor="@color/neon_green"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+            <!-- 1-star -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="★"
+                    android:textColor="@color/neon_green_dim"
+                    android:textSize="14sp"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1"
+                    android:progressDrawable="@drawable/progressbar_neon"
+                    android:progress="20"/>
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="601"
+                    android:textColor="@color/neon_green"
+                    android:gravity="end"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

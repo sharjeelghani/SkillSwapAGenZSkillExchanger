@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Header Row -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skill Test"
+                android:textSize="32sp"
+                android:textColor="@color/teal_light"
+                 />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp">
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="40dp"
+                android:progressDrawable="@drawable/custom_progress_bg"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingBottom="3dp">
+                <TextView
+                    android:id="@+id/loading_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Hurry Up..."
+                    android:textColor="#4B4B4B"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:fontFamily="@font/nunito_bold"
+                    android:paddingStart="10dp"
+                    android:text="0"
+                    android:layout_toEndOf="@+id/loading_id"
+                    android:textColor="#4B4B4B"
+                    android:textSize="16dp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+        <!-- Question Card -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Which of the following is a vector graphics editor?"
+            android:textSize="18sp"
+            android:textColor="@color/teal_light"
+            android:padding="18dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_input_outline"
+             />
+
+        <!-- Options -->
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/optPhotoshop"
+                style="@style/NeonRadio"
+                android:text="Adobe Photoshop" />
+
+            <RadioButton
+                android:id="@+id/optFigma"
+                style="@style/NeonRadio"
+                android:checked="true"
+                android:text="Figma" />
+
+            <RadioButton
+                android:id="@+id/optSketch"
+                style="@style/NeonRadio"
+                android:text="Sketch" />
+
+            <RadioButton
+                android:id="@+id/optInvision"
+                style="@style/NeonRadio"
+                android:text="InVision" />
+        </RadioGroup>
+
+        <!-- Submit Button -->
+        <TextView
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="36dp"
+            android:text="SUBMIT"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textColor="@color/teal_light"
+            android:background="@drawable/neon_button_outline"
+            />
+
+    </LinearLayout>
+</ScrollView>

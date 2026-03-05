@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#02131C">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <!-- TOP TITLE -->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Upload CNIC front &amp; back and take a live selfie to verify your identity."
+                android:textColor="#7AF2DD"
+                android:textSize="18sp"
+                android:lineSpacingExtra="4dp" />
+
+            <!-- CNIC CARDS ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="32dp"
+                android:weightSum="2">
+
+                <!-- CNIC FRONT -->
+                <LinearLayout
+                    android:id="@+id/card_cnic_front"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_cnic_card"
+                    android:padding="20dp"
+                    android:layout_marginEnd="12dp">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_cnic_front"
+                        android:layout_marginBottom="16dp"
+                        app:tint="#27F3B3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload CNIC\nFront"
+                        android:gravity="center"
+                        android:textColor="#F4FDFB"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- CNIC BACK -->
+                <LinearLayout
+                    android:id="@+id/card_cnic_back"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_cnic_card"
+                    android:padding="20dp"
+                    android:layout_marginStart="12dp">
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_cnic_back"
+                        android:layout_marginBottom="16dp"
+                        app:tint="#27F3B3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload CNIC\nBack"
+                        android:gravity="center"
+                        android:textColor="#F4FDFB"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- SELFIE CARD -->
+            <LinearLayout
+                android:id="@+id/card_selfie"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_selfie_card"
+                android:padding="24dp">
+
+                <!-- Avatar circle -->
+                <FrameLayout
+                    android:layout_width="140dp"
+                    android:layout_height="140dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_avatar_ring" />
+
+                    <ImageView
+                        android:id="@+id/img_profile"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/man"
+                        android:background="@drawable/bg_avatar_circle" />
+                </FrameLayout>
+
+                <!-- Name -->
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Sharjeel Ghani"
+                    android:textColor="#F4FDFB"
+                    android:textSize="18sp" />
+
+                <!-- Capture button -->
+                <TextView
+                    android:id="@+id/btn_capture"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:text="Capture Selfie"
+                    android:textColor="#7AF2DD"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_selfie_button" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/btn_verify"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="Verify"
+                android:textColor="#7AF2DD"
+                android:textSize="16sp"
+                android:background="@drawable/bg_selfie_button" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

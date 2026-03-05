@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#02131C"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- PROFILE IMAGE -->
+        <FrameLayout
+            android:layout_width="130dp"
+            android:layout_height="130dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_avatar_ring"/>
+
+            <ImageView
+                android:id="@+id/img_profile"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center"
+                android:src="@drawable/man"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_avatar_circle"/>
+        </FrameLayout>
+
+        <!-- NAME -->
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Sharjeel Ghani"
+            android:textColor="#7AF2DD"
+            android:textSize="26sp"
+            android:textStyle="bold"/>
+
+        <!-- EMAIL -->
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sharjeel.ghani@example.com"
+            android:textColor="#7AF2DD"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp"/>
+
+        <!-- PENDING BADGE -->
+        <TextView
+            android:id="@+id/tv_pending"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="PENDING"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:background="@drawable/bg_pending"
+            android:textStyle="bold"/>
+
+        <!-- CARD -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_skill_card"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_marginTop="28dp">
+
+            <TextView
+                android:text="Skill to Offer"
+                android:textColor="#7AF2DD"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <!-- SKILL ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="18dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/ic_python"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Python Programming"
+                    android:textColor="#C3FFF9"
+                    android:textSize="20sp"
+                    android:layout_marginStart="16dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- CATEGORY + LEVEL -->
+            <TextView
+                android:text="Category"
+                android:textColor="#7AF2DD"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:text="Programming"
+                android:textColor="#FFFFFF"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:text="Level"
+                android:textColor="#7AF2DD"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:text="Expert"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"/>
+
+            <!-- DESCRIPTION -->
+            <TextView
+                android:text="Description"
+                android:textColor="#7AF2DD"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:text="Skilled in developing Python applications"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="2dp"/>
+
+            <!-- BUTTON ROW -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/btn_reject"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="Reject"
+                    android:textColor="#27F3B3"
+                    android:textSize="18sp"
+                    android:background="@drawable/bg_reject"/>
+
+                <TextView
+                    android:id="@+id/btn_approve"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center"
+                    android:text="Approve"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:background="@drawable/bg_approve"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

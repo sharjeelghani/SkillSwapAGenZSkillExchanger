@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- dark translucent fill -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/button_fill_trans"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- neon stroke -->
+    <item android:top="0dp" android:left="0dp" android:right="0dp" android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <transparent android:color="@android:color/transparent"/>
+            <stroke android:width="1.8dp" android:color="@color/neon_stroke"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+</layer-list>

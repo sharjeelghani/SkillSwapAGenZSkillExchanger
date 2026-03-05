@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:dividerPadding="12dp"
+        android:showDividers="none">
+
+        <!-- Active Users Card -->
+        <include
+            layout="@layout/item_stat_card"
+            android:id="@+id/card_active_users" />
+
+        <!-- Sessions Card -->
+        <include
+            layout="@layout/item_stat_card_sessions"
+            android:id="@+id/card_sessions" />
+
+        <!-- Certificates Card -->
+        <include
+            layout="@layout/item_stat_card_certificates"
+            android:id="@+id/card_certificates" />
+
+        <!-- SECTION TITLE -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Growth"
+            android:textSize="20sp"
+            android:textColor="@color/teal_text"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Chart Container -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:background="@drawable/card_bg"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/chart_user_growth" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

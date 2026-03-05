@@ -1,0 +1,51 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Skill Swap A GenZ Skill Exchanger</string>
+    <!-- content descriptions -->
+    <string name="name_priya">Priya</string>
+    <string name="level_intermediate_french">Intermediate French</string>
+    <string name="date_example">April 23, 2024</string>
+    <string name="time_example">2:00 PM - 3:00 PM</string>
+    <string name="mode_online">Online</string>
+    <string name="cancel_session">Cancel Session</string>
+    <string name="cd_calendar">calendar</string>
+    <string name="cd_clock">clock</string>
+    <string name="cd_video">video mode</string>
+    <string name="help_support">HELP &amp; SUPPORT</string>
+    <string name="faqs">FAQs</string>
+    <string name="faqs_sub">Browse through common questions.</string>
+
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="contact_support">CONTACT SUPPORT</string>
+    <string name="email_us">Email Us</string>
+    <string name="chat_with_us">Chat With Us</string>
+
+    <string name="report_problem">REPORT A PROBLEM</string>
+    <string name="report_sub">Let us know about any issues youre experiencing</string>
+    <string name="report_user">Report a User</string>
+    <string name="report_user_sub">Let us know what the problem is.</string>
+
+    <string name="opt_inappropriate">Inappropriate content</string>
+    <string name="opt_bullying">Harassment or bullying</string>
+    <string name="opt_spam">Scam or spam</string>
+    <string name="opt_impersonation">Impersonation</string>
+    <string name="opt_other">Other</string>
+
+    <string name="additional_details">Additional details</string>
+    <string name="submit">Submit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="countries_array">
+        <item>Select Country</item>
+        <item>United States</item>
+        <item>United Kingdom</item>
+        <item>Canada</item>
+        <item>Australia</item>
+        <item>India</item>
+        <item>Pakistan</item>
+        <item>Germany</item>
+        <item>France</item>
+        <item>Other</item>
+    </string-array>
+</resources>

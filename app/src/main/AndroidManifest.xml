@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SkillSwapAGenZSkillExchanger"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.DataCllectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SkillTestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.AdminMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SessionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ProfileApprovalAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.CertificateApprovalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SkillApprovalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ActivityCNICVarification"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Session_Reminder_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Admin_Reports_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Report_User_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Help_Support_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Dashboard_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LauncherScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

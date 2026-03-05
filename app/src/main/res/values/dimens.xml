@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="top_margin_avatar">24dp</dimen>
+
+    <dimen name="avatar_outer_size">140dp</dimen>
+    <dimen name="avatar_inner_size">120dp</dimen>
+
+    <dimen name="name_text">32dp</dimen>
+    <dimen name="subtitle_text">18dp</dimen>
+    <dimen name="chip_corner">14dp</dimen>
+    <dimen name="chip_padding_h">12dp</dimen>
+    <dimen name="chip_padding_v">6dp</dimen>
+    <dimen name="card_height">64dp</dimen>
+    <dimen name="card_padding_h">20dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
+    <dimen name="icon_size">28dp</dimen>
+    <dimen name="card_text">18dp</dimen>
+
+    <dimen name="space_xsmall">4dp</dimen>
+    <dimen name="space_small">8dp</dimen>
+    <dimen name="space_medium">12dp</dimen>
+    <dimen name="space_large">20dp</dimen>
+    <dimen name="space_xlarge">28dp</dimen>
+
+    <dimen name="button_radius">22dp</dimen>
+    <dimen name="button_text">22dp</dimen>
+    <dimen name="container_top_margin">28dp</dimen>
+
+    <dimen name="title_size">30dp</dimen>
+
+    <dimen name="card_height_small">110dp</dimen>
+    <dimen name="card_height_medium">160dp</dimen>
+    <dimen name="card_padding">18dp</dimen>
+    <dimen name="card_margin">18dp</dimen>
+
+
+
+    <dimen name="card_title_size">22dp</dimen>
+    <dimen name="card_sub_size">14dp</dimen>
+    <dimen name="sub_margin_top">8dp</dimen>
+
+
+    <dimen name="button_row_margin">18dp</dimen>
+    <dimen name="button_dpacing">12dp</dimen>
+    <dimen name="button_text_size">16dp</dimen>
+
+    <dimen name="activity_margin">24dp</dimen>
+    <dimen name="top_margin">48dp</dimen>
+    <dimen name="card_outer_padding">6dp</dimen>
+    <dimen name="card_inner_spacing">10dp</dimen>
+    <dimen name="card_inner_padding">0dp</dimen>
+
+    <dimen name="card_content_padding">28dp</dimen>
+    <dimen name="card_content_padding_top">26dp</dimen>
+
+
+    <dimen name="subtitle_size">18dp</dimen>
+    <dimen name="time_size">36dp</dimen>
+
+    <dimen name="title_top_margin">6dp</dimen>
+    <dimen name="subtitle_top_margin">18dp</dimen>
+    <dimen name="time_top_margin">22dp</dimen>
+    <dimen name="time_bottom_margin">12dp</dimen>
+
+    <dimen name="button_container_margin">16dp</dimen>
+    <dimen name="button_container_bottom_margin">22dp</dimen>
+
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="card_corner_radius">28dp</dimen>
+
+
+</resources>
