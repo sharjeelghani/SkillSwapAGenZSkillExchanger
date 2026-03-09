@@ -2,6 +2,7 @@ package com.sharjeelsoft.skillswapagenzskillexchanger.auth;
 
 public class HelperClass {
     String username, fullName, email, Country, password, contact, dateofbirth;
+    boolean verified;
 
     public String getUsername() {
         return username;
@@ -59,6 +60,14 @@ public class HelperClass {
         this.dateofbirth = dateofbirth;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
     public HelperClass(String username, String fullName, String email, String password, String contact, String dateofbirth, String country) {
         this.username = username;
         this.fullName = fullName;
@@ -67,6 +76,18 @@ public class HelperClass {
         this.password = password;
         this.contact = contact;
         this.dateofbirth = dateofbirth;
+        this.verified = false;
+    }
+
+    public HelperClass(String username, String fullName, String email, String password, String contact, String dateofbirth, String country, boolean verified) {
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.Country = country;
+        this.password = password;
+        this.contact = contact;
+        this.dateofbirth = dateofbirth;
+        this.verified = verified;
     }
 
     public HelperClass() {
