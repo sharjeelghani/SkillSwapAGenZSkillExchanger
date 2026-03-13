@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tvSelectTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose a Skill to Test"
+        android:textColor="@color/teal_light"
+        android:textSize="28sp"
+        android:fontFamily="@font/nunito_semibold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="To verify your profile, you must take a test in at least one of your teaching skills."
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectTitle" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/btnStartTest"
+        app:layout_constraintTop_toBottomOf="@id/tvSub">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cgSkillsToTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacing="12dp"
+            app:singleSelection="true" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/btnStartTest"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_btn_view_profile"
+        android:gravity="center"
+        android:text="Start Test"
+        android:textColor="@color/teal_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

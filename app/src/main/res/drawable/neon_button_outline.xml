@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state (Checked) -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- bright mint fill -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/mint_primary"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+            <!-- white stroke for accent -->
+            <item>
+                <shape android:shape="rectangle">
+                    <stroke android:width="1.8dp" android:color="@color/white"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
 
-    <!-- dark translucent fill -->
+    <!-- Default state -->
     <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@color/button_fill_trans"/>
-            <corners android:radius="12dp"/>
-        </shape>
+        <layer-list>
+            <!-- dark translucent fill -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/button_fill_trans"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+            <!-- neon stroke -->
+            <item>
+                <shape android:shape="rectangle">
+                    <stroke android:width="1.8dp" android:color="@color/neon_stroke"/>
+                    <corners android:radius="12dp"/>
+                </shape>
+            </item>
+        </layer-list>
     </item>
-
-    <!-- neon stroke -->
-    <item android:top="0dp" android:left="0dp" android:right="0dp" android:bottom="0dp">
-        <shape android:shape="rectangle">
-            <transparent android:color="@android:color/transparent"/>
-            <stroke android:width="1.8dp" android:color="@color/neon_stroke"/>
-            <corners android:radius="12dp"/>
-        </shape>
-    </item>
-
-</layer-list>
+</selector>

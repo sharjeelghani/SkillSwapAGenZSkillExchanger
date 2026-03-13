@@ -16,7 +16,7 @@
         <item name="android:drawableLeft">@drawable/radio_unchecked</item>
     </style>
     <style name="SelectableChip" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/bg_chip</item>
+        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
         <item name="chipStrokeColor">@color/mint_primary</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipCornerRadius">@dimen/chip_corner</item>

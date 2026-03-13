@@ -32,11 +32,11 @@
         <item name="android:textAllCaps">false</item>
     </style>
     <style name="SelectableChip" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="chipBackgroundColor">@color/bg_chip</item>
+        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
         <item name="chipStrokeColor">@color/mint_primary</item>
         <item name="chipStrokeWidth">1dp</item>
         <item name="chipCornerRadius">@dimen/chip_corner</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColor">@color/chip_text_selector</item>
         <item name="chipIconVisible">false</item>
         <item name="android:paddingLeft">@dimen/chip_padding_h</item>
         <item name="android:paddingRight">@dimen/chip_padding_h</item>
@@ -67,8 +67,8 @@
         <item name="android:padding">16dp</item>
         <item name="android:layout_marginBottom">14dp</item>
         <item name="android:background">@drawable/neon_button_outline</item>
-        <item name="android:textColor">@color/teal_light</item>
+        <item name="android:textColor">@color/radio_text_selector</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:buttonTint">@color/teal_light</item>
+        <item name="android:buttonTint">@color/radio_button_tint_selector</item>
     </style>
 </resources>
