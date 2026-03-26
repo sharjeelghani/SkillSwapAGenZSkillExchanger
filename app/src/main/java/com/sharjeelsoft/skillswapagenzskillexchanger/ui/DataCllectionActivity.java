@@ -13,14 +13,24 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataCllectionActivity extends AppCompatActivity {
     private static final String TAG = "UserOnboarding";
@@ -32,6 +42,10 @@ public class DataCllectionActivity extends AppCompatActivity {
     private TextView tvAttachedCount, btnContinue;
 
     private final List<Uri> attachedUris = new ArrayList<>();
+    private MySharedprefsClass sharedPrefs;
+    private DatabaseReference userRef;
+    private String username;
+    private boolean isFirstTime = true;
 
     // Modern Activity Result API
     private final ActivityResultLauncher<Intent> pickFilesLauncher =
@@ -58,6 +72,84 @@ public class DataCllectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_cllection);
 
+        sharedPrefs = new MySharedprefsClass(this);
+        String prefsUsername = sharedPrefs.getStringValue("username");
+        String intentUsername = getIntent().getStringExtra("username");
+
+        // Determine which username to check
+        String candidateUsername = null;
+        if (intentUsername != null && !intentUsername.isEmpty()) {
+            candidateUsername = intentUsername;
+        } else if (!prefsUsername.equals("new_user")) {
+            candidateUsername = prefsUsername;
+        }
+
+        if (candidateUsername == null) {
+            Toast.makeText(this, "User session not found. Please login again.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        final String finalUsername = candidateUsername;
+
+        // --- Debug Condition ---
+        if ("Abubakar Ch".equals(finalUsername)) {
+            username = finalUsername;
+            fetchAndInitialize(finalUsername);
+            return;
+        }
+        // -----------------------
+
+        // Check existence in both Realtime Database and SharedPrefs
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(finalUsername);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean existsInDB = snapshot.exists();
+                boolean existsInPrefs = !sharedPrefs.getStringValue("username").equals("new_user");
+
+                // If it exists in at least one of them, then activity should not be finished
+                if (existsInDB || existsInPrefs) {
+                    username = finalUsername;
+                    initializeActivity(snapshot);
+                } else {
+                    Toast.makeText(DataCllectionActivity.this, "User session not found. Please login again.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // On error, fallback to SharedPrefs check as a safety measure
+                if (!sharedPrefs.getStringValue("username").equals("new_user")) {
+                    username = finalUsername;
+                    fetchAndInitialize(finalUsername);
+                } else {
+                    Toast.makeText(DataCllectionActivity.this, "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+    }
+
+    private void fetchAndInitialize(String name) {
+        FirebaseDatabase.getInstance().getReference("user").child(name)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        initializeActivity(snapshot);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        initializeActivity(null);
+                    }
+                });
+    }
+
+    private void initializeActivity(DataSnapshot snapshot) {
+        userRef = FirebaseDatabase.getInstance().getReference("user").child(username);
+
         rgGender = findViewById(R.id.rgGender);
         cgTeaching = findViewById(R.id.cgTeaching);
         cgLearning = findViewById(R.id.cgLearning);
@@ -69,8 +161,70 @@ public class DataCllectionActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btnContinue);
 
         btnAttach.setOnClickListener(v -> openFilePicker());
-
         btnContinue.setOnClickListener(v -> onSubmit());
+
+        if (snapshot != null && snapshot.exists()) {
+            populateData(snapshot);
+        }
+    }
+
+    private void populateData(DataSnapshot snapshot) {
+        // Populate Gender
+        if (snapshot.hasChild("gender")) {
+            isFirstTime = false;
+            String gender = snapshot.child("gender").getValue(String.class);
+            if ("Male".equals(gender)) rgGender.check(R.id.rbMale);
+            else if ("Female".equals(gender)) rgGender.check(R.id.rbFemale);
+            else if ("Other".equals(gender)) rgGender.check(R.id.rbOther);
+
+            // Change UI text if data exists
+            TextView tvTitle = findViewById(R.id.tvTitle);
+            if (tvTitle != null) tvTitle.setText("Edit Your Profile");
+            btnContinue.setText("Update Profile");
+        }
+
+        // Populate Teaching Skills
+        if (snapshot.hasChild("teachingSkills")) {
+            List<String> teaching = new ArrayList<>();
+            for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
+                teaching.add(child.getValue(String.class));
+            }
+            selectChips(cgTeaching, teaching);
+        }
+
+        // Populate Learning Interests
+        if (snapshot.hasChild("learningInterests")) {
+            List<String> learning = new ArrayList<>();
+            for (DataSnapshot child : snapshot.child("learningInterests").getChildren()) {
+                learning.add(child.getValue(String.class));
+            }
+            selectChips(cgLearning, learning);
+        }
+
+        // Populate Background History
+        if (snapshot.hasChild("education")) {
+            etQualifications.setText(snapshot.child("education").getValue(String.class));
+        }
+        if (snapshot.hasChild("currentJob")) {
+            etCurrentJob.setText(snapshot.child("currentJob").getValue(String.class));
+        }
+        if (snapshot.hasChild("experience")) {
+            Object exp = snapshot.child("experience").getValue();
+            if (exp != null) etExperience.setText(String.valueOf(exp));
+        }
+    }
+
+    private void selectChips(ChipGroup group, List<String> selectedValues) {
+        if (selectedValues == null) return;
+        int count = group.getChildCount();
+        for (int i = 0; i < count; i++) {
+            if (group.getChildAt(i) instanceof Chip) {
+                Chip chip = (Chip) group.getChildAt(i);
+                if (selectedValues.contains(chip.getText().toString())) {
+                    chip.setChecked(true);
+                }
+            }
+        }
     }
 
     private void openFilePicker() {
@@ -114,20 +268,44 @@ public class DataCllectionActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (teaching.isEmpty()) {
+            Toast.makeText(this, "Please select at least one teaching skill", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // For demo show collected data via log and a toast summary:
-        Log.d(TAG, "Gender: " + gender);
-        Log.d(TAG, "Teaching: " + teaching.toString());
-        Log.d(TAG, "Learning: " + learning.toString());
-        Log.d(TAG, "Qualifications: " + qualifications);
-        Log.d(TAG, "CurrentJob: " + currentJob);
-        Log.d(TAG, "Experience: " + experience);
-        Log.d(TAG, "Attached files: " + attachedUris.size());
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("gender", gender);
+        updates.put("teachingSkills", teaching);
+        updates.put("learningInterests", learning);
+        updates.put("education", qualifications);
+        updates.put("currentJob", currentJob);
+        updates.put("experience", experience);
 
-        String preview = "Saved: " + gender + " · Teach: " + teaching.size() + " · Learn: " + learning.size();
-        Toast.makeText(this, preview, Toast.LENGTH_LONG).show();
+        btnContinue.setEnabled(false);
 
-        // TODO: send data to server / store locally
+        userRef.updateChildren(updates).addOnCompleteListener(task -> {
+            btnContinue.setEnabled(true);
+            if (task.isSuccessful()) {
+                if (isFirstTime) {
+                    Toast.makeText(DataCllectionActivity.this, "Profile built successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DataCllectionActivity.this, SkillSelectionActivity.class);
+                    intent.putStringArrayListExtra("teachingSkills", new ArrayList<>(teaching));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(DataCllectionActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DataCllectionActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                finish();
+            } else {
+                String error = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                Toast.makeText(DataCllectionActivity.this, "Failed to save: " + error, Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Database Error: ", task.getException());
+            }
+        }).addOnFailureListener(e -> {
+            btnContinue.setEnabled(true);
+            Toast.makeText(DataCllectionActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        });
     }
 
     private List<String> getSelectedChips(ChipGroup group) {

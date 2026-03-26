@@ -126,84 +126,98 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Graphic Design" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="UI/UX Design" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Figma Designing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Adobe Photoshop" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Adobe Illustrator" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Canva Designing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Video Editing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Motion Graphics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Animation (2D/3D)" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Logo Design" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Illustration and Drawing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Photography" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Photo Editing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Filmmaking Basics" />
@@ -228,72 +242,84 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Web Development (HTML/CSS/JS)" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="App Development (Android/Kotlin)" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Python Programming" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Java Programming" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Database Basics (SQL/Firebase)" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cybersecurity Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="WordPress Development" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Shopify Store Development" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AI Prompt Engineering" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Machine Learning Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Data Analysis" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cloud Computing Fundamentals" />
@@ -318,54 +344,63 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Math tutoring" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Physics tutoring" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chemistry tutoring" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Content writing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Research writing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Assignment guidance" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Presentation skills" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Academic proofreading" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MS Office (Word/Excel/PowerPoint)" />
@@ -390,42 +425,49 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="English Speaking" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="IELTS/PTE Prep" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Urdu Writing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Arabic Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Chinese Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Public Speaking" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Debate and Confidence Building" />
@@ -450,60 +492,70 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fiverr Gig Creation" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Upwork Profile Setup" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SEO Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Social Media Marketing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Digital Marketing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="E-commerce Management" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dropshipping" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amazon VA" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Brand Building" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Copywriting for Ads" />
@@ -528,36 +580,42 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Singing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guitar Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Piano Basics" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Beat Making" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Music Production" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Acting" />
@@ -582,30 +640,35 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fitness Training" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yoga/Meditation" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Diet Planning" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Productivity Skills" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time Management" />
@@ -630,31 +693,35 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="Cooking/Baking" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Makeup and Beauty" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hair Styling" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DIY Crafts" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home Organizing" />
@@ -679,30 +746,35 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CV/Resume Writing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Interview Preparation" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Portfolio Building" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Career Guidance" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sales Skills" />
@@ -727,36 +799,42 @@
                     android:background="@color/divider" />
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AI Content Creation" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="YouTube Video Creation" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TikTok/Reels Editing" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Influencer Skills" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Game Development" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3D Printing Basics" />
@@ -791,84 +869,98 @@
                 <!-- use recommended interest tags and repeats of major categories -->
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Technology" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Art and Design" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Entrepreneurship" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fitness" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Fashion" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Music" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gaming" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Personal Development" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nature" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Travel" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Photography" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Education" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Finance" />
 
                 <com.google.android.material.chip.Chip
                     style="@style/SelectableChip"
+                    android:checkable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cooking" />

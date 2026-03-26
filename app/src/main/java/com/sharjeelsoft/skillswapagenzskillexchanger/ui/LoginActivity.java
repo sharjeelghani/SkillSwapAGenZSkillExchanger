@@ -121,10 +121,13 @@ public class LoginActivity extends AppCompatActivity {
                     // Iterate through users with this email (usually one)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         String passwordFromDB = userSnapshot.child("password").getValue(String.class);
+                        String usernameFromDB = userSnapshot.child("username").getValue(String.class);
 
                         if(Objects.equals(passwordFromDB, Password)){
                             userFound = true;
                             loginpassword.setError(null);
+                            
+                            loginprefsClassLog.saveStringValue("username", usernameFromDB);
 
                             if (Email.equals("sharjeel@admin.com"))
                             {

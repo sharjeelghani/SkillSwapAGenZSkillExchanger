@@ -35,6 +35,9 @@
             android:name=".ui.SkillTestActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.SkillSelectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AdminMainActivity"
             android:exported="false" />
         <activity
@@ -46,15 +49,15 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.ProfileApprovalAdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.CertificateApprovalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.SkillApprovalActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ui.ProfileApprovalAdminActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".ui.CertificateApprovalActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".ui.SkillApprovalActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ui.SignUpActivity"
             android:exported="false" />
@@ -67,18 +70,18 @@
         <activity
             android:name=".ui.Session_Reminder_Activity"
             android:exported="false" />
-        <activity
-            android:name=".ui.Admin_Reports_Activity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ui.Admin_Reports_Activity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ui.Report_User_Activity"
             android:exported="false" />
         <activity
             android:name=".ui.Help_Support_Activity"
             android:exported="false" />
-        <activity
-            android:name=".ui.Dashboard_Activity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".ui.Dashboard_Activity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ui.SearchActivity"
             android:exported="false" />

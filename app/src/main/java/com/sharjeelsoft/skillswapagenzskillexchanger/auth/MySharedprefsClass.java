@@ -29,9 +29,10 @@ public class MySharedprefsClass {
     public void saveStringValue(String name ,String value) {
         editor.putString(name, value);
         editor.apply();
+
     }
 
     public String getStringValue(String name) {
-        return sharedPreferences.getString(name, "new_user");
+        return sharedPreferences.getString(name, "Sharjeel Ghani");
     }
 }
