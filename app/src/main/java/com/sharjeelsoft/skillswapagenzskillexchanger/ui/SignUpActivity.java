@@ -36,6 +36,7 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -64,9 +65,8 @@ public class SignUpActivity extends AppCompatActivity {
     DatabaseReference references;
 
     private String generatedOtp;
-    // Replace with your actual Postmark Server Token and verified Sender Email
-    private final String POSTMARK_SERVER_TOKEN = "YOUR_POSTMARK_SERVER_TOKEN"; 
-    private final String FROM_EMAIL = "your-verified@email.com"; 
+    private final String MAILTRAP_TOKEN = "5b87d41e19497497d94fac63e9d4cfa9";
+    private final OkHttpClient client = new OkHttpClient();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -192,34 +192,31 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void sendOtpEmail(String userEmail, String userName, String fullNameText, String pass, String cont, String dob, String country) {
         generatedOtp = String.format("%06d", new Random().nextInt(999999));
-        
-        OkHttpClient client = new OkHttpClient();
+
         MediaType mediaType = MediaType.parse("application/json");
-        
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("From", FROM_EMAIL);
-            jsonBody.put("To", userEmail);
-            jsonBody.put("Subject", "Skill Swap Verification Code");
-            jsonBody.put("HtmlBody", "<h3>Verification Code</h3><p>Your 6-digit verification code is: <b>" + generatedOtp + "</b></p>");
-            jsonBody.put("MessageStream", "outbound");
+            jsonBody.put("from", new JSONObject().put("email", "hello@denmire.store").put("name", "Skill Swap Team"));
+            jsonBody.put("to", new JSONArray().put(new JSONObject().put("email", userEmail)));
+            jsonBody.put("subject", "Skill Swap Verification Code");
+            jsonBody.put("text", "Your verification code is: " + generatedOtp);
+            jsonBody.put("category", "OTP Verification");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         RequestBody body = RequestBody.create(jsonBody.toString(), mediaType);
         Request request = new Request.Builder()
-                .url("https://api.postmarkapp.com/email")
+                .url("https://send.api.mailtrap.io/api/send")
                 .post(body)
-                .addHeader("Accept", "application/json")
+                .addHeader("Authorization", "Bearer " + MAILTRAP_TOKEN)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("X-Postmark-Server-Token", POSTMARK_SERVER_TOKEN)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Failed to send OTP. Check your internet.", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Failed to send OTP: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -227,7 +224,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     runOnUiThread(() -> showOtpDialog(userEmail, userName, fullNameText, pass, cont, dob, country));
                 } else {
-                    runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Error sending email. Verify your Postmark settings.", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(SignUpActivity.this, "Error sending email: " + response.message(), Toast.LENGTH_SHORT).show());
                 }
             }
         });
@@ -322,7 +319,11 @@ public class SignUpActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Toast.makeText(SignUpActivity.this, "You have signed up successfully", Toast.LENGTH_SHORT).show();
                 signupPrefsClassLog.saveStringValue("isLogin", "signed_up");
-                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                
+                // Navigate to CNIC Verification
+                Intent intent = new Intent(SignUpActivity.this, ActivityCNICVarification.class);
+                intent.putExtra("username", userName);
+                intent.putExtra("fullName", FullName);
                 startActivity(intent);
                 finish();
             } else {
