@@ -1,12 +1,9 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,19 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.face.Face;
 import com.google.mlkit.vision.face.FaceDetection;
 import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
@@ -39,10 +32,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
-import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ActivityCNICVarification extends AppCompatActivity {
 
@@ -68,12 +59,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
         setContentView(R.layout.activity_cnicvarification);
 
         username = getIntent().getStringExtra("username");
-        if (username == null) {
-            // Fallback for testing
-            MySharedprefsClass prefs = new MySharedprefsClass(this);
-            // Assuming we might have saved it or need it from somewhere
-        }
-
         initViews();
         setupMLKit();
         setupListeners();
@@ -88,7 +73,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
         btnVerify = findViewById(R.id.btn_verify);
         tvName = findViewById(R.id.tv_name);
 
-        // Set name from intent if available
         String name = getIntent().getStringExtra("fullName");
         if (name != null) tvName.setText(name);
     }
@@ -186,7 +170,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
 
     private boolean isCnicValid(Text text) {
         String result = text.getText().toLowerCase();
-        // Simple heuristic for Pakistani CNIC
         return result.contains("pakistan") || result.contains("identity") || result.contains("government") || result.contains("name");
     }
 
@@ -197,9 +180,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
         faceDetector.process(selfieImg)
                 .addOnSuccessListener(faces -> {
                     if (!faces.isEmpty()) {
-                        // In a real app, we'd compare selfie face with CNIC face.
-                        // ML Kit Face Detection alone doesn't do comparison.
-                        // For this task, we verify that a face is present in the live selfie.
                         processFinalVerification(true);
                     } else {
                         hideLoadingDialog();
