@@ -13,6 +13,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SkillSelectionActivity extends AppCompatActivity {
 
@@ -35,22 +36,23 @@ public class SkillSelectionActivity extends AppCompatActivity {
                 Chip chip = new Chip(this);
                 chip.setText(skill);
                 chip.setCheckable(true);
-                // Use the same style as in DataCollection if possible, or just standard chips
-                // chip.setChipDrawable(ChipDrawable.createFromAttributes(this, null, 0, R.style.SelectableChip));
                 cgSkillsToTest.addView(chip);
             }
         }
 
         btnStartTest.setOnClickListener(v -> {
-            int checkedId = cgSkillsToTest.getCheckedChipId();
-            if (checkedId == View.NO_ID) {
+            List<Integer> checkedChipIds = cgSkillsToTest.getCheckedChipIds();
+            if (checkedChipIds.isEmpty()) {
                 Toast.makeText(this, "Please select at least one skill to test", Toast.LENGTH_SHORT).show();
             } else {
-                Chip selectedChip = findViewById(checkedId);
-                String selectedSkill = selectedChip.getText().toString();
+                ArrayList<String> selectedSkills = new ArrayList<>();
+                for (Integer id : checkedChipIds) {
+                    Chip chip = findViewById(id);
+                    selectedSkills.add(chip.getText().toString());
+                }
                 
                 Intent intent = new Intent(SkillSelectionActivity.this, SkillTestActivity.class);
-                intent.putExtra("selectedSkill", selectedSkill);
+                intent.putStringArrayListExtra("selectedSkills", selectedSkills);
                 startActivity(intent);
                 finish();
             }

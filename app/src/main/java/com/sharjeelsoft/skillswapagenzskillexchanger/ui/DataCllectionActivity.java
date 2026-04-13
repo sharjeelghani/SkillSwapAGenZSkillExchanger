@@ -272,6 +272,10 @@ public class DataCllectionActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select at least one teaching skill", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (learning.isEmpty()) {
+            Toast.makeText(this, "Please select at least one learning skill", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("gender", gender);
@@ -293,7 +297,8 @@ public class DataCllectionActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     Toast.makeText(DataCllectionActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DataCllectionActivity.this, MainActivity.class);
+                    Intent intent = new Intent(DataCllectionActivity.this, SkillSelectionActivity.class);
+                    intent.putStringArrayListExtra("teachingSkills", new ArrayList<>(teaching));
                     startActivity(intent);
                 }
                 finish();

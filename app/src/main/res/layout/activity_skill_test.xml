@@ -22,17 +22,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Skill Test"
-                android:textSize="32sp"
+                android:textSize="28sp"
                 android:textColor="@color/teal_light"
-                 />
-
+                android:fontFamily="@font/nunito_semibold" />
 
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp">
-
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -42,20 +41,22 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginHorizontal="40dp"
                 android:progressDrawable="@drawable/custom_progress_bg"/>
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:paddingBottom="3dp">
+
                 <TextView
                     android:id="@+id/loading_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Hurry Up..."
+                    android:text="Time Left: "
                     android:textColor="#4B4B4B"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textView"
@@ -63,51 +64,51 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textStart"
                     android:fontFamily="@font/nunito_bold"
-                    android:paddingStart="10dp"
-                    android:text="0"
+                    android:paddingStart="4dp"
+                    android:text="30"
                     android:layout_toEndOf="@+id/loading_id"
                     android:textColor="#4B4B4B"
-                    android:textSize="16dp" />
-
+                    android:textSize="16sp" />
             </RelativeLayout>
         </RelativeLayout>
-        <!-- Question Card -->
+
+        <!-- Question Text -->
         <TextView
+            android:id="@+id/tvQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Which of the following is a vector graphics editor?"
+            android:text="Loading Question..."
             android:textSize="18sp"
             android:textColor="@color/teal_light"
             android:padding="18dp"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_input_outline"
-             />
+            android:background="@drawable/bg_input_outline" />
 
         <!-- Options -->
         <RadioGroup
+            android:id="@+id/rgOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/optPhotoshop"
+                android:id="@+id/opt1"
                 style="@style/NeonRadio"
-                android:text="Adobe Photoshop" />
+                android:text="Option 1" />
 
             <RadioButton
-                android:id="@+id/optFigma"
+                android:id="@+id/opt2"
                 style="@style/NeonRadio"
-                android:checked="true"
-                android:text="Figma" />
+                android:text="Option 2" />
 
             <RadioButton
-                android:id="@+id/optSketch"
+                android:id="@+id/opt3"
                 style="@style/NeonRadio"
-                android:text="Sketch" />
+                android:text="Option 3" />
 
             <RadioButton
-                android:id="@+id/optInvision"
+                android:id="@+id/opt4"
                 style="@style/NeonRadio"
-                android:text="InVision" />
+                android:text="Option 4" />
         </RadioGroup>
 
         <!-- Submit Button -->
@@ -122,8 +123,7 @@
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/teal_light"
-            android:background="@drawable/neon_button_outline"
-            />
+            android:background="@drawable/neon_button_outline" />
 
     </LinearLayout>
 </ScrollView>
