@@ -85,6 +85,8 @@ public class ActivityCNICVarification extends AppCompatActivity {
                 .build();
         faceDetector = FaceDetection.getClient(options);
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+
+
     }
 
     private void setupListeners() {

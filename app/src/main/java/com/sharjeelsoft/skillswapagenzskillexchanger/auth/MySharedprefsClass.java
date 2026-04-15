@@ -33,6 +33,6 @@ public class MySharedprefsClass {
     }
 
     public String getStringValue(String name) {
-        return sharedPreferences.getString(name, "sheju");
+        return sharedPreferences.getString(name, "new_user");
     }
 }
