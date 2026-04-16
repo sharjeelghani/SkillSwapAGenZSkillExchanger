@@ -50,6 +50,9 @@ dependencies {
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    
+    // Image Cropper
+    implementation("com.github.yalantis:ucrop:2.2.8")
 
     // ML Kit dependencies
     implementation(libs.mlkitText)

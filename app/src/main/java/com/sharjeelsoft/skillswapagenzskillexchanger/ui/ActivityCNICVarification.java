@@ -14,14 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.face.FaceDetection;
 import com.google.mlkit.vision.face.FaceDetector;
@@ -32,8 +36,11 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ActivityCNICVarification extends AppCompatActivity {
 
@@ -49,6 +56,7 @@ public class ActivityCNICVarification extends AppCompatActivity {
 
     private Bitmap cnicFrontBitmap, cnicBackBitmap, selfieBitmap;
     private String username;
+    private HelperClass userData;
     
     private FaceDetector faceDetector;
     private TextRecognizer textRecognizer;
@@ -62,6 +70,7 @@ public class ActivityCNICVarification extends AppCompatActivity {
         initViews();
         setupMLKit();
         setupListeners();
+        fetchUserData();
     }
 
     private void initViews() {
@@ -77,16 +86,27 @@ public class ActivityCNICVarification extends AppCompatActivity {
         if (name != null) tvName.setText(name);
     }
 
+    private void fetchUserData() {
+        if (username == null) return;
+        FirebaseDatabase.getInstance().getReference("user").child(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userData = snapshot.getValue(HelperClass.class);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+    }
+
     private void setupMLKit() {
         FaceDetectorOptions options = new FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
                 .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .build();
         faceDetector = FaceDetection.getClient(options);
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
-
     }
 
     private void setupListeners() {
@@ -103,6 +123,11 @@ public class ActivityCNICVarification extends AppCompatActivity {
         btnVerify.setOnClickListener(v -> {
             if (cnicFrontBitmap == null || cnicBackBitmap == null || selfieBitmap == null) {
                 Toast.makeText(this, "Please provide all required images", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (userData == null) {
+                Toast.makeText(this, "Loading user data, please wait...", Toast.LENGTH_SHORT).show();
+                fetchUserData();
                 return;
             }
             startVerificationProcess();
@@ -151,47 +176,107 @@ public class ActivityCNICVarification extends AppCompatActivity {
     }
 
     private void startVerificationProcess() {
-        showLoadingDialog("Verifying CNIC...");
+        showLoadingDialog("Verifying document...");
         
         InputImage frontImage = InputImage.fromBitmap(cnicFrontBitmap, 0);
         textRecognizer.process(frontImage)
                 .addOnSuccessListener(text -> {
-                    if (isCnicValid(text)) {
+                    String validationError = getCnicValidationError(text);
+                    if (validationError == null) {
                         verifyFaces();
                     } else {
                         hideLoadingDialog();
                         updateVerificationStatus(false);
-                        showErrorDialog("Invalid CNIC. Please upload a clear image of your Pakistani Identity Card.");
+                        showErrorDialog(validationError);
                     }
                 })
                 .addOnFailureListener(e -> {
                     hideLoadingDialog();
-                    Toast.makeText(this, "OCR Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Verification failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private boolean isCnicValid(Text text) {
-        String result = text.getText().toLowerCase();
-        return result.contains("pakistan") || result.contains("identity") || result.contains("government") || result.contains("name");
+    private String getCnicValidationError(Text text) {
+        String fullText = text.getText().toLowerCase();
+        
+        // 1. Check for CNIC number pattern
+        Pattern cnicPattern = Pattern.compile("\\d{5}[-]?\\d{7}[-]?\\d");
+        Matcher matcher = cnicPattern.matcher(text.getText());
+        if (!matcher.find()) {
+            return "CNIC number not detected. Please upload a clear photo.";
+        }
+
+        // 2. Check for keywords
+        boolean hasPakistan = fullText.contains("pakistan");
+        boolean hasIdentity = fullText.contains("identity") || fullText.contains("card");
+        if (!hasPakistan || !hasIdentity) {
+            return "Document does not appear to be a valid Pakistani CNIC.";
+        }
+
+        // 3. Check for Full Name
+        if (userData.getFullName() != null) {
+            String[] nameParts = userData.getFullName().toLowerCase().split(" ");
+            boolean nameMatch = false;
+            for (String part : nameParts) {
+                if (part.length() > 2 && fullText.contains(part)) {
+                    nameMatch = true;
+                    break;
+                }
+            }
+            if (!nameMatch) {
+                return "The name on the ID card does not match your profile name (" + userData.getFullName() + ").";
+            }
+        }
+
+        // 4. Check for DOB
+        if (userData.getDateofbirth() != null) {
+            // DOB is stored as D/M/YYYY or DD/MM/YYYY. CNIC often uses DD.MM.YYYY
+            String dob = userData.getDateofbirth().replace("/", ".");
+            String dobAlt = userData.getDateofbirth(); // D/M/YYYY
+            
+            if (!fullText.contains(dob) && !fullText.contains(dobAlt)) {
+                // Try to be a bit more flexible with DOB matching (e.g. check year)
+                String[] dobParts = userData.getDateofbirth().split("/");
+                String year = dobParts[dobParts.length - 1];
+                if (!fullText.contains(year)) {
+                    return "The date of birth on the ID card does not match your profile.";
+                }
+            }
+        }
+
+        return null; // No errors
     }
 
     private void verifyFaces() {
-        updateLoadingMessage("Matching faces...");
+        updateLoadingMessage("Analyzing ID photo...");
         
-        InputImage selfieImg = InputImage.fromBitmap(selfieBitmap, 0);
-        faceDetector.process(selfieImg)
-                .addOnSuccessListener(faces -> {
-                    if (!faces.isEmpty()) {
-                        processFinalVerification(true);
+        InputImage cnicImg = InputImage.fromBitmap(cnicFrontBitmap, 0);
+        faceDetector.process(cnicImg)
+                .addOnSuccessListener(cnicFaces -> {
+                    if (!cnicFaces.isEmpty()) {
+                        updateLoadingMessage("Analyzing selfie...");
+                        InputImage selfieImg = InputImage.fromBitmap(selfieBitmap, 0);
+                        faceDetector.process(selfieImg)
+                                .addOnSuccessListener(selfieFaces -> {
+                                    if (!selfieFaces.isEmpty()) {
+                                        processFinalVerification(true);
+                                    } else {
+                                        hideLoadingDialog();
+                                        showErrorDialog("No face detected in your selfie. Please take a clear photo of your face.");
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    hideLoadingDialog();
+                                    Toast.makeText(this, "Selfie check failed", Toast.LENGTH_SHORT).show();
+                                });
                     } else {
                         hideLoadingDialog();
-                        updateVerificationStatus(false);
-                        showErrorDialog("No face detected in selfie. Please try again.");
+                        showErrorDialog("No face detected on your CNIC image. Please upload a clearer photo.");
                     }
                 })
                 .addOnFailureListener(e -> {
                     hideLoadingDialog();
-                    Toast.makeText(this, "Face Detection Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ID check failed", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -202,7 +287,7 @@ public class ActivityCNICVarification extends AppCompatActivity {
         if (matched) {
             showSuccessDialog();
         } else {
-            showErrorDialog("Verification failed. Data does not match.");
+            showErrorDialog("Verification failed. Document details do not match.");
         }
     }
 
@@ -216,7 +301,7 @@ public class ActivityCNICVarification extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null);
         TextView tvMsg = view.findViewById(R.id.tv_loading_msg);
-        tvMsg.setText(msg);
+        if (tvMsg != null) tvMsg.setText(msg);
         builder.setView(view);
         builder.setCancelable(false);
         loadingDialog = builder.create();
@@ -238,8 +323,8 @@ public class ActivityCNICVarification extends AppCompatActivity {
 
     private void showSuccessDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Verified!")
-                .setMessage("Your identity has been successfully verified.")
+                .setTitle("Identity Verified!")
+                .setMessage("Your account has been successfully verified. Welcome to Skill Swap.")
                 .setPositiveButton("Proceed", (d, w) -> {
                     startActivity(new Intent(this, MainActivity.class));
                     finish();

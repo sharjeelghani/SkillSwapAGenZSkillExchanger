@@ -27,7 +27,7 @@
     <dimen name="button_text">22dp</dimen>
     <dimen name="container_top_margin">28dp</dimen>
 
-    <dimen name="title_size">30dp</dimen>
+    <dimen name="title_size">18dp</dimen>
 
     <dimen name="card_height_small">110dp</dimen>
     <dimen name="card_height_medium">160dp</dimen>
@@ -36,7 +36,7 @@
 
 
 
-    <dimen name="card_title_size">22dp</dimen>
+    <dimen name="card_title_size">16dp</dimen>
     <dimen name="card_sub_size">14dp</dimen>
     <dimen name="sub_margin_top">8dp</dimen>
 

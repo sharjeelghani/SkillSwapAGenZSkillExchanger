@@ -28,7 +28,7 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="@string/help_support"
         android:textAllCaps="true"
         android:textSize="@dimen/title_size"
@@ -92,7 +92,7 @@
                         android:id="@+id/a1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="You can search for users with the skills you want to learn, send them a message, and agree on a swap."
+                        android:text="You can search for users with the skills you want to learn, Match with them and send them a message, and agree on a swap."
                         android:textColor="@color/text_secondary"
                         android:layout_marginTop="8dp"
                         android:visibility="gone"/>
@@ -120,7 +120,7 @@
                         android:id="@+id/a2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Yes, the core experience of swapping skills is completely free for all users."
+                        android:text="Yes, the core experience for this app of swapping skills is completely free for all users."
                         android:textColor="@color/text_secondary"
                         android:layout_marginTop="8dp"
                         android:visibility="gone"/>
@@ -228,6 +228,14 @@
                     android:text="@string/contact_support"
                     android:textColor="@color/teal_light"
                     android:textSize="@dimen/card_title_size"/>
+                <TextView
+                    android:id="@+id/report_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_sub"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/card_sub_size"
+                    android:layout_marginTop="@dimen/sub_margin_top"/>
 
                 <!-- Buttons row -->
                 <LinearLayout
@@ -275,32 +283,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Report a problem card -->
-            <LinearLayout
-                android:id="@+id/report_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/card_padding"
-                android:background="@drawable/neon_card">
-
-                <TextView
-                    android:id="@+id/report_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/report_problem"
-                    android:textColor="@color/teal_light"
-                    android:textSize="@dimen/card_title_size"/>
-
-                <TextView
-                    android:id="@+id/report_sub"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/report_sub"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/card_sub_size"
-                    android:layout_marginTop="@dimen/sub_margin_top"/>
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

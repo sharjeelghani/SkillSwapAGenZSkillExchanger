@@ -77,6 +77,16 @@
             android:name=".ui.ChangePasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.ViewProfileActivity"
+            android:exported="false" />
+
+        <!-- UCrop Activity -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
             android:name=".ui.LauncherScreen"
             android:exported="true">
             <intent-filter>

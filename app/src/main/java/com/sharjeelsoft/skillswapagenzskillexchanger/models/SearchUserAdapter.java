@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatActivity;
@@ -56,6 +57,16 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
         }
 
         holder.tvTime.setVisibility(View.GONE);
+
+        // Load profile image using Glide
+        if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+            Glide.with(context)
+                    .load(user.getProfileImageUrl())
+                    .placeholder(R.drawable.man)
+                    .into(holder.profileImage);
+        } else {
+            holder.profileImage.setImageResource(R.drawable.man);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatActivity.class);

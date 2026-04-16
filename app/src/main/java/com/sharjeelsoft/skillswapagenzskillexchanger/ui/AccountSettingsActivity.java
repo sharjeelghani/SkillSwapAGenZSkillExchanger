@@ -2,9 +2,11 @@ package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -32,7 +34,9 @@ import com.google.firebase.storage.StorageReference;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
 import java.util.UUID;
 
 public class AccountSettingsActivity extends AppCompatActivity {
@@ -47,13 +51,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private boolean isDataChanged = false;
     
     private Uri imageUri;
+    private ProgressDialog progressDialog;
     
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    imageUri = result.getData().getData();
-                    uploadImageToFirebase();
+                    Uri sourceUri = result.getData().getData();
+                    startCrop(sourceUri);
                 }
             }
     );
@@ -62,7 +67,22 @@ public class AccountSettingsActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
-                    uploadImageToFirebase();
+                    startCrop(imageUri);
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> cropImageLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri croppedUri = UCrop.getOutput(result.getData());
+                    if (croppedUri != null) {
+                        uploadImageToFirebase(croppedUri);
+                    }
+                } else if (result.getResultCode() == UCrop.RESULT_ERROR) {
+                    final Throwable cropError = UCrop.getError(result.getData());
+                    Toast.makeText(this, "Crop error: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
     );
@@ -114,6 +134,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         sharedPrefs = new MySharedprefsClass(this);
         currentUsername = sharedPrefs.getStringValue("username");
         userRef = FirebaseDatabase.getInstance().getReference("user").child(currentUsername);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
 
         TextWatcher watcher = new TextWatcher() {
             @Override
@@ -204,27 +227,71 @@ public class AccountSettingsActivity extends AppCompatActivity {
         pickImageLauncher.launch(intent);
     }
 
-    private void uploadImageToFirebase() {
-        if (imageUri == null) return;
+    private void startCrop(@NonNull Uri uri) {
+        String destinationFileName = "cropped_image_" + UUID.randomUUID().toString() + ".jpg";
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(false);
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setCompressionQuality(90);
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(false);
+        
+        // Use theme colors
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.teal_light));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.teal_light));
+        options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.teal_light));
 
-        Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show();
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
+        uCrop.withAspectRatio(1, 1);
+        uCrop.withMaxResultSize(1000, 1000);
+        uCrop.withOptions(options);
+        cropImageLauncher.launch(uCrop.getIntent(this));
+    }
+
+    private void uploadImageToFirebase(Uri uri) {
+        progressDialog.setMessage("Uploading Profile Picture...");
+        progressDialog.show();
         
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://skill-swap-a-genz-skill.firebasestorage.app");
+        
+        // 1. Delete old image if exists
+        if (currentUserData != null && currentUserData.getProfileImageUrl() != null && !currentUserData.getProfileImageUrl().isEmpty()) {
+            try {
+                StorageReference oldPhotoRef = storage.getReferenceFromUrl(currentUserData.getProfileImageUrl());
+                oldPhotoRef.delete().addOnCompleteListener(task -> {
+                    proceedWithUpload(storage, uri);
+                });
+            } catch (Exception e) {
+                proceedWithUpload(storage, uri);
+            }
+        } else {
+            proceedWithUpload(storage, uri);
+        }
+    }
+
+    private void proceedWithUpload(FirebaseStorage storage, Uri uri) {
         StorageReference storageRef = storage.getReference()
                 .child("profile_images/" + currentUsername + "_" + UUID.randomUUID().toString());
 
-        storageRef.putFile(imageUri)
+        storageRef.putFile(uri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String downloadUrl = uri.toString();
+                    storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        String downloadUrl = downloadUri.toString();
                         userRef.child("profileImageUrl").setValue(downloadUrl).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(AccountSettingsActivity.this, "Profile photo updated", Toast.LENGTH_SHORT).show();
+                                progressDialog.setMessage("Profile Updated");
+                                new android.os.Handler().postDelayed(() -> {
+                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                                }, 1500);
+                            } else {
+                                if (progressDialog.isShowing()) progressDialog.dismiss();
+                                Toast.makeText(this, "Database update failed", Toast.LENGTH_SHORT).show();
                             }
                         });
                     });
                 })
                 .addOnFailureListener(e -> {
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
                     android.util.Log.e("UploadError", "Failed to upload", e);
                     Toast.makeText(AccountSettingsActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });

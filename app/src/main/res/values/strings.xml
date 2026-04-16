@@ -16,12 +16,11 @@
 
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
-    <string name="contact_support">CONTACT SUPPORT</string>
+    <string name="contact_support">CONTACT SUPPORT OR REPORT A PROBLEM</string>
     <string name="email_us">Email Us</string>
     <string name="chat_with_us">Chat With Us</string>
 
-    <string name="report_problem">REPORT A PROBLEM</string>
-    <string name="report_sub">Let us know about any issues youre experiencing</string>
+    <string name="report_sub">Let us know about any issues youre experiencing or suggestions you want to share.</string>
     <string name="report_user">Report a User</string>
     <string name="report_user_sub">Let us know what the problem is.</string>
 
