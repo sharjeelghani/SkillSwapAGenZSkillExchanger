@@ -43,9 +43,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-storage")
     
     implementation(libs.googleAuth)
     implementation(libs.okhttp)
+
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // ML Kit dependencies
     implementation(libs.mlkitText)

@@ -13,6 +13,7 @@ public class HelperClass {
     String education;
     String currentJob;
     String experience;
+    String profileImageUrl;
 
     public String getUsername() {
         return username;
@@ -124,6 +125,14 @@ public class HelperClass {
 
     public void setExperience(String experience) {
         this.experience = experience;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public HelperClass(String username, String fullName, String email, String password, String contact, String dateofbirth, String country) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private TextView tvName, tvLocation, tvJob;
+    private ImageView profilePic;
     private MySharedprefsClass sharedPrefs;
     private DatabaseReference userRef;
 
@@ -47,6 +50,7 @@ public class ProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.name);
         tvLocation = view.findViewById(R.id.location);
         tvJob = view.findViewById(R.id.tv_job);
+        profilePic = view.findViewById(R.id.profile_pic);
 
         sharedPrefs = new MySharedprefsClass(requireContext());
         String username = sharedPrefs.getStringValue("username");
@@ -69,6 +73,17 @@ public class ProfileFragment extends Fragment {
                         tvName.setText(user.getFullName());
                         tvLocation.setText(user.getCountry());
                         tvJob.setText(user.getCurrentJob());
+
+                        if (isAdded()) {
+                            if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
+                                Glide.with(requireContext())
+                                        .load(user.getProfileImageUrl())
+                                        .placeholder(R.drawable.man)
+                                        .into(profilePic);
+                            } else {
+                                profilePic.setImageResource(R.drawable.man);
+                            }
+                        }
                     }
                 }
             }

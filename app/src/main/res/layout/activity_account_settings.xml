@@ -1,25 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="20dp">
+    android:background="#061B1D"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Account Settings"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    <!-- AppBar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingHorizontal="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Welcome to your account settings. All skills verified!"
-        android:textAlignment="center"
-        android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back_activity"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Account Settings"
+            android:textColor="#27F3B3"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- PROFILE IMAGE (from fragment_profile) -->
+            <FrameLayout
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:background="@drawable/profile_ring"
+                android:padding="4dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/man"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
+                    android:padding="2dp"/>
+            </FrameLayout>
+
+            <!-- UPDATE PHOTO TEXT -->
+            <TextView
+                android:id="@+id/tv_update_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="Update Profile Photo"
+                android:textColor="#F4FDFB"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_login"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <!-- NAME -->
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textColor="#C3FFF9"
+                android:layout_gravity="center"
+                android:paddingTop="16dp"
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-medium"/>
+
+            <!-- JOB -->
+            <TextView
+                android:id="@+id/tv_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Job"
+                android:layout_gravity="center"
+                android:textColor="#A8F2DD"
+                android:textSize="18sp"
+                android:paddingTop="4dp"/>
+
+            <!-- LOCATION -->
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:layout_gravity="center"
+                android:textColor="#7AF2DD"
+                android:textSize="16sp"
+                android:paddingTop="2dp"/>
+
+            <!-- EDITABLE FIELDS (from activity_sign_up) -->
+            <EditText
+                android:id="@+id/et_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_input_outline"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:hint="User name"
+                android:textColor="#27F3B3"
+                android:textColorHint="#27F3B3"
+                android:textSize="16sp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_input_outline"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:hint="Full name"
+                android:textColor="#27F3B3"
+                android:textColorHint="#27F3B3"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:focusable="false"
+                android:clickable="false"
+                android:alpha="0.6"/>
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_input_outline"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:hint="Email address"
+                android:textColor="#27F3B3"
+                android:textColorHint="#27F3B3"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:focusable="false"
+                android:clickable="false"
+                android:alpha="0.6"/>
+
+            <EditText
+                android:id="@+id/et_contact"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_input_outline"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:hint="Contact"
+                android:inputType="phone"
+                android:textColor="#27F3B3"
+                android:textColorHint="#27F3B3"
+                android:textSize="16sp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/et_dob"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/bg_input_outline"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:hint="Date of birth"
+                android:textColor="#27F3B3"
+                android:textColorHint="#27F3B3"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:focusable="false"
+                android:clickable="false"
+                android:alpha="0.6"/>
+
+            <!-- CHANGE PASSWORD BUTTON -->
+            <TextView
+                android:id="@+id/btn_change_password"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_signup_btn"
+                android:gravity="center"
+                android:text="Change Password"
+                android:textColor="#02131C"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- SAVE INFO BUTTON -->
+            <TextView
+                android:id="@+id/btn_save_info"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_btn_login"
+                android:gravity="center"
+                android:text="Save Info"
+                android:textColor="#F4FDFB"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:alpha="0.5"
+                android:clickable="false" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
