@@ -39,23 +39,34 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sharjeel Ghani"
+                android:text="Name"
                 android:textColor="#C3FFF9"
                 android:layout_gravity="center"
                 android:paddingTop="16dp"
                 android:textSize="28sp"
                 android:fontFamily="sans-serif-medium"/>
 
+            <!-- JOB -->
+            <TextView
+                android:id="@+id/tv_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Job"
+                android:layout_gravity="center"
+                android:textColor="#A8F2DD"
+                android:textSize="18sp"
+                android:paddingTop="4dp"/>
+
             <!-- LOCATION -->
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Islamabad"
+                android:text="Location"
                 android:layout_gravity="center"
                 android:textColor="#7AF2DD"
                 android:textSize="16sp"
-                android:paddingTop="4dp"/>
+                android:paddingTop="2dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -5,14 +5,30 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/screen_padding"
     android:background="@drawable/bg_gradient">
+
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_back_activity"
+        app:tint="@color/teal_light"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <!-- Title -->
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/help_support"
         android:textAllCaps="true"
         android:textSize="@dimen/title_size"
@@ -22,142 +38,270 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <!-- Vertical container for cards -->
-    <LinearLayout
-        android:id="@+id/container"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/container_top_margin"
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="@dimen/screen_padding"
         app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintRight_toRightOf="parent">
 
-        <!-- FAQ Card -->
         <LinearLayout
-            android:id="@+id/faq_card"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height_small"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/card_padding"
-            android:background="@drawable/neon_card"
-            android:layout_marginBottom="@dimen/card_margin">
+            android:paddingBottom="20dp">
 
+            <!-- FAQ Section -->
             <TextView
-                android:id="@+id/faq_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/faqs"
                 android:textColor="@color/teal_light"
-                android:textSize="@dimen/card_title_size"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"/>
 
-            <TextView
-                android:id="@+id/faq_sub"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/faqs_sub"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/card_sub_size"
-                android:layout_marginTop="@dimen/sub_margin_top"/>
-
-        </LinearLayout>
-
-        <!-- Contact support card -->
-        <LinearLayout
-            android:id="@+id/contact_card"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height_medium"
-            android:orientation="vertical"
-            android:padding="@dimen/card_padding"
-            android:background="@drawable/neon_card"
-            android:layout_marginBottom="@dimen/card_margin">
-
-            <TextView
-                android:id="@+id/contact_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/contact_support"
-                android:textColor="@color/teal_light"
-                android:textSize="@dimen/card_title_size"/>
-
-            <!-- Buttons row -->
             <LinearLayout
+                android:id="@+id/faq_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/button_row_margin"
-                android:gravity="center"
-                android:weightSum="2">
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/email_button"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/neon_button_outline"
-                    >
+                <!-- FAQ 1 -->
+                <LinearLayout
+                    android:id="@+id/faq1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/neon_card"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/q1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/email_us"
+                        android:text="How do I swap skills?"
                         android:textColor="@color/teal_light"
-                        android:textSize="@dimen/button_text_size"
-                        android:layout_centerInParent="true"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/chat_button"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_weight="1"
-                    android:background="@drawable/neon_button_outline"
-                    >
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/ic_arrow_down" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/a1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/chat_with_us"
-                        android:textSize="@dimen/button_text_size"
+                        android:text="You can search for users with the skills you want to learn, send them a message, and agree on a swap."
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <!-- FAQ 2 -->
+                <LinearLayout
+                    android:id="@+id/faq2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/neon_card"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/q2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Is Skill Swap free?"
                         android:textColor="@color/teal_light"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/ic_arrow_down" />
+                    <TextView
+                        android:id="@+id/a2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Yes, the core experience of swapping skills is completely free for all users."
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <!-- FAQ 3 -->
+                <LinearLayout
+                    android:id="@+id/faq3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/neon_card"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/q3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="How do I verify my profile?"
+                        android:textColor="@color/teal_light"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/ic_arrow_down" />
+                    <TextView
+                        android:id="@+id/a3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Go to settings and upload your CNIC for verification to get a verified badge."
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <!-- FAQ 4 -->
+                <LinearLayout
+                    android:id="@+id/faq4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/neon_card"
+                    android:padding="12dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/q4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Can I report a user?"
+                        android:textColor="@color/teal_light"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/ic_arrow_down" />
+                    <TextView
+                        android:id="@+id/a4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Yes, you can report any user from their profile or the report section in Help and Support."
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <!-- FAQ 5 -->
+                <LinearLayout
+                    android:id="@+id/faq5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/neon_card"
+                    android:padding="12dp"
+                    android:layout_marginBottom="20dp">
+                    <TextView
+                        android:id="@+id/q5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="What are badges?"
+                        android:textColor="@color/teal_light"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/ic_arrow_down" />
+                    <TextView
+                        android:id="@+id/a5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Badges are rewards for your activities and successful skill swaps on the platform."
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+                </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
-
-        <!-- Report a problem card -->
-        <LinearLayout
-            android:id="@+id/report_card"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/card_height_small"
-            android:orientation="vertical"
-            android:padding="@dimen/card_padding"
-            android:background="@drawable/neon_card"
-            android:layout_marginBottom="@dimen/card_margin">
-
-            <TextView
-                android:id="@+id/report_title"
+            <!-- Contact Section -->
+            <LinearLayout
+                android:id="@+id/contact_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/report_problem"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:background="@drawable/neon_card"
+                android:layout_marginBottom="@dimen/card_margin">
 
-                android:textColor="@color/teal_light"
-                android:textSize="@dimen/card_title_size"/>
+                <TextView
+                    android:id="@+id/contact_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contact_support"
+                    android:textColor="@color/teal_light"
+                    android:textSize="@dimen/card_title_size"/>
 
-            <TextView
-                android:id="@+id/report_sub"
+                <!-- Buttons row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/button_row_margin"
+                    android:gravity="center"
+                    android:weightSum="2">
+
+                    <RelativeLayout
+                        android:id="@+id/email_button"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_marginEnd="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/neon_button_outline"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/email_us"
+                            android:textColor="@color/teal_light"
+                            android:textSize="@dimen/button_text_size"
+                            android:layout_centerInParent="true"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/chat_button"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_weight="1"
+                        android:background="@drawable/neon_button_outline"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chat_with_us"
+                            android:textSize="@dimen/button_text_size"
+                            android:textColor="@color/teal_light"
+                            android:layout_centerInParent="true"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Report a problem card -->
+            <LinearLayout
+                android:id="@+id/report_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/report_sub"
+                android:orientation="vertical"
+                android:padding="@dimen/card_padding"
+                android:background="@drawable/neon_card">
 
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/card_sub_size"
-                android:layout_marginTop="@dimen/sub_margin_top"/>
+                <TextView
+                    android:id="@+id/report_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_problem"
+                    android:textColor="@color/teal_light"
+                    android:textSize="@dimen/card_title_size"/>
+
+                <TextView
+                    android:id="@+id/report_sub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_sub"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/card_sub_size"
+                    android:layout_marginTop="@dimen/sub_margin_top"/>
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
