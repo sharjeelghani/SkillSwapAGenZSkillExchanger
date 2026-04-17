@@ -338,6 +338,19 @@ public class SignUpActivity extends AppCompatActivity {
             username.requestFocus();
             return false;
         }
+
+        if (userName.contains(" ")) {
+            username.setError("Username cannot contain spaces");
+            username.requestFocus();
+            return false;
+        }
+
+        if (!Pattern.compile("^[a-z0-9_]*$").matcher(userName).matches()) {
+            username.setError("Username can only contain small letters, numbers and underscore (_)");
+            username.requestFocus();
+            return false;
+        }
+
         if (FullName.isEmpty()) {
             fullName.setError("Full name is required");
             fullName.requestFocus();
