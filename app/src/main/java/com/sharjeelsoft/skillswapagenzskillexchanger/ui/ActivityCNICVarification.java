@@ -72,7 +72,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
         setupListeners();
         fetchUserData();
     }
-
     private void initViews() {
         cardCnicFront = findViewById(R.id.card_cnic_front);
         cardCnicBack = findViewById(R.id.card_cnic_back);

@@ -6,7 +6,7 @@
     android:background="#061B1D"
     android:orientation="vertical">
 
-    <!-- AppBar -->
+    <!-- AppBar For Activity-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
