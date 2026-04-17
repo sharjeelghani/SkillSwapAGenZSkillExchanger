@@ -87,6 +87,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <activity
+            android:name=".ui.AccountSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.LauncherScreen"
             android:exported="true">
             <intent-filter>

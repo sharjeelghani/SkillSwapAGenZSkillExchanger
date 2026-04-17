@@ -76,80 +76,20 @@ public class DataCllectionActivity extends AppCompatActivity {
         String prefsUsername = sharedPrefs.getStringValue("username");
         String intentUsername = getIntent().getStringExtra("username");
 
-        // Determine which username to check
-        String candidateUsername = null;
-        if (intentUsername != null && !intentUsername.isEmpty()) {
-            candidateUsername = intentUsername;
-        } else if (!prefsUsername.equals("new_user")) {
-            candidateUsername = prefsUsername;
-        }
+        username = (intentUsername != null && !intentUsername.isEmpty()) ? intentUsername : prefsUsername;
 
-        if (candidateUsername == null) {
+        if (username == null || username.equals("new_user")) {
             Toast.makeText(this, "User session not found. Please login again.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        final String finalUsername = candidateUsername;
-
-        // --- Debug Condition ---
-        if ("Abubakar Ch".equals(finalUsername)) {
-            username = finalUsername;
-            fetchAndInitialize(finalUsername);
-            return;
-        }
-        // -----------------------
-
-        // Check existence in both Realtime Database and SharedPrefs
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user").child(finalUsername);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean existsInDB = snapshot.exists();
-                boolean existsInPrefs = !sharedPrefs.getStringValue("username").equals("new_user");
-
-                // If it exists in at least one of them, then activity should not be finished
-                if (existsInDB || existsInPrefs) {
-                    username = finalUsername;
-                    initializeActivity(snapshot);
-                } else {
-                    Toast.makeText(DataCllectionActivity.this, "User session not found. Please login again.", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // On error, fallback to SharedPrefs check as a safety measure
-                if (!sharedPrefs.getStringValue("username").equals("new_user")) {
-                    username = finalUsername;
-                    fetchAndInitialize(finalUsername);
-                } else {
-                    Toast.makeText(DataCllectionActivity.this, "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        });
-    }
-
-    private void fetchAndInitialize(String name) {
-        FirebaseDatabase.getInstance().getReference("user").child(name)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        initializeActivity(snapshot);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        initializeActivity(null);
-                    }
-                });
-    }
-
-    private void initializeActivity(DataSnapshot snapshot) {
         userRef = FirebaseDatabase.getInstance().getReference("user").child(username);
+        initializeViews();
+        fetchUserData();
+    }
 
+    private void initializeViews() {
         rgGender = findViewById(R.id.rgGender);
         cgTeaching = findViewById(R.id.cgTeaching);
         cgLearning = findViewById(R.id.cgLearning);
@@ -162,28 +102,32 @@ public class DataCllectionActivity extends AppCompatActivity {
 
         btnAttach.setOnClickListener(v -> openFilePicker());
         btnContinue.setOnClickListener(v -> onSubmit());
+    }
 
-        if (snapshot != null && snapshot.exists()) {
-            populateData(snapshot);
-        }
+    private void fetchUserData() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    populateData(snapshot);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     private void populateData(DataSnapshot snapshot) {
-        // Populate Gender
         if (snapshot.hasChild("gender")) {
             isFirstTime = false;
             String gender = snapshot.child("gender").getValue(String.class);
             if ("Male".equals(gender)) rgGender.check(R.id.rbMale);
             else if ("Female".equals(gender)) rgGender.check(R.id.rbFemale);
             else if ("Other".equals(gender)) rgGender.check(R.id.rbOther);
-
-            // Change UI text if data exists
-            TextView tvTitle = findViewById(R.id.tvTitle);
-            if (tvTitle != null) tvTitle.setText("Edit Your Profile");
+            
             btnContinue.setText("Update Profile");
         }
 
-        // Populate Teaching Skills
         if (snapshot.hasChild("teachingSkills")) {
             List<String> teaching = new ArrayList<>();
             for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
@@ -192,7 +136,6 @@ public class DataCllectionActivity extends AppCompatActivity {
             selectChips(cgTeaching, teaching);
         }
 
-        // Populate Learning Interests
         if (snapshot.hasChild("learningInterests")) {
             List<String> learning = new ArrayList<>();
             for (DataSnapshot child : snapshot.child("learningInterests").getChildren()) {
@@ -201,23 +144,14 @@ public class DataCllectionActivity extends AppCompatActivity {
             selectChips(cgLearning, learning);
         }
 
-        // Populate Background History
-        if (snapshot.hasChild("education")) {
-            etQualifications.setText(snapshot.child("education").getValue(String.class));
-        }
-        if (snapshot.hasChild("currentJob")) {
-            etCurrentJob.setText(snapshot.child("currentJob").getValue(String.class));
-        }
-        if (snapshot.hasChild("experience")) {
-            Object exp = snapshot.child("experience").getValue();
-            if (exp != null) etExperience.setText(String.valueOf(exp));
-        }
+        if (snapshot.hasChild("education")) etQualifications.setText(snapshot.child("education").getValue(String.class));
+        if (snapshot.hasChild("currentJob")) etCurrentJob.setText(snapshot.child("currentJob").getValue(String.class));
+        if (snapshot.hasChild("experience")) etExperience.setText(String.valueOf(snapshot.child("experience").getValue()));
     }
 
     private void selectChips(ChipGroup group, List<String> selectedValues) {
         if (selectedValues == null) return;
-        int count = group.getChildCount();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < group.getChildCount(); i++) {
             if (group.getChildAt(i) instanceof Chip) {
                 Chip chip = (Chip) group.getChildAt(i);
                 if (selectedValues.contains(chip.getText().toString())) {
@@ -230,50 +164,26 @@ public class DataCllectionActivity extends AppCompatActivity {
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*"); // allow any; filter in server if needed
-        // allow multiple selection
+        intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         pickFilesLauncher.launch(intent);
     }
 
     private void updateAttachedCount() {
-        if (attachedUris.isEmpty()) {
-            tvAttachedCount.setText("No files selected");
-        } else {
-            tvAttachedCount.setText(attachedUris.size() + " file(s) selected");
-        }
+        tvAttachedCount.setText(attachedUris.isEmpty() ? "No files selected" : attachedUris.size() + " file(s) selected");
     }
 
     private void onSubmit() {
-        // Gender
         int checkedId = rgGender.getCheckedRadioButtonId();
-        String gender = "";
-        if (checkedId == R.id.rbMale) gender = "Male";
-        else if (checkedId == R.id.rbFemale) gender = "Female";
-        else if (checkedId == R.id.rbOther) gender = "Other";
-
-        // Teaching skills
+        String gender = checkedId == R.id.rbMale ? "Male" : checkedId == R.id.rbFemale ? "Female" : checkedId == R.id.rbOther ? "Other" : "";
         List<String> teaching = getSelectedChips(cgTeaching);
-
-        // Learning skills
         List<String> learning = getSelectedChips(cgLearning);
-
-        // Background
         String qualifications = etQualifications.getText().toString().trim();
         String currentJob = etCurrentJob.getText().toString().trim();
         String experience = etExperience.getText().toString().trim();
 
-        // Simple validation
-        if (gender.isEmpty()) {
-            Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (teaching.isEmpty()) {
-            Toast.makeText(this, "Please select at least one teaching skill", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (learning.isEmpty()) {
-            Toast.makeText(this, "Please select at least one learning skill", Toast.LENGTH_SHORT).show();
+        if (gender.isEmpty() || teaching.isEmpty() || learning.isEmpty()) {
+            Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -284,39 +194,29 @@ public class DataCllectionActivity extends AppCompatActivity {
         updates.put("education", qualifications);
         updates.put("currentJob", currentJob);
         updates.put("experience", experience);
+        
+        // Progress tracking
+        updates.put("isDataUpdated", true);
+        updates.put("signupStage", "SKILLS_PENDING");
 
         btnContinue.setEnabled(false);
-
         userRef.updateChildren(updates).addOnCompleteListener(task -> {
             btnContinue.setEnabled(true);
             if (task.isSuccessful()) {
-                if (isFirstTime) {
-                    Toast.makeText(DataCllectionActivity.this, "Profile built successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DataCllectionActivity.this, SkillSelectionActivity.class);
-                    intent.putStringArrayListExtra("teachingSkills", new ArrayList<>(teaching));
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(DataCllectionActivity.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(DataCllectionActivity.this, SkillSelectionActivity.class);
-                    intent.putStringArrayListExtra("teachingSkills", new ArrayList<>(teaching));
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(this, SkillSelectionActivity.class);
+                intent.putStringArrayListExtra("teachingSkills", new ArrayList<>(teaching));
+                intent.putExtra("username", username);
+                startActivity(intent);
                 finish();
             } else {
-                String error = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                Toast.makeText(DataCllectionActivity.this, "Failed to save: " + error, Toast.LENGTH_LONG).show();
-                Log.e(TAG, "Database Error: ", task.getException());
+                Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(e -> {
-            btnContinue.setEnabled(true);
-            Toast.makeText(DataCllectionActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
 
     private List<String> getSelectedChips(ChipGroup group) {
         List<String> result = new ArrayList<>();
-        int count = group.getChildCount();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < group.getChildCount(); i++) {
             if (group.getChildAt(i) instanceof Chip) {
                 Chip chip = (Chip) group.getChildAt(i);
                 if (chip.isChecked()) result.add(chip.getText().toString());
