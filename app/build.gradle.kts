@@ -32,7 +32,6 @@ android {
     }
 }
 
-
 dependencies {
 
     implementation(libs.appcompat)
@@ -45,6 +44,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-messaging")
     
     implementation(libs.googleAuth)
     implementation(libs.okhttp)
