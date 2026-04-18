@@ -6,7 +6,7 @@
     android:background="#061B1D"
     android:orientation="vertical">
 
-    <!-- AppBar -->
+    <!-- AppBar For Activity-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -139,10 +139,7 @@
                 android:textColor="#27F3B3"
                 android:textColorHint="#27F3B3"
                 android:textSize="16sp"
-                android:singleLine="true"
-                android:focusable="false"
-                android:clickable="false"
-                android:alpha="0.6"/>
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/et_email"
@@ -190,8 +187,7 @@
                 android:textSize="16sp"
                 android:singleLine="true"
                 android:focusable="false"
-                android:clickable="false"
-                android:alpha="0.6"/>
+                android:clickable="true" />
 
             <!-- CHANGE PASSWORD BUTTON -->
             <TextView

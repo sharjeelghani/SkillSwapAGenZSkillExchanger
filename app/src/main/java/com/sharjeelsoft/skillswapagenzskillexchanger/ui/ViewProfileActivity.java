@@ -24,7 +24,7 @@ import java.util.List;
 public class ViewProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic, btnBack;
-    private TextView tvFullName, tvUsername, tvJob, tvLocation, tvGender, tvEducation, tvExperience;
+    private TextView tvFullName, tvUsername, tvJob, tvLocation, tvGender, tvEducation, tvExperience, btnMatch;
     private ChipGroup cgTeaching, cgLearning;
     private DatabaseReference userRef;
 
@@ -46,6 +46,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         loadUserData();
 
         btnBack.setOnClickListener(v -> finish());
+        
+        btnMatch.setOnClickListener(v -> {
+            Toast.makeText(this, "Match Request Sent!", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void initViews() {
@@ -60,6 +64,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         tvExperience = findViewById(R.id.tv_experience_detail);
         cgTeaching = findViewById(R.id.cg_teaching);
         cgLearning = findViewById(R.id.cg_learning);
+        btnMatch = findViewById(R.id.btn_match);
     }
 
     private void loadUserData() {
@@ -82,33 +87,52 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
     private void updateUI(HelperClass user) {
-        tvFullName.setText(user.getFullName());
-        tvUsername.setText("@" + user.getUsername());
-        tvJob.setText(user.getCurrentJob() != null ? user.getCurrentJob() : "No job specified");
-        tvLocation.setText(user.getCountry() != null ? user.getCountry() : "No location");
-        tvGender.setText(user.getGender() != null ? user.getGender() : "Not specified");
-        tvEducation.setText(user.getEducation() != null ? user.getEducation() : "No education listed");
-        tvExperience.setText(user.getExperience() != null ? user.getExperience() + " Experience" : "No experience listed");
+        tvFullName.setText(user.getFullName() != null ? user.getFullName() : "NA");
+        tvUsername.setText(user.getUsername() != null ? "@" + user.getUsername() : "@NA");
+        tvJob.setText(user.getCurrentJob() != null && !user.getCurrentJob().isEmpty() ? user.getCurrentJob() : "NA");
+        tvLocation.setText(user.getCountry() != null && !user.getCountry().isEmpty() ? user.getCountry() : "NA");
+        tvGender.setText(user.getGender() != null && !user.getGender().isEmpty() ? user.getGender() : "NA");
+        tvEducation.setText(user.getEducation() != null && !user.getEducation().isEmpty() ? user.getEducation() : "NA");
+        tvExperience.setText(user.getExperience() != null && !user.getExperience().isEmpty() ? user.getExperience() + " Experience" : "NA");
+
+        int placeholder = getGenderPlaceholder(user.getGender());
 
         if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
             Glide.with(this)
                     .load(user.getProfileImageUrl())
-                    .placeholder(R.drawable.man)
+                    .placeholder(placeholder)
+                    .error(placeholder)
                     .into(profilePic);
+        } else {
+            profilePic.setImageResource(placeholder);
         }
 
         populateChips(cgTeaching, user.getTeachingSkills());
         populateChips(cgLearning, user.getLearningInterests());
     }
 
+    private int getGenderPlaceholder(String gender) {
+        if (gender != null && gender.equalsIgnoreCase("Female")) {
+            return R.drawable.avatar;
+        } else {
+            return R.drawable.man;
+        }
+    }
+
     private void populateChips(ChipGroup group, List<String> skills) {
         group.removeAllViews();
-        if (skills == null) return;
+        if (skills == null || skills.isEmpty()) {
+            Chip chip = new Chip(this);
+            chip.setText("NA");
+            chip.setChipBackgroundColorResource(R.color.button_fill_trans);
+            chip.setTextColor(getResources().getColor(R.color.white));
+            group.addView(chip);
+            return;
+        }
         for (String skill : skills) {
             Chip chip = new Chip(this);
             chip.setText(skill);
             chip.setChipBackgroundColorResource(R.color.teal_light);
-            // Change text color to dark (using bg_dark for theme consistency)
             chip.setTextColor(getResources().getColor(R.color.bg_dark));
             group.addView(chip);
         }

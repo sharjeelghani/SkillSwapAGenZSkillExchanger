@@ -6,7 +6,35 @@
     android:layout_height="match_parent"
     android:background="#020C15">
 
-    <!-- Center the card in the fragment -->
+    <!-- Loading State -->
+    <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:indeterminateTint="#8BFDE5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Searching for matches..."
+            android:textColor="#8BFDE5"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Container for the card -->
     <LinearLayout
         android:id="@+id/card_root"
         android:layout_width="0dp"
@@ -19,16 +47,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Outer rounded card -->
+        <!-- Outer rounded card (Stable Height) -->
         <LinearLayout
             android:id="@+id/match_card"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@drawable/bg_match_card"
-            android:padding="18dp">
+            android:padding="18dp"
+            android:visibility="visible">
 
-            <!-- TOP PILL: Perfect Swap Match -->
+            <!-- TOP PILL -->
             <TextView
                 android:id="@+id/tv_header"
                 android:layout_width="match_parent"
@@ -41,117 +70,109 @@
                 android:background="@drawable/bg_btn_connect"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- PROFILE IMAGE -->
-            <ImageView
-                android:id="@+id/img_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="260dp"
-                android:src="@drawable/man"
-                android:scaleType="centerCrop"
-                android:background="@drawable/bg_avatar_ring"
-                android:layout_marginTop="4dp"/>
+            <!-- PROFILE IMAGE (Circular) -->
+            <FrameLayout
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:background="@drawable/profile_ring"
+                android:padding="4dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/man"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/CircleImageView"
+                    android:padding="2dp"/>
+            </FrameLayout>
 
             <!-- NAME -->
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Scarlett Zhao"
+                android:text="Name"
                 android:textColor="#8BFDE5"
                 android:textStyle="bold"
-                android:textSize="24sp"/>
+                android:textSize="22sp"/>
 
-            <!-- SKILL TAGS -->
-            <LinearLayout
-                android:id="@+id/layout_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
+            <!-- SCROLLABLE SKILLS AREA -->
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal">
+                android:fillViewport="true">
 
-                <TextView
-                    android:id="@+id/tag_skill_one"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_matching_skills"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_skill_chip"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Video Editing"
-                    android:textColor="#E8FFF9"
-                    android:textSize="14sp"/>
+                    app:chipSpacingVertical="4dp"
+                    app:chipSpacingHorizontal="8dp"
+                    app:singleSelection="false"
+                    android:layout_gravity="center_horizontal" />
+            </androidx.core.widget.NestedScrollView>
 
-                <TextView
-                    android:id="@+id/tag_skill_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_skill_chip"
-                    android:paddingStart="18dp"
-                    android:paddingEnd="18dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="Learning Guitar"
-                    android:textColor="#E8FFF9"
-                    android:textSize="14sp"
-                    android:layout_marginStart="12dp"/>
-            </LinearLayout>
-
-            <!-- Action Buttons Row -->
+            <!-- Action Buttons Area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="22dp"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
 
-                <!-- CONNECT BUTTON -->
-                <TextView
-                    android:id="@+id/btn_connect"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
-                    android:background="@drawable/bg_btn_connect"
-                    android:gravity="center"
-                    android:text="Connect"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="18sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <!-- PASS BUTTON -->
+                    <!-- CONNECT BUTTON -->
+                    <TextView
+                        android:id="@+id/btn_connect"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_btn_connect"
+                        android:gravity="center"
+                        android:text="Connect"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:textSize="17sp"/>
+
+                    <!-- PASS BUTTON -->
+                    <TextView
+                        android:id="@+id/btn_pass"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_btn_view_profile"
+                        android:gravity="center"
+                        android:text="Pass"
+                        android:textColor="#8BFDE5"
+                        android:textStyle="bold"
+                        android:textSize="17sp"/>
+                </LinearLayout>
+
+                <!-- VIEW PROFILE BUTTON -->
                 <TextView
-                    android:id="@+id/btn_pass"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
+                    android:id="@+id/btn_view_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bg_btn_view_profile"
                     android:gravity="center"
-                    android:text="Pass"
+                    android:text="View Profile"
                     android:textColor="#8BFDE5"
                     android:textStyle="bold"
-                    android:textSize="18sp"/>
-
+                    android:textSize="17sp"/>
             </LinearLayout>
-
-            <!-- VIEW PROFILE BUTTON -->
-            <TextView
-                android:id="@+id/btn_view_profile"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_btn_view_profile"
-                android:gravity="center"
-                android:text="View Profile"
-                android:textColor="#8BFDE5"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
 
         </LinearLayout>
 

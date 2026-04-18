@@ -126,7 +126,7 @@
                         android:visibility="gone"/>
                 </LinearLayout>
 
-                <!-- FAQ 3 -->
+                <!-- FAQs  -->
                 <LinearLayout
                     android:id="@+id/faq3"
                     android:layout_width="match_parent"

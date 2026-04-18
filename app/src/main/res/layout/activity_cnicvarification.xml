@@ -21,7 +21,7 @@
             android:gravity="center_horizontal"
             android:padding="24dp">
 
-            <!-- TOP TITLE -->
+            <!-- TOP TITLE For Card -->
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
@@ -31,6 +31,7 @@
                 android:textColor="#7AF2DD"
                 android:textSize="18sp"
                 android:lineSpacingExtra="4dp" />
+
 
             <!-- CNIC CARDS ROW -->
             <LinearLayout
