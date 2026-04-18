@@ -13,11 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
@@ -42,8 +39,9 @@ public class SkillTestActivity extends AppCompatActivity {
 
     private static final String TAG = "SkillTestActivity";
 
-    private String API_KEY = "";
-    private String GEMINI_URL = "";
+    private static final String API_KEY = "AQ.Ab8RN6IWy_DPJECSAvZcenZ6x6A8wt0Jb29aEm4AP9EhU0iH9A";
+    private static final String GEMINI_URL =
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent?key=" + API_KEY;
 
     private Handler handler;
     private ProgressBar progressBar;
@@ -101,29 +99,9 @@ public class SkillTestActivity extends AppCompatActivity {
 
         handler = new Handler(Looper.getMainLooper());
 
-        fetchApiKeyAndStart();
+        loadQuestionsForCurrentSkill();
 
         btnSubmit.setOnClickListener(v -> checkAnswerAndNext());
-    }
-
-    private void fetchApiKeyAndStart() {
-        FirebaseDatabase.getInstance().getReference("api_keys").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    API_KEY = snapshot.getValue(String.class);
-                    GEMINI_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash-lite:generateContent?key=" + API_KEY;
-                    loadQuestionsForCurrentSkill();
-                } else {
-                    Toast.makeText(SkillTestActivity.this, "API Key not found in Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SkillTestActivity.this, "Failed to fetch API Key", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void loadQuestionsForCurrentSkill() {
@@ -290,6 +268,7 @@ public class SkillTestActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Continue", (d, w) -> {
                     if (finalAllTeachingPassed) {
+                        // Changed from AccountSettingsActivity to ProfileUpdateActivity
                         Intent intent = new Intent(this, ProfileUpdateActivity.class);
                         intent.putExtra("username", username);
                         startActivity(intent);
