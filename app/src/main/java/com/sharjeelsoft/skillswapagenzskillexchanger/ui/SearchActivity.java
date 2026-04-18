@@ -36,6 +36,7 @@ public class SearchActivity extends AppCompatActivity {
     private List<HelperClass> allUsers;
     private SearchUserAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

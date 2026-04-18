@@ -25,7 +25,7 @@
             android:paddingTop="20dp"
             android:paddingEnd="20dp"
             android:paddingBottom="24dp">
-            
+
 
             <!-- Title -->
             <TextView
@@ -869,7 +869,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="18dp"
                     android:background="@color/divider" />
-                <!-- 1. Creative and Design -->
+                <!-- 1. Creative and Design Skills -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -985,7 +985,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="18dp"
                     android:background="@color/divider" />
-                <!-- 2. Tech and Programming -->
+                <!-- 2. Tech and Programming Skills -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1087,7 +1087,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="18dp"
                     android:background="@color/divider" />
-                <!-- 3. Academic and Study -->
+                <!-- 3. Academic and Study Skills -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

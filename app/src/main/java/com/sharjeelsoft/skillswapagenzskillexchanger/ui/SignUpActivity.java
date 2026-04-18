@@ -319,6 +319,7 @@ public class SignUpActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Toast.makeText(SignUpActivity.this, "You have signed up successfully", Toast.LENGTH_SHORT).show();
                 signupPrefsClassLog.saveStringValue("isLogin", "signed_up");
+                signupPrefsClassLog.saveStringValue("username", userName); // FIXED: Added saving username
                 
                 // Navigate to CNIC Verification
                 Intent intent = new Intent(SignUpActivity.this, ActivityCNICVarification.class);

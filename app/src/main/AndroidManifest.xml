@@ -79,6 +79,9 @@
         <activity
             android:name=".ui.ViewProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.ProfileUpdateActivity"
+            android:exported="false" />
 
         <!-- UCrop Activity -->
         <activity

@@ -129,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                             
                             loginprefsClassLog.saveStringValue("username", usernameFromDB);
 
+
                             if (Email.equals("sharjeel@admin.com"))
                             {
                                 loginprefsClassLog.saveStringValue("isLogin","admin_in");

@@ -32,6 +32,7 @@
                 android:textSize="18sp"
                 android:lineSpacingExtra="4dp" />
 
+
             <!-- CNIC CARDS ROW -->
             <LinearLayout
                 android:layout_width="match_parent"
