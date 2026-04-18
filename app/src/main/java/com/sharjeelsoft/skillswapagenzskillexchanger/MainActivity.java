@@ -40,7 +40,6 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.ui.Session_Reminder_Activit
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SettingsActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillMatchmakingFragment;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillSelectionActivity;
-import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillTestActivity;
 
 public class MainActivity extends AppCompatActivity {
 

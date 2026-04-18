@@ -336,6 +336,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+
+
+
     public boolean validateData(String userName, String FullName, String Email, String Password, String Contact, String Dateofbirth, String country) {
         if (userName.isEmpty()) {
             username.setError("User name is required");

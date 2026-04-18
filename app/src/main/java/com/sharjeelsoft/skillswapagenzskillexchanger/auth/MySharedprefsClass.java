@@ -22,6 +22,8 @@ public class MySharedprefsClass {
         editor.apply();
     }
 
+
+
     public boolean getBoolean(String name) {
         return sharedPreferences.getBoolean(name, false); // Default value is false
     }

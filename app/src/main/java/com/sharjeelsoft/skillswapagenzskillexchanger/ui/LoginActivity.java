@@ -32,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView signupRedirectText,loginButton;
     ImageView ivEye;
     boolean isPasswordVisible = false;
+
+
     MySharedprefsClass loginprefsClassLog;
     Context context;
     @SuppressLint("MissingInflatedId")

@@ -272,7 +272,8 @@ public class SkillTestActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Continue", (d, w) -> {
                     if (finalAllTeachingPassed) {
-                        Intent intent = new Intent(this, AccountSettingsActivity.class);
+                        // Changed from AccountSettingsActivity to ProfileUpdateActivity
+                        Intent intent = new Intent(this, ProfileUpdateActivity.class);
                         intent.putExtra("username", username);
                         startActivity(intent);
                     } else {

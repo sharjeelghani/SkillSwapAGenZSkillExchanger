@@ -41,6 +41,8 @@ public class HelperClass {
     public boolean isVerified() { return verified; }
     public void setVerified(boolean verified) { this.verified = verified; }
 
+
+
     public String getSignupStage() { return signupStage; }
     public void setSignupStage(String signupStage) { this.signupStage = signupStage; }
     public boolean isSignedUp() { return isSignedUp; }

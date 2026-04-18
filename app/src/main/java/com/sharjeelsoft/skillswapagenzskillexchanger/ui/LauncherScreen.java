@@ -1,13 +1,12 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -108,6 +107,8 @@ public class LauncherScreen extends AppCompatActivity {
             navigateTo(SignUpActivity.class);
         }
     }
+
+
 
     private void navigateTo(Class<?> target) {
         Intent intent = new Intent(LauncherScreen.this, target);

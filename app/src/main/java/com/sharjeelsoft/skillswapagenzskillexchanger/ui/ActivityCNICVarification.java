@@ -30,10 +30,11 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
-import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActivityCNICVarification extends AppCompatActivity {
 
@@ -85,8 +86,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
                 .build();
         faceDetector = FaceDetection.getClient(options);
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-
-
     }
 
     private void setupListeners() {
@@ -209,7 +208,14 @@ public class ActivityCNICVarification extends AppCompatActivity {
     private void updateVerificationStatus(boolean status) {
         if (username == null) return;
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("user").child(username);
-        ref.child("verified").setValue(status);
+        
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("isCNICVerified", status);
+        if (status) {
+            updates.put("signupStage", "DATA_PENDING");
+        }
+        
+        ref.updateChildren(updates);
     }
 
     private void showLoadingDialog(String msg) {
@@ -241,7 +247,9 @@ public class ActivityCNICVarification extends AppCompatActivity {
                 .setTitle("Verified!")
                 .setMessage("Your identity has been successfully verified.")
                 .setPositiveButton("Proceed", (d, w) -> {
-                    startActivity(new Intent(this, MainActivity.class));
+                    Intent intent = new Intent(this, DataCllectionActivity.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
                     finish();
                 })
                 .setCancelable(false)

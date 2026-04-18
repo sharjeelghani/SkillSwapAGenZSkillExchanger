@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -212,6 +211,8 @@ public class DataCllectionActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private List<String> getSelectedChips(ChipGroup group) {
         List<String> result = new ArrayList<>();
