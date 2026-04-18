@@ -39,9 +39,9 @@ public class SkillTestActivity extends AppCompatActivity {
 
     private static final String TAG = "SkillTestActivity";
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "YOUR_API_KEY_HERE";
     private static final String GEMINI_URL =
-            "" + API_KEY;
+            "YOUR_GEMINI_URL_HERE" + API_KEY;
 
     private Handler handler;
     private ProgressBar progressBar;
