@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,18 +30,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
 
     private ImageView profilePic, btnBack;
     private TextView tvUpdatePhoto;
+    private Button btnFinish;
     private MySharedprefsClass sharedPrefs;
     private DatabaseReference userRef;
     private String currentUsername;
@@ -101,12 +107,15 @@ public class ProfileUpdateActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
         tvUpdatePhoto.setOnClickListener(v -> showImagePickerDialog());
+        
+        btnFinish.setOnClickListener(v -> completeSignupProgress());
     }
 
     private void initViews() {
         profilePic = findViewById(R.id.profile_pic);
         btnBack = findViewById(R.id.btn_back);
         tvUpdatePhoto = findViewById(R.id.tv_update_photo);
+        btnFinish = findViewById(R.id.btnFinish);
 
         sharedPrefs = new MySharedprefsClass(this);
         currentUsername = sharedPrefs.getStringValue("username");
@@ -127,6 +136,8 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                                 .load(currentUserData.getProfileImageUrl())
                                 .placeholder(R.drawable.man)
                                 .into(profilePic);
+                        
+                        btnFinish.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -225,6 +236,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                         userRef.child("profileImageUrl").setValue(downloadUrl).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 progressDialog.setMessage("Profile Updated");
+                                btnFinish.setVisibility(View.VISIBLE);
                                 new android.os.Handler().postDelayed(() -> {
                                     if (progressDialog.isShowing()) progressDialog.dismiss();
                                 }, 1500);
@@ -238,5 +250,26 @@ public class ProfileUpdateActivity extends AppCompatActivity {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
                     Toast.makeText(ProfileUpdateActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
+    }
+
+    private void completeSignupProgress() {
+        progressDialog.setMessage("Completing Signup...");
+        progressDialog.show();
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("isAccountSet", true);
+        updates.put("signupStage", "COMPLETED");
+
+        userRef.updateChildren(updates).addOnCompleteListener(task -> {
+            progressDialog.dismiss();
+            if (task.isSuccessful()) {
+                Intent intent = new Intent(ProfileUpdateActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Failed to complete setup", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

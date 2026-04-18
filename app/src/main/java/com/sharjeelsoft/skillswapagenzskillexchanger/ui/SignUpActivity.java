@@ -315,13 +315,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void registerUser(String userName, String FullName, String Email, String Password, String Contact, String Dateofbirth, String country) {
         HelperClass helperClass = new HelperClass(userName, FullName, Email, Password, Contact, Dateofbirth, country);
+        // Stage 1: Signed Up -> Moving to CNIC
+        helperClass.setSignupStage("CNIC_PENDING");
+        helperClass.setSignedUp(true);
+
         references.child(userName).setValue(helperClass).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(SignUpActivity.this, "You have signed up successfully", Toast.LENGTH_SHORT).show();
-                signupPrefsClassLog.saveStringValue("isLogin", "signed_up");
-                signupPrefsClassLog.saveStringValue("username", userName); // FIXED: Added saving username
+                signupPrefsClassLog.saveStringValue("isLogin", "logged_in");
+                signupPrefsClassLog.saveStringValue("username", userName);
                 
-                // Navigate to CNIC Verification
                 Intent intent = new Intent(SignUpActivity.this, ActivityCNICVarification.class);
                 intent.putExtra("username", userName);
                 intent.putExtra("fullName", FullName);
@@ -333,25 +336,15 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+
+
+
     public boolean validateData(String userName, String FullName, String Email, String Password, String Contact, String Dateofbirth, String country) {
         if (userName.isEmpty()) {
             username.setError("User name is required");
             username.requestFocus();
             return false;
         }
-
-        if (userName.contains(" ")) {
-            username.setError("Username cannot contain spaces");
-            username.requestFocus();
-            return false;
-        }
-
-        if (!Pattern.compile("^[a-z0-9_]*$").matcher(userName).matches()) {
-            username.setError("Username can only contain small letters, numbers and underscore (_)");
-            username.requestFocus();
-            return false;
-        }
-
         if (FullName.isEmpty()) {
             fullName.setError("Full name is required");
             fullName.requestFocus();

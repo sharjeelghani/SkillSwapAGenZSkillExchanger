@@ -24,6 +24,7 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView signupRedirectText,loginButton;
     ImageView ivEye;
     boolean isPasswordVisible = false;
+
+
     MySharedprefsClass loginprefsClassLog;
     Context context;
     @SuppressLint("MissingInflatedId")
@@ -118,31 +121,26 @@ public class LoginActivity extends AppCompatActivity {
                     loginemail.setError(null);
                     boolean userFound = false;
 
-                    // Iterate through users with this email (usually one)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                         String passwordFromDB = userSnapshot.child("password").getValue(String.class);
                         String usernameFromDB = userSnapshot.child("username").getValue(String.class);
+                        String stage = userSnapshot.child("signupStage").getValue(String.class);
+                        String fullName = userSnapshot.child("fullName").getValue(String.class);
 
                         if(Objects.equals(passwordFromDB, Password)){
                             userFound = true;
                             loginpassword.setError(null);
                             
                             loginprefsClassLog.saveStringValue("username", usernameFromDB);
+                            loginprefsClassLog.saveStringValue("isLogin", Email.equals("sharjeel@admin.com") ? "admin_in" : "logged_in");
 
-
-                            if (Email.equals("sharjeel@admin.com"))
-                            {
-                                loginprefsClassLog.saveStringValue("isLogin","admin_in");
-                                Intent intent = new Intent(LoginActivity.this, AdminMainActivity.class);
-                                startActivity(intent);
+                            if (Email.equals("sharjeel@admin.com")) {
+                                startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                                finish();
+                            } else {
+                                // Unified progress check on login
+                                handleNavigation(stage, usernameFromDB, fullName, userSnapshot);
                             }
-                            else
-                            {
-                                loginprefsClassLog.saveStringValue("isLogin","logged_in");
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                            finish(); // Finish LoginActivity so user can't go back to it
                             break;
                         }
                     }
@@ -163,5 +161,43 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void handleNavigation(String stage, String username, String fullName, DataSnapshot snapshot) {
+        if (stage == null) stage = "SIGN_UP";
+        Intent intent;
+
+        switch (stage) {
+            case "CNIC_PENDING":
+                intent = new Intent(LoginActivity.this, ActivityCNICVarification.class);
+                intent.putExtra("username", username);
+                intent.putExtra("fullName", fullName);
+                break;
+            case "DATA_PENDING":
+                intent = new Intent(LoginActivity.this, DataCllectionActivity.class);
+                intent.putExtra("username", username);
+                break;
+            case "SKILLS_PENDING":
+                ArrayList<String> teaching = new ArrayList<>();
+                for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
+                    teaching.add(child.getValue(String.class));
+                }
+                intent = new Intent(LoginActivity.this, SkillSelectionActivity.class);
+                intent.putExtra("username", username);
+                intent.putStringArrayListExtra("teachingSkills", teaching);
+                break;
+            case "ACCOUNT_PENDING":
+                intent = new Intent(LoginActivity.this, AccountSettingsActivity.class);
+                intent.putExtra("username", username);
+                break;
+            case "COMPLETED":
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                break;
+            default:
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                break;
+        }
+        startActivity(intent);
+        finish();
     }
 }

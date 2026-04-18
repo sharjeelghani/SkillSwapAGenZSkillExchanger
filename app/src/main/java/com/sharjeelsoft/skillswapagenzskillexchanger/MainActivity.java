@@ -41,7 +41,7 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SessionDetailsActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.Session_Reminder_Activity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SettingsActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillMatchmakingFragment;
-import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillTestActivity;
+import com.sharjeelsoft.skillswapagenzskillexchanger.ui.SkillSelectionActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.settings_nav) {
             intent = new Intent(this, SettingsActivity.class);
         }  else if (id == R.id.skill_test_nav) {
-            intent = new Intent(this, SkillTestActivity.class);
+            intent = new Intent(this, SkillSelectionActivity.class);
         } else if (id == R.id.data_collextion_nav) {
             intent = new Intent(this, DataCllectionActivity.class);
         }  else if (id == R.id.chat_system_nav) {

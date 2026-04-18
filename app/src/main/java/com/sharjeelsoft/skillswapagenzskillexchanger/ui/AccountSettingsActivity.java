@@ -377,6 +377,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void checkUsernameAndMigrate(String newUsername, String newFullName, String newContact, String newDob) {
         DatabaseReference allUsersRef = FirebaseDatabase.getInstance().getReference("user");
         allUsersRef.child(newUsername).addListenerForSingleValueEvent(new ValueEventListener() {
