@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.firebase:firebase-analytics")
     
     implementation(libs.googleAuth)
     implementation(libs.okhttp)
@@ -54,7 +55,7 @@ dependencies {
     
     // Image Cropper
     implementation("com.github.yalantis:ucrop:2.2.8")
-
+    implementation("androidx.cardview:cardview:1.0.0")
     // ML Kit dependencies
     implementation(libs.mlkitText)
     implementation(libs.mlkitFace)
