@@ -31,6 +31,7 @@ public class LauncherScreen extends AppCompatActivity {
         context = getApplicationContext();
         loginprefsClass = new MySharedprefsClass(context);
 
+
         new Handler().postDelayed(this::checkUserProgress, 2000);
     }
 

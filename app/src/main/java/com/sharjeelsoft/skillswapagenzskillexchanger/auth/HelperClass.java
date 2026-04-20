@@ -33,6 +33,7 @@ public class HelperClass {
     public String getCountry() { return Country; }
     public void setCountry(String country) { Country = country; }
     public String getPassword() { return password; }
+
     public void setPassword(String password) { this.password = password; }
     public String getContact() { return contact; }
     public void setContact(String contact) { this.contact = contact; }

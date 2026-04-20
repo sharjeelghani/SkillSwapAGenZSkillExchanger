@@ -225,6 +225,7 @@
                         android:textColor="@color/teal_text"
                         android:textStyle="bold" />
 
+
                     <TextView
                         android:id="@+id/value_avg_session_duration"
                         android:layout_width="wrap_content"

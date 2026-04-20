@@ -26,6 +26,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.AnalyticsService;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ActivityCNICVarification;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.DashboardFragment;
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupDrawerClicks();
 
+        logUserActivity();
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(Color.TRANSPARENT);
         gradientDrawable.setCornerRadius(50);
@@ -117,6 +122,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         SetUpPager();
+    }
+    private void logUserActivity() {
+        MySharedprefsClass prefs = new MySharedprefsClass(this);
+        String username = prefs.getStringValue("username");
+        if (username != null && !username.isEmpty()) {
+            // Log user activity for DAU/WAU/MAU
+            DatabaseReference activityRef = FirebaseDatabase.getInstance().getReference("analytics_data").child("user_activity").child(username);
+            activityRef.child("last_active_timestamp").setValue(System.currentTimeMillis());
+
+            // Start a new session for duration tracking
+            AnalyticsService.getInstance(this).startSession(username);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // End the session when MainActivity is destroyed
+        AnalyticsService.getInstance(this).endSession();
     }
     private void SetUpPager() {
         // Define the icons for the selected and unselected states

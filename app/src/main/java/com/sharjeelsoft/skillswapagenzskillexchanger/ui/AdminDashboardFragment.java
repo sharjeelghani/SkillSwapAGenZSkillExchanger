@@ -59,6 +59,7 @@ public class AdminDashboardFragment extends Fragment {
         if (activeUsersCard != null) {
             tvActiveUsers = activeUsersCard.findViewById(R.id.value);
         }
+
         tvTotalSessions = view.findViewById(R.id.value_total_sessions);
         tvAvgSessionDuration = view.findViewById(R.id.value_avg_session_duration);
         tvTopEvent = view.findViewById(R.id.value_top_event);
