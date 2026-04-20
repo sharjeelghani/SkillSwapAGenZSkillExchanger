@@ -11,7 +11,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notifications"
+        android:text="Match Requests"
         android:textColor="#8BFDE5"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -22,17 +22,17 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_notifications"
+            android:id="@+id/rv_match_requests"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
 
         <TextView
-            android:id="@+id/tv_no_notifications"
+            android:id="@+id/tv_no_requests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="No Notifications Yet."
+            android:text="No Requests Received Yet."
             android:textColor="#5CD9C0"
             android:textSize="18sp"
             android:visibility="visible"/>

@@ -3,6 +3,7 @@ package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -24,14 +26,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
+import com.sharjeelsoft.skillswapagenzskillexchanger.models.NotificationModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SkillMatchmakingFragment extends Fragment {
 
     private List<HelperClass> userList = new ArrayList<>();
     private List<String> myLearningInterests = new ArrayList<>();
+    private List<String> sentRequests = new ArrayList<>();
+    private List<String> connections = new ArrayList<>();
     private int currentIndex = 0;
 
     private TextView tvName;
@@ -64,7 +71,7 @@ public class SkillMatchmakingFragment extends Fragment {
         layoutLoading = view.findViewById(R.id.layout_loading);
 
         // --- button handlers ---
-        btnConnect.setOnClickListener(v -> goToNextMatch());
+        btnConnect.setOnClickListener(v -> sendMatchRequest());
         btnPass.setOnClickListener(v -> goToNextMatch());
 
         btnViewProfile.setOnClickListener(v -> {
@@ -81,24 +88,83 @@ public class SkillMatchmakingFragment extends Fragment {
         return view;
     }
 
+    private void sendMatchRequest() {
+        if (userList.isEmpty() || currentIndex >= userList.size()) return;
+
+        HelperClass targetUser = userList.get(currentIndex);
+        String currentUsername = sharedPrefs.getStringValue("username");
+        String targetUsername = targetUser.getUsername();
+
+        if (currentUsername == null || targetUsername == null) return;
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        long timestamp = System.currentTimeMillis();
+
+        // Prepare Notification
+        String notiId = dbRef.child("user").child(targetUsername).child("notifications").push().getKey();
+        NotificationModel notification = new NotificationModel(
+                notiId,
+                "New Match Request",
+                "You have a new connection request from a potential match!",
+                currentUsername,
+                timestamp,
+                "match_request"
+        );
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("user/" + currentUsername + "/matchRequests/sent/" + targetUsername, timestamp);
+        updates.put("user/" + targetUsername + "/matchRequests/received/" + currentUsername, timestamp);
+        if (notiId != null) {
+            updates.put("user/" + targetUsername + "/notifications/" + notiId, notification);
+        }
+
+        dbRef.updateChildren(updates).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                showRequestSentPopup();
+                // Remove from local list so it doesn't show again in this session immediately
+                userList.remove(currentIndex);
+                if (userList.isEmpty()) {
+                    matchCard.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "No more users found", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (currentIndex >= userList.size()) currentIndex = 0;
+                    showMatch(currentIndex);
+                }
+            }
+        });
+    }
+
+    private void showRequestSentPopup() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_request_sent, null);
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        dialog.show();
+
+        new Handler().postDelayed(dialog::dismiss, 2000);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        // Start listening when fragment becomes visible (e.g., returning from profile update)
         loadUsersFromFirebase();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Always remove listeners in onStop to prevent memory leaks
         if (usersRef != null && usersListener != null) {
             usersRef.removeEventListener(usersListener);
         }
     }
 
     private void loadUsersFromFirebase() {
-        // Show loading state
         layoutLoading.setVisibility(View.VISIBLE);
         matchCard.setVisibility(View.GONE);
 
@@ -115,23 +181,35 @@ public class SkillMatchmakingFragment extends Fragment {
                 
                 userList.clear();
                 myLearningInterests.clear();
+                sentRequests.clear();
+                connections.clear();
 
-                // 1. First Pass: Get the logged-in user's latest learning interests
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    HelperClass u = ds.getValue(HelperClass.class);
-                    if (u != null && u.getUsername() != null && u.getUsername().equals(currentLoggedInUser)) {
-                        if (u.getLearningInterests() != null) {
-                            myLearningInterests.addAll(u.getLearningInterests());
+                DataSnapshot me = snapshot.child(currentLoggedInUser);
+                if (me.exists()) {
+                    HelperClass uMe = me.getValue(HelperClass.class);
+                    if (uMe != null && uMe.getLearningInterests() != null) {
+                        myLearningInterests.addAll(uMe.getLearningInterests());
+                    }
+                    // Get already sent requests
+                    if (me.hasChild("matchRequests/sent")) {
+                        for (DataSnapshot ds : me.child("matchRequests/sent").getChildren()) {
+                            sentRequests.add(ds.getKey());
                         }
-                        break;
+                    }
+                    // Get already connected users
+                    if (me.hasChild("allConnections")) {
+                        for (DataSnapshot ds : me.child("allConnections").getChildren()) {
+                            connections.add(ds.getKey());
+                        }
                     }
                 }
 
-                // 2. Second Pass: Populate matches list (excluding self)
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     HelperClass user = dataSnapshot.getValue(HelperClass.class);
                     if (user != null && user.getUsername() != null) {
-                        if (!user.getUsername().equals(currentLoggedInUser)) {
+                        String uName = user.getUsername();
+                        // Filter: Not self, Not already sent request, Not already connected
+                        if (!uName.equals(currentLoggedInUser) && !sentRequests.contains(uName) && !connections.contains(uName)) {
                             userList.add(user);
                         }
                     }
@@ -141,12 +219,10 @@ public class SkillMatchmakingFragment extends Fragment {
 
                 if (!userList.isEmpty()) {
                     matchCard.setVisibility(View.VISIBLE);
-                    // If index is out of bounds after update, reset it
                     if (currentIndex >= userList.size()) currentIndex = 0;
                     showMatch(currentIndex);
                 } else {
                     matchCard.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "No more users found", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -168,7 +244,6 @@ public class SkillMatchmakingFragment extends Fragment {
 
         tvName.setText(user.getFullName() != null ? user.getFullName() : "NA");
 
-        // Filter user's teaching skills by my current learning interests
         cgMatchingSkills.removeAllViews();
         List<String> matchingSkills = new ArrayList<>();
         if (user.getTeachingSkills() != null) {
@@ -198,7 +273,6 @@ public class SkillMatchmakingFragment extends Fragment {
             cgMatchingSkills.addView(chip);
         }
 
-        // Handle profile image with gender-specific placeholders
         int placeholder = getGenderPlaceholder(user.getGender());
         if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty()) {
             Glide.with(this)
