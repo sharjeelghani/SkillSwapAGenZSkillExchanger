@@ -255,6 +255,20 @@
                 app:chipSpacingVertical="8dp"
                 app:chipSpacingHorizontal="8dp"/>
 
+            <!-- REPORT USER BUTTON -->
+            <TextView
+                android:id="@+id/btn_report_user"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/bg_btn_view_profile"
+                android:gravity="center"
+                android:text="Report User"
+                android:textColor="#FF4D4D"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
 
         </LinearLayout>
     </ScrollView>

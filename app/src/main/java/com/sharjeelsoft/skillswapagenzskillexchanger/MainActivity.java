@@ -1,16 +1,22 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +33,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ActivityCNICVarification;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.DashboardFragment;
@@ -51,12 +60,26 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager viewPager;
     View contentView;
 
-    public LottieAnimationView drawer_icon; // Changed type to match XML
+    public LottieAnimationView drawer_icon;
     public int fragPosition = 0;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    saveFcmToken();
+                } else {
+                    Log.w("MainActivity", "Notification permission denied");
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        askNotificationPermission();
+        saveFcmToken();
+        
         setupDrawerClicks();
 
         GradientDrawable gradientDrawable = new GradientDrawable();
@@ -119,14 +142,54 @@ public class MainActivity extends AppCompatActivity {
         SetUpPager();
 
         // Handle navigation from notification panel
-        if (getIntent().hasExtra("navigate_to")) {
-            String destination = getIntent().getStringExtra("navigate_to");
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent != null && intent.hasExtra("navigate_to")) {
+            String destination = intent.getStringExtra("navigate_to");
             if ("requests".equals(destination)) {
                 fragPosition = 3;
-                viewPager.setCurrentItem(3);
+                if (viewPager != null) {
+                    viewPager.setCurrentItem(3);
+                }
             }
         }
     }
+
+    private void askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
+
+    private void saveFcmToken() {
+        MySharedprefsClass prefs = new MySharedprefsClass(this);
+        String username = prefs.getStringValue("username");
+        if (username == null || username.equals("new_user")) return;
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
+                return;
+            }
+
+            String token = task.getResult();
+            FirebaseDatabase.getInstance().getReference("user")
+                    .child(username).child("fcmToken").setValue(token);
+        });
+    }
+
     private void SetUpPager() {
         // Define the icons for the selected and unselected states
         int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.ic_matches, R.drawable.user_sel};

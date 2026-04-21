@@ -55,7 +55,12 @@ public class LauncherScreen extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         String stage = snapshot.child("signupStage").getValue(String.class);
-                        if (stage == null) stage = "SIGN_UP";
+                        
+                        // If stage is missing, fallback to status-based navigation
+                        if (stage == null)  {
+                            handleStatusBasedNavigation(isLogin);
+                            return;
+                        }
 
                         switch (stage) {
                             case "CNIC_PENDING":
@@ -75,7 +80,7 @@ public class LauncherScreen extends AppCompatActivity {
                                 // Fetch teaching skills to pass to selection activity
                                 ArrayList<String> teaching = new ArrayList<>();
                                 for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
-                                    teaching.add(child.getValue(String.class));
+                                    teaching.add(String.valueOf(child.getValue()));
                                 }
                                 Intent skillsIntent = new Intent(LauncherScreen.this, SkillSelectionActivity.class);
                                 skillsIntent.putExtra("username", username);
@@ -84,23 +89,26 @@ public class LauncherScreen extends AppCompatActivity {
                                 finish();
                                 break;
                             case "ACCOUNT_PENDING":
-                                navigateTo(AccountSettingsActivity.class);
+                                navigateTo(ProfileUpdateActivity.class);
                                 break;
                             case "COMPLETED":
                                 navigateTo(MainActivity.class);
                                 break;
                             default:
-                                navigateTo(SignUpActivity.class);
+                                // Use the unified check for unrecognized stages
+                                handleStatusBasedNavigation(isLogin);
                                 break;
                         }
                     } else {
-                        navigateTo(SignUpActivity.class);
+                        // User data doesn't exist in Firebase, check local status
+                        handleStatusBasedNavigation(isLogin);
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    navigateTo(LoginActivity.class);
+                    // Firebase error, fallback to local status
+                    handleStatusBasedNavigation(isLogin);
                 }
             });
         } else {
@@ -108,10 +116,31 @@ public class LauncherScreen extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Unified navigation logic based on the isLogin preference.
+     * This ensures the "check" works correctly when Firebase data is missing or corrupted.
+     */
+    private void handleStatusBasedNavigation(String isLogin) {
+        if (isLogin.equals("new_user")) {
+            navigateTo(SignUpActivity.class);
+        } else if (isLogin.equals("signed_up")) {
+            navigateTo(LoginActivity.class);
+        } else if (isLogin.equals("logged_in")) {
+            // If already logged in but stage is unknown, go to Main
+            navigateTo(MainActivity.class);
+        } else if (isLogin.equals("admin_in")) {
+            navigateTo(AdminMainActivity.class);
+        } else {
+            navigateTo(SignUpActivity.class);
+        }
+    }
 
     private void navigateTo(Class<?> target) {
         Intent intent = new Intent(LauncherScreen.this, target);
+        // Pass notification extras if any
+        if (getIntent().hasExtra("navigate_to")) {
+            intent.putExtra("navigate_to", getIntent().getStringExtra("navigate_to"));
+        }
         startActivity(intent);
         finish();
     }

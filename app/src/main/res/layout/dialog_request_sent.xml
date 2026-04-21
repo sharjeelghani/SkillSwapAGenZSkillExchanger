@@ -10,11 +10,11 @@
     android:padding="24dp">
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        app:lottie_colorFilter="#8BFDE5"
         app:lottie_rawRes="@raw/check_animation" />
 
     <TextView

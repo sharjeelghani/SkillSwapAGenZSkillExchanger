@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +31,7 @@ import java.util.List;
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView rvNotifications;
-    private TextView tvNoNotifications;
+    private TextView tvNoNotifications, tvClearAll;
     private ProgressBar progressBar;
     private List<NotificationModel> notificationList = new ArrayList<>();
     private NotificationAdapter adapter;
@@ -46,6 +47,7 @@ public class NotificationsFragment extends Fragment {
 
         rvNotifications = view.findViewById(R.id.rv_notifications);
         tvNoNotifications = view.findViewById(R.id.tv_no_notifications);
+        tvClearAll = view.findViewById(R.id.tv_clear_all);
         progressBar = view.findViewById(R.id.progress_bar);
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -57,6 +59,8 @@ public class NotificationsFragment extends Fragment {
                     .child(currentUsername).child("notifications");
             loadNotifications();
         }
+
+        tvClearAll.setOnClickListener(v -> clearAllNotifications());
 
         return view;
     }
@@ -85,14 +89,28 @@ public class NotificationsFragment extends Fragment {
         });
     }
 
+    private void clearAllNotifications() {
+        if (notificationsRef != null) {
+            notificationsRef.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Notifications cleared", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed to clear notifications", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     private void updateUI() {
         progressBar.setVisibility(View.GONE);
         if (notificationList.isEmpty()) {
             tvNoNotifications.setVisibility(View.VISIBLE);
             rvNotifications.setVisibility(View.GONE);
+            tvClearAll.setVisibility(View.GONE);
         } else {
             tvNoNotifications.setVisibility(View.GONE);
             rvNotifications.setVisibility(View.VISIBLE);
+            tvClearAll.setVisibility(View.VISIBLE);
             adapter = new NotificationAdapter(notificationList, getContext());
             rvNotifications.setAdapter(adapter);
         }

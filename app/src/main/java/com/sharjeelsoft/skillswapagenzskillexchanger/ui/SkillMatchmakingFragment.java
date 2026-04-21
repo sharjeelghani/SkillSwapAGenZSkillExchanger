@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.FCMV1Helper;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.models.NotificationModel;
@@ -37,13 +38,14 @@ public class SkillMatchmakingFragment extends Fragment {
 
     private List<HelperClass> userList = new ArrayList<>();
     private List<String> myLearningInterests = new ArrayList<>();
+    private List<String> myTeachingSkills = new ArrayList<>();
     private List<String> sentRequests = new ArrayList<>();
     private List<String> connections = new ArrayList<>();
     private int currentIndex = 0;
 
     private TextView tvName;
     private ImageView imgAvatar;
-    private ChipGroup cgMatchingSkills;
+    private ChipGroup cgTeachingMatches, cgLearningMatches;
     private TextView btnConnect;
     private TextView btnPass;
     private TextView btnViewProfile;
@@ -51,6 +53,7 @@ public class SkillMatchmakingFragment extends Fragment {
     private MySharedprefsClass sharedPrefs;
     private DatabaseReference usersRef;
     private ValueEventListener usersListener;
+    private FCMV1Helper fcmv1Helper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,11 +62,13 @@ public class SkillMatchmakingFragment extends Fragment {
 
         sharedPrefs = new MySharedprefsClass(requireContext());
         usersRef = FirebaseDatabase.getInstance().getReference("user");
+        fcmv1Helper = new FCMV1Helper(requireContext());
 
         // --- bind views ---
         tvName = view.findViewById(R.id.tv_name);
         imgAvatar = view.findViewById(R.id.img_avatar);
-        cgMatchingSkills = view.findViewById(R.id.cg_matching_skills);
+        cgTeachingMatches = view.findViewById(R.id.cg_teaching_matches);
+        cgLearningMatches = view.findViewById(R.id.cg_learning_matches);
         btnConnect = view.findViewById(R.id.btn_connect);
         btnPass = view.findViewById(R.id.btn_pass);
         btnViewProfile = view.findViewById(R.id.btn_view_profile);
@@ -94,6 +99,7 @@ public class SkillMatchmakingFragment extends Fragment {
         HelperClass targetUser = userList.get(currentIndex);
         String currentUsername = sharedPrefs.getStringValue("username");
         String targetUsername = targetUser.getUsername();
+        String targetFcmToken = targetUser.getFcmToken();
 
         if (currentUsername == null || targetUsername == null) return;
 
@@ -105,7 +111,7 @@ public class SkillMatchmakingFragment extends Fragment {
         NotificationModel notification = new NotificationModel(
                 notiId,
                 "New Match Request",
-                "You have a new connection request from a potential match!",
+                "You have a new connection request from " + currentUsername + "!",
                 currentUsername,
                 timestamp,
                 "match_request"
@@ -121,6 +127,12 @@ public class SkillMatchmakingFragment extends Fragment {
         dbRef.updateChildren(updates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 showRequestSentPopup();
+
+                // Send Real-time Push Notification via FCM V1
+                if (targetFcmToken != null && !targetFcmToken.isEmpty()) {
+                    fcmv1Helper.sendNotification(targetFcmToken, notification.getTitle(), notification.getMessage(), "requests");
+                }
+
                 // Remove from local list so it doesn't show again in this session immediately
                 userList.remove(currentIndex);
                 if (userList.isEmpty()) {
@@ -181,14 +193,20 @@ public class SkillMatchmakingFragment extends Fragment {
                 
                 userList.clear();
                 myLearningInterests.clear();
+                myTeachingSkills.clear();
                 sentRequests.clear();
                 connections.clear();
 
                 DataSnapshot me = snapshot.child(currentLoggedInUser);
                 if (me.exists()) {
                     HelperClass uMe = me.getValue(HelperClass.class);
-                    if (uMe != null && uMe.getLearningInterests() != null) {
-                        myLearningInterests.addAll(uMe.getLearningInterests());
+                    if (uMe != null) {
+                        if (uMe.getLearningInterests() != null) {
+                            myLearningInterests.addAll(uMe.getLearningInterests());
+                        }
+                        if (uMe.getTeachingSkills() != null) {
+                            myTeachingSkills.addAll(uMe.getTeachingSkills());
+                        }
                     }
                     // Get already sent requests
                     if (me.hasChild("matchRequests/sent")) {
@@ -210,7 +228,35 @@ public class SkillMatchmakingFragment extends Fragment {
                         String uName = user.getUsername();
                         // Filter: Not self, Not already sent request, Not already connected
                         if (!uName.equals(currentLoggedInUser) && !sentRequests.contains(uName) && !connections.contains(uName)) {
-                            userList.add(user);
+
+                            // --- Mutual Skill-based Filtering (Skill Swap) ---
+
+                            // 1. Does other user teach what I want to learn?
+                            boolean otherTeachesWhatILearn = false;
+                            if (user.getTeachingSkills() != null) {
+                                for (String skill : user.getTeachingSkills()) {
+                                    if (myLearningInterests.contains(skill)) {
+                                        otherTeachesWhatILearn = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // 2. Do I teach what the other user wants to learn?
+                            boolean iTeachWhatOtherLearns = false;
+                            if (user.getLearningInterests() != null) {
+                                for (String interest : user.getLearningInterests()) {
+                                    if (myTeachingSkills.contains(interest)) {
+                                        iTeachWhatOtherLearns = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // It's only a "Swap" match if both conditions are met
+                            if (otherTeachesWhatILearn && iTeachWhatOtherLearns) {
+                                userList.add(user);
+                            }
                         }
                     }
                 }
@@ -244,33 +290,24 @@ public class SkillMatchmakingFragment extends Fragment {
 
         tvName.setText(user.getFullName() != null ? user.getFullName() : "NA");
 
-        cgMatchingSkills.removeAllViews();
-        List<String> matchingSkills = new ArrayList<>();
+        // --- Matched Teaching Skills ---
+        cgTeachingMatches.removeAllViews();
         if (user.getTeachingSkills() != null) {
             for (String skill : user.getTeachingSkills()) {
                 if (myLearningInterests.contains(skill)) {
-                    matchingSkills.add(skill);
+                    addChipToGroup(cgTeachingMatches, skill);
                 }
             }
         }
 
-        if (!matchingSkills.isEmpty()) {
-            for (String skill : matchingSkills) {
-                Chip chip = new Chip(requireContext());
-                chip.setText(skill);
-                chip.setChipBackgroundColorResource(R.color.button_fill_trans);
-                chip.setTextColor(getResources().getColor(R.color.white));
-                chip.setChipStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.teal_light)));
-                chip.setChipStrokeWidth(3);
-                chip.setChipCornerRadius(50);
-                cgMatchingSkills.addView(chip);
+        // --- Matched Learning Interests ---
+        cgLearningMatches.removeAllViews();
+        if (user.getLearningInterests() != null) {
+            for (String interest : user.getLearningInterests()) {
+                if (myTeachingSkills.contains(interest)) {
+                    addChipToGroup(cgLearningMatches, interest);
+                }
             }
-        } else {
-            Chip chip = new Chip(requireContext());
-            chip.setText("NA");
-            chip.setChipBackgroundColorResource(R.color.button_fill_trans);
-            chip.setTextColor(getResources().getColor(R.color.white));
-            cgMatchingSkills.addView(chip);
         }
 
         int placeholder = getGenderPlaceholder(user.getGender());
@@ -283,6 +320,17 @@ public class SkillMatchmakingFragment extends Fragment {
         } else {
             imgAvatar.setImageResource(placeholder);
         }
+    }
+
+    private void addChipToGroup(ChipGroup group, String text) {
+        Chip chip = new Chip(requireContext());
+        chip.setText(text);
+        chip.setChipBackgroundColorResource(R.color.button_fill_trans);
+        chip.setTextColor(getResources().getColor(R.color.white));
+        chip.setChipStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.teal_light)));
+        chip.setChipStrokeWidth(3);
+        chip.setChipCornerRadius(50);
+        group.addView(chip);
     }
 
     private int getGenderPlaceholder(String gender) {

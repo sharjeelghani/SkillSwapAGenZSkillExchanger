@@ -1,5 +1,6 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,17 +25,18 @@ import java.util.List;
 public class ViewProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic, btnBack;
-    private TextView tvFullName, tvUsername, tvJob, tvLocation, tvGender, tvEducation, tvExperience, btnMatch;
+    private TextView tvFullName, tvUsername, tvJob, tvLocation, tvGender, tvEducation, tvExperience, btnMatch, btnReport;
     private ChipGroup cgTeaching, cgLearning;
     private DatabaseReference userRef;
+    private String reportedUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
-        String username = getIntent().getStringExtra("userName");
-        if (username == null || username.isEmpty()) {
+        reportedUsername = getIntent().getStringExtra("userName");
+        if (reportedUsername == null || reportedUsername.isEmpty()) {
             Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -42,13 +44,19 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         initViews();
         
-        userRef = FirebaseDatabase.getInstance().getReference("user").child(username);
+        userRef = FirebaseDatabase.getInstance().getReference("user").child(reportedUsername);
         loadUserData();
 
         btnBack.setOnClickListener(v -> finish());
         
         btnMatch.setOnClickListener(v -> {
             Toast.makeText(this, "Match Request Sent!", Toast.LENGTH_SHORT).show();
+        });
+
+        btnReport.setOnClickListener(v -> {
+            Intent intent = new Intent(ViewProfileActivity.this, Report_User_Activity.class);
+            intent.putExtra("reportedUsername", reportedUsername);
+            startActivity(intent);
         });
     }
 
@@ -65,6 +73,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         cgTeaching = findViewById(R.id.cg_teaching);
         cgLearning = findViewById(R.id.cg_learning);
         btnMatch = findViewById(R.id.btn_match);
+        btnReport = findViewById(R.id.btn_report_user);
     }
 
     private void loadUserData() {

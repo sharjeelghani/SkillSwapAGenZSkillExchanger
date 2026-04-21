@@ -33,16 +33,26 @@ public class LoginActivity extends AppCompatActivity {
     ImageView ivEye;
     boolean isPasswordVisible = false;
 
-
     MySharedprefsClass loginprefsClassLog;
     Context context;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        
         context = LoginActivity.this;
         loginprefsClassLog = new MySharedprefsClass(context);
+
+        // Implementation of isLogin check to avoid showing login screen if already logged in
+        String isLogin = loginprefsClassLog.getStringValue("isLogin");
+        if (isLogin.equals("logged_in") || isLogin.equals("admin_in")) {
+            startActivity(new Intent(LoginActivity.this, LauncherScreen.class));
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_login);
         loginemail=findViewById(R.id.et_email);
         signupRedirectText=findViewById(R.id.btn_signup);
         loginpassword=findViewById(R.id.et_password);
@@ -53,11 +63,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isPasswordVisible) {
-                    // Hide Password
                     loginpassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     ivEye.setImageResource(R.drawable.ic_eye);
                 } else {
-                    // Show Password
                     loginpassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     ivEye.setImageResource(R.drawable.ic_eye_off);
                 }
@@ -78,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     public boolean validateEmail(){
         String val =loginemail.getText().toString();
         if(val.isEmpty()){
@@ -96,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
     }
+
     public boolean validatePassword() {
         String val = loginpassword.getText().toString();
         if (val.isEmpty()) {
@@ -105,8 +116,8 @@ public class LoginActivity extends AppCompatActivity {
             loginpassword.setError(null);
             return true;
         }
-
     }
+
     public void checkUser(){
         String Email= loginemail.getText().toString().trim();
         String Password= loginpassword.getText().toString().trim();
@@ -122,23 +133,25 @@ public class LoginActivity extends AppCompatActivity {
                     boolean userFound = false;
 
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        String passwordFromDB = userSnapshot.child("password").getValue(String.class);
-                        String usernameFromDB = userSnapshot.child("username").getValue(String.class);
-                        String stage = userSnapshot.child("signupStage").getValue(String.class);
-                        String fullName = userSnapshot.child("fullName").getValue(String.class);
+                        // Using String.valueOf to safely handle potential numeric values (Long to String)
+                        String passwordFromDB = String.valueOf(userSnapshot.child("password").getValue());
+                        String usernameFromDB = String.valueOf(userSnapshot.child("username").getValue());
+                        String stage = String.valueOf(userSnapshot.child("signupStage").getValue());
+                        String fullName = String.valueOf(userSnapshot.child("fullName").getValue());
 
                         if(Objects.equals(passwordFromDB, Password)){
                             userFound = true;
                             loginpassword.setError(null);
                             
                             loginprefsClassLog.saveStringValue("username", usernameFromDB);
-                            loginprefsClassLog.saveStringValue("isLogin", Email.equals("sharjeel@admin.com") ? "admin_in" : "logged_in");
-
-                            if (Email.equals("sharjeel@admin.com")) {
+                            
+                            // Implementation of isLogin logic accurately
+                            if (Email.equalsIgnoreCase("sharjeel@admin.com")) {
+                                loginprefsClassLog.saveStringValue("isLogin", "admin_in");
                                 startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
                                 finish();
                             } else {
-                                // Unified progress check on login
+                                loginprefsClassLog.saveStringValue("isLogin", "logged_in");
                                 handleNavigation(stage, usernameFromDB, fullName, userSnapshot);
                             }
                             break;
@@ -158,13 +171,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(LoginActivity.this, "Database Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void handleNavigation(String stage, String username, String fullName, DataSnapshot snapshot) {
-        if (stage == null) stage = "SIGN_UP";
+        if (stage == null || stage.equals("null")) stage = "SIGN_UP";
         Intent intent;
 
         switch (stage) {
@@ -180,14 +193,14 @@ public class LoginActivity extends AppCompatActivity {
             case "SKILLS_PENDING":
                 ArrayList<String> teaching = new ArrayList<>();
                 for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
-                    teaching.add(child.getValue(String.class));
+                    teaching.add(String.valueOf(child.getValue()));
                 }
                 intent = new Intent(LoginActivity.this, SkillSelectionActivity.class);
                 intent.putExtra("username", username);
                 intent.putStringArrayListExtra("teachingSkills", teaching);
                 break;
             case "ACCOUNT_PENDING":
-                intent = new Intent(LoginActivity.this, AccountSettingsActivity.class);
+                intent = new Intent(LoginActivity.this, ProfileUpdateActivity.class);
                 intent.putExtra("username", username);
                 break;
             case "COMPLETED":
