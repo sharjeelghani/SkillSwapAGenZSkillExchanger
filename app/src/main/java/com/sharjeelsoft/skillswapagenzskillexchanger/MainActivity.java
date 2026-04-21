@@ -33,11 +33,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.AnalyticsService;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ActivityCNICVarification;
@@ -83,10 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
         askNotificationPermission();
         saveFcmToken();
-
         setupDrawerClicks();
-
         logUserActivity();
+
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(Color.TRANSPARENT);
         gradientDrawable.setCornerRadius(50);
@@ -96,26 +93,8 @@ public class MainActivity extends AppCompatActivity {
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_icon = findViewById(R.id.drawer_icon_home);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-
-        drawer_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawer_icon.setOnClickListener(v -> mDrawerLayout.openDrawer(GravityCompat.START));
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
         nav_view.setElevation(0f);
@@ -145,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         SetUpPager();
+
+        handleIntent(getIntent());
     }
     private void logUserActivity() {
         MySharedprefsClass prefs = new MySharedprefsClass(this);
@@ -153,9 +134,8 @@ public class MainActivity extends AppCompatActivity {
             // Log user activity for DAU/WAU/MAU
             DatabaseReference activityRef = FirebaseDatabase.getInstance().getReference("analytics_data").child("user_activity").child(username);
             activityRef.child("last_active_timestamp").setValue(System.currentTimeMillis());
-
-        // Handle navigation from notification panel
-        handleIntent(getIntent());
+            AnalyticsService.getInstance(this).startSession(username);
+        }
     }
 
     @Override
@@ -169,14 +149,12 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra("navigate_to")) {
             String destination = intent.getStringExtra("navigate_to");
             if ("requests".equals(destination)) {
-                fragPosition = 3;
                 if (viewPager != null) {
                     viewPager.setCurrentItem(3);
+                } else {
+                    fragPosition = 3; // For SetUpPager later
                 }
             }
-        }
-            // Start a new session for duration tracking
-            AnalyticsService.getInstance(this).startSession(username);
         }
     }
 
@@ -202,22 +180,16 @@ public class MainActivity extends AppCompatActivity {
         if (username == null || username.equals("new_user")) return;
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.w("MainActivity", "Fetching FCM registration token failed", task.getException());
-                return;
+            if (task.isSuccessful()) {
+                String token = task.getResult();
+                FirebaseDatabase.getInstance().getReference("user").child(username).child("fcmToken").setValue(token);
             }
-
-            String token = task.getResult();
-            FirebaseDatabase.getInstance().getReference("user")
-                    .child(username).child("fcmToken").setValue(token);
         });
     }
 
     private void SetUpPager() {
-        // Define the icons for the selected and unselected states
-        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.user_sel};
-
-        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.notification_unsel, R.drawable.user_unsel};
+        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.ic_matches, R.drawable.user_sel};
+        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.notification_unsel, R.drawable.ic_matches, R.drawable.user_unsel};
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
@@ -227,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
-
             if (tab != null) {
                 View customView = LayoutInflater.from(this).inflate(R.layout.tab_custom_view, null);
                 ImageView tabIcon = customView.findViewById(R.id.tab_icon);
@@ -256,12 +227,8 @@ public class MainActivity extends AppCompatActivity {
             tabText.setText(getTabTitle(fragPosition));
             tabText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white));
         }
-        tabLayout.selectTab(tabLayout.getTabAt(fragPosition));
-        viewPager.setOffscreenPageLimit(5);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 
@@ -302,151 +269,70 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+        viewPager.setOffscreenPageLimit(5);
+        tabLayout.getTabAt(fragPosition).select();
     }
 
     private String getTabTitle(int position) {
         switch (position) {
-            case 1:
-                return "Dashboard";
-            case 2:
-                return "Alerts";
-            case 3:
-                return "Requests";
-            case 4:
-                return "Profile";
-            case 0:
-            default:
-                return "Home";
+            case 1: return "Dashboard";
+            case 2: return "Alerts";
+            case 3: return "Requests";
+            case 4: return "Profile";
+            default: return "Home";
         }
     }
+
     public static class ViewPagerAdapter extends FragmentPagerAdapter {
-
-
-        private final Context mContext;
-
-        public ViewPagerAdapter(Context context, FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
+        public ViewPagerAdapter(Context context, FragmentManager fm) { super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT); }
+        @NonNull @Override public Fragment getItem(int position) {
             switch (position) {
-                case 1:
-                    return new DashboardFragment();
-                case 2:
-                    return new NotificationsFragment();
-                case 3:
-                    return new MatchRequestsFragment();
-                case 4:
-                    return new ProfileFragment();
-                case 0:
-                default:
-                    return new SkillMatchmakingFragment();
+                case 1: return new DashboardFragment();
+                case 2: return new NotificationsFragment();
+                case 3: return new MatchRequestsFragment();
+                case 4: return new ProfileFragment();
+                default: return new SkillMatchmakingFragment();
             }
         }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
+        @Override public int getCount() { return 5; }
     }
+
     private void setupDrawerClicks() {
-        int[] navIds = {
-                R.id.cnicvar_nav,
-                R.id.help_Support_nav,
-                R.id.session_rate_nav,
-                R.id.report_user_nav,
-                R.id.search_user_nav,
-                R.id.session_details_nav,
-                R.id.session_reminder_nav,
-                R.id.settings_nav,
-                R.id.data_collextion_nav,
-                R.id.chat_system_nav,
-                R.id.skill_test_nav
-        };
-
+        int[] navIds = {R.id.cnicvar_nav, R.id.help_Support_nav, R.id.session_rate_nav, R.id.report_user_nav, R.id.search_user_nav, R.id.session_details_nav, R.id.session_reminder_nav, R.id.settings_nav, R.id.data_collextion_nav, R.id.chat_system_nav, R.id.skill_test_nav};
         for (int id : navIds) {
-            View view = findViewById(id);
-            if (view != null) {
-                view.setOnClickListener(this::onDrawerItemClick);
-            }
+            View v = findViewById(id);
+            if (v != null) v.setOnClickListener(this::onDrawerItemClick);
         }
-
     }
+
     private void onDrawerItemClick(View view) {
-        // close the drawer immediately for smooth UX
         mDrawerLayout.closeDrawer(GravityCompat.START);
-
-        final int id = view.getId();
-
-        // handle the special-case dialog first
-        if (id == R.id.session_rate_nav) {
-            // close drawer then show dialog after small delay so drawer closing animation doesn't overlap
-            mDrawerLayout.postDelayed(() -> showSessionRateDialog(), 250);
-            return;
-        }
-
-        // Otherwise prepare an Intent for other destinations
-         Intent intent;
-        if (id == R.id.cnicvar_nav) {
-            intent = new Intent(this, ActivityCNICVarification.class);
-        } else if (id == R.id.help_Support_nav) {
-            intent = new Intent(this, Help_Support_Activity.class);
-        } else if (id == R.id.report_user_nav) {
-            intent = new Intent(this, Report_User_Activity.class);
-        } else if (id == R.id.search_user_nav) {
-            intent = new Intent(this, SearchActivity.class);
-        } else if (id == R.id.session_details_nav) {
-            intent = new Intent(this, SessionDetailsActivity.class);
-        } else if (id == R.id.session_reminder_nav) {
-            intent = new Intent(this, Session_Reminder_Activity.class);
-        } else if (id == R.id.settings_nav) {
-            intent = new Intent(this, SettingsActivity.class);
-        }  else if (id == R.id.skill_test_nav) {
-            intent = new Intent(this, SkillSelectionActivity.class);
-        } else if (id == R.id.data_collextion_nav) {
-            intent = new Intent(this, DataCllectionActivity.class);
-        }  else if (id == R.id.chat_system_nav) {
-            intent = new Intent(this, ChatActivity.class);
-        } else {
-            // unknown id — nothing to do
-            return;
-        }
-
-        // start Activity after drawer animation finishes
+        int id = view.getId();
+        if (id == R.id.session_rate_nav) { showSessionRateDialog(); return; }
+        Intent intent;
+        if (id == R.id.cnicvar_nav) intent = new Intent(this, ActivityCNICVarification.class);
+        else if (id == R.id.help_Support_nav) intent = new Intent(this, Help_Support_Activity.class);
+        else if (id == R.id.report_user_nav) intent = new Intent(this, Report_User_Activity.class);
+        else if (id == R.id.search_user_nav) intent = new Intent(this, SearchActivity.class);
+        else if (id == R.id.session_details_nav) intent = new Intent(this, SessionDetailsActivity.class);
+        else if (id == R.id.session_reminder_nav) intent = new Intent(this, Session_Reminder_Activity.class);
+        else if (id == R.id.settings_nav) intent = new Intent(this, SettingsActivity.class);
+        else if (id == R.id.skill_test_nav) intent = new Intent(this, SkillSelectionActivity.class);
+        else if (id == R.id.data_collextion_nav) intent = new Intent(this, DataCllectionActivity.class);
+        else if (id == R.id.chat_system_nav) intent = new Intent(this, ChatActivity.class);
+        else return;
         startActivity(intent);
     }
 
     private void showSessionRateDialog() {
-
-        // Close drawer first
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-
-        View dialogView = LayoutInflater.from(this)
-                .inflate(R.layout.activity_rate_popup, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(dialogView)
-                .setCancelable(true)
-                .create();
-
-        // Optional: Transparent background
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.activity_rate_popup, null);
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dialogView).setCancelable(true).create();
+        if (dialog.getWindow() != null) dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
-
         View closeBtn = dialogView.findViewById(R.id.btn_close);
-        if (closeBtn != null) {
-            closeBtn.setOnClickListener(v -> dialog.dismiss());
-        }
+        if (closeBtn != null) closeBtn.setOnClickListener(v -> dialog.dismiss());
     }
 }
