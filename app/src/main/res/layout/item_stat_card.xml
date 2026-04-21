@@ -6,6 +6,7 @@
     android:background="@drawable/card_bg"
     android:padding="20dp">
 
+
     <ImageView
         android:id="@+id/icon"
         android:layout_width="50dp"

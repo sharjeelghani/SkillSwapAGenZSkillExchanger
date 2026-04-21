@@ -10,21 +10,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 
@@ -43,6 +38,7 @@ public class AdminMainActivity extends AppCompatActivity {
         AdminprefsClassLog = new MySharedprefsClass(AdminMainActivity.this);
         logout_admin.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
                 AdminprefsClassLog.saveStringValue("isLogin","signed_up");
                 Intent intent = new Intent(AdminMainActivity.this, LoginActivity.class);

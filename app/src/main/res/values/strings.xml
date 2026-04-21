@@ -47,4 +47,6 @@
         <item>France</item>
         <item>Other</item>
     </string-array>
+
+    <string name="total_users">Total Users</string>
 </resources>

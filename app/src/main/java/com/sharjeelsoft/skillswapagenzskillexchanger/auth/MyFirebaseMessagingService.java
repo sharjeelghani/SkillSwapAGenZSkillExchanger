@@ -59,10 +59,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (navigateTo != null) {
             intent.putExtra("navigate_to", navigateTo);
         }
-        
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
+        String channelId = "match_requests_channel";
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_launcher) // Fallback to launcher icon

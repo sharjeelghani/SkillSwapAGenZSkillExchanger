@@ -69,6 +69,8 @@
     <color name="neon_blue">#4EF0FF</color>
     <color name="neon_purple">#C45BFF</color>
     <color name="neon_gradient">#8C6CFF</color>
+    <color name="gray_text">#9E9E9E</color>
+
 
     <!-- Selectors -->
     <color name="bg_chip_selected">@color/mint_primary</color>

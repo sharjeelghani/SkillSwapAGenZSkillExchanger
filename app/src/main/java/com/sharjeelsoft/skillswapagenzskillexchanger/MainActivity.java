@@ -36,6 +36,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.AnalyticsService;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ActivityCNICVarification;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.DashboardFragment;
@@ -76,12 +80,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         askNotificationPermission();
         saveFcmToken();
-        
+
         setupDrawerClicks();
 
+        logUserActivity();
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setColor(Color.TRANSPARENT);
         gradientDrawable.setCornerRadius(50);
@@ -140,6 +145,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         SetUpPager();
+    }
+    private void logUserActivity() {
+        MySharedprefsClass prefs = new MySharedprefsClass(this);
+        String username = prefs.getStringValue("username");
+        if (username != null && !username.isEmpty()) {
+            // Log user activity for DAU/WAU/MAU
+            DatabaseReference activityRef = FirebaseDatabase.getInstance().getReference("analytics_data").child("user_activity").child(username);
+            activityRef.child("last_active_timestamp").setValue(System.currentTimeMillis());
 
         // Handle navigation from notification panel
         handleIntent(getIntent());
@@ -162,6 +175,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+            // Start a new session for duration tracking
+            AnalyticsService.getInstance(this).startSession(username);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // End the session when MainActivity is destroyed
+        AnalyticsService.getInstance(this).endSession();
     }
 
     private void askNotificationPermission() {
@@ -192,8 +215,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void SetUpPager() {
         // Define the icons for the selected and unselected states
-        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.ic_matches, R.drawable.user_sel};
-        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.notification_unsel, R.drawable.ic_matches, R.drawable.user_unsel};
+        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.user_sel};
+
+        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.notification_unsel, R.drawable.user_unsel};
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
@@ -213,8 +237,11 @@ public class MainActivity extends AppCompatActivity {
                 tabText.setText("");
 
                 tab.setCustomView(customView);
+                // Select the first tab by default
             }
+            tab.select();
         }
+        // Select the first tab by default
 
         // Set initial state based on current fragPosition
         TabLayout.Tab tab = tabLayout.getTabAt(fragPosition);
@@ -233,8 +260,11 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(5);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 int position = tab.getPosition();
                 fragPosition = position;
                 View customView = tab.getCustomView();
@@ -247,11 +277,16 @@ public class MainActivity extends AppCompatActivity {
                     tabIcon.setImageResource(SELECTED_ICONS[position]);
                     tabText.setText(getTabTitle(position));
                     tabText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white));
+
                 }
+
             }
 
+
+            // Set the icons and their sizes when a tab is unselected
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
                 int position = tab.getPosition();
                 View customView = tab.getCustomView();
                 if (customView != null) {
@@ -264,10 +299,12 @@ public class MainActivity extends AppCompatActivity {
                     tabText.setText("");
                     tabText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.white));
                 }
+
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
@@ -289,6 +326,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public static class ViewPagerAdapter extends FragmentPagerAdapter {
+
+
+        private final Context mContext;
 
         public ViewPagerAdapter(Context context, FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -338,17 +378,23 @@ public class MainActivity extends AppCompatActivity {
                 view.setOnClickListener(this::onDrawerItemClick);
             }
         }
+
     }
     private void onDrawerItemClick(View view) {
+        // close the drawer immediately for smooth UX
         mDrawerLayout.closeDrawer(GravityCompat.START);
+
         final int id = view.getId();
 
+        // handle the special-case dialog first
         if (id == R.id.session_rate_nav) {
+            // close drawer then show dialog after small delay so drawer closing animation doesn't overlap
             mDrawerLayout.postDelayed(() -> showSessionRateDialog(), 250);
             return;
         }
 
-        Intent intent;
+        // Otherwise prepare an Intent for other destinations
+         Intent intent;
         if (id == R.id.cnicvar_nav) {
             intent = new Intent(this, ActivityCNICVarification.class);
         } else if (id == R.id.help_Support_nav) {
@@ -370,14 +416,19 @@ public class MainActivity extends AppCompatActivity {
         }  else if (id == R.id.chat_system_nav) {
             intent = new Intent(this, ChatActivity.class);
         } else {
+            // unknown id — nothing to do
             return;
         }
 
+        // start Activity after drawer animation finishes
         startActivity(intent);
     }
 
     private void showSessionRateDialog() {
+
+        // Close drawer first
         mDrawerLayout.closeDrawer(GravityCompat.START);
+
         View dialogView = LayoutInflater.from(this)
                 .inflate(R.layout.activity_rate_popup, null);
 
@@ -386,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(true)
                 .create();
 
+        // Optional: Transparent background
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
