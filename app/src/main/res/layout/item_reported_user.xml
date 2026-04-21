@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/card_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_reported_user_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reported User:"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_name_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_reported_user_label"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_reported_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="username123"
+                        android:textColor="@color/neon_green"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_report_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_report_count"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="2dp"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="2h ago"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:background="@color/divider"
+                android:alpha="0.2" />
+
+            <TextView
+                android:id="@+id/tv_reporting_user_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reported By:"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_reporting_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="reporter_admin"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_cause_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reason:"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_report_cause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inappropriate behavior"
+                android:textColor="@color/teal_light"
+                android:textSize="15sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tv_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Additional details go here..."
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                android:alpha="0.8" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginStart="12dp">
+
+            <ImageButton
+                android:id="@+id/btn_send_warning"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_approve"
+                android:src="@drawable/ic_notifications"
+                app:tint="@color/white"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="12dp"
+                android:contentDescription="Send Warning" />
+
+            <ImageButton
+                android:id="@+id/btn_delete_user"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/bg_report_count"
+                android:src="@drawable/delete"
+                app:tint="@color/white"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:contentDescription="Delete User" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

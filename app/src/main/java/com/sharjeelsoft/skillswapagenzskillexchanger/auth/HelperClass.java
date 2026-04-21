@@ -44,6 +44,7 @@ public class HelperClass {
     public void setCountry(Object country) { this.Country = country == null ? null : String.valueOf(country); }
     
     public String getPassword() { return password; }
+
     public void setPassword(Object password) { this.password = password == null ? null : String.valueOf(password); }
     
     public String getContact() { return contact; }

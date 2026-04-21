@@ -9,13 +9,13 @@
     <style name="Theme.SkillSwapAGenZSkillExchanger" parent="Base.Theme.SkillSwapAGenZSkillExchanger" />
     <style name="NeonRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:button">@null</item>
-        <item name="android:background">@drawable/neon_card</item>
+        <item name="android:background">@drawable/neon_card_selector</item>
         <item name="android:padding">18dp</item>
-        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColor">@color/radio_text_selector</item>
         <item name="android:textSize">18sp</item>
         <item name="android:drawablePadding">18dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:drawableLeft">@drawable/radio_unchecked</item>
+        <item name="android:drawableLeft">@drawable/radio_selector</item>
     </style>
     <style name="NeonButton" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- outer glow layer - larger corner radius, low alpha -->
+            <item android:left="-6dp" android:top="-6dp" android:right="-6dp" android:bottom="-6dp">
+                <shape android:shape="rectangle">/> <!-- mint glow for checked -->
+                    <corners android:radius="18dp"/>
+                </shape>
+            </item>
+
+            <!-- main card with transparent fill and neon stroke -->
+            <item>
+                <shape android:shape="rectangle">/>
+                    <stroke android:width="2.5dp" android:color="@color/mint_primary"/> <!-- mint stroke for checked -->
+                    <corners android:radius="16dp"/>
+                </shape>
+            </item>
+
+            <!-- inner subtle dark overlay for depth -->
+            <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#051C1C"/>
+                    <corners android:radius="14dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <!-- outer glow layer - larger corner radius, low alpha -->
+            <item android:left="-6dp" android:top="-6dp" android:right="-6dp" android:bottom="-6dp">
+                <shape android:shape="rectangle">/> <!-- faint colored glow -->
+                    <corners android:radius="18dp"/>
+                </shape>
+            </item>
+
+            <!-- main card with transparent fill and neon stroke -->
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@android:color/transparent"/>
+                    <stroke android:width="2.5dp" android:color="@color/neon_stroke"/>
+                    <corners android:radius="16dp"/>
+                </shape>
+            </item>
+
+            <!-- inner subtle dark overlay for depth -->
+            <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#051C1C"/>
+                    <corners android:radius="14dp"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

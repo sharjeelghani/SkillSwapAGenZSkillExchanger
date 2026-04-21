@@ -157,7 +157,7 @@ public class AdminMainActivity extends AppCompatActivity {
             case 1:
                 return "Reports";
             case 2:
-                return "Profile Approval";
+                return "Reported Users";
             case 3:
                 return "Skill Approval";
             case 4:
@@ -187,7 +187,7 @@ public class AdminMainActivity extends AppCompatActivity {
                     return new AdminReportsFragment();
 
                 case 2:
-                    return new ProfileApprovalAdminFragment();
+                    return new ReportedUsersFragment();
 
                 case 3:
                     return new SkillApprovalFragment();
