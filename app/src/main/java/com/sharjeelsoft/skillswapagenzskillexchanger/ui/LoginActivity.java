@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sharjeelsoft.skillswapagenzskillexchanger.MainActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
@@ -44,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         context = LoginActivity.this;
         loginprefsClassLog = new MySharedprefsClass(context);
 
-        // Implementation of isLogin check to avoid showing login screen if already logged in
         String isLogin = loginprefsClassLog.getStringValue("isLogin");
         if (isLogin.equals("logged_in") || isLogin.equals("admin_in")) {
             startActivity(new Intent(LoginActivity.this, LauncherScreen.class));
@@ -133,7 +134,6 @@ public class LoginActivity extends AppCompatActivity {
                     boolean userFound = false;
 
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        // Using String.valueOf to safely handle potential numeric values (Long to String)
                         String passwordFromDB = String.valueOf(userSnapshot.child("password").getValue());
                         String usernameFromDB = String.valueOf(userSnapshot.child("username").getValue());
                         String stage = String.valueOf(userSnapshot.child("signupStage").getValue());
@@ -145,7 +145,9 @@ public class LoginActivity extends AppCompatActivity {
                             
                             loginprefsClassLog.saveStringValue("username", usernameFromDB);
                             
-                            // Implementation of isLogin logic accurately
+                            // Save FCM Token immediately upon successful login for all versions
+                            saveFcmToken(usernameFromDB);
+
                             if (Email.equalsIgnoreCase("sharjeel@admin.com")) {
                                 loginprefsClassLog.saveStringValue("isLogin", "admin_in");
                                 startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
@@ -172,6 +174,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(LoginActivity.this, "Database Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveFcmToken(String username) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                String token = task.getResult();
+                FirebaseDatabase.getInstance().getReference("user")
+                        .child(username).child("fcmToken").setValue(token);
+                Log.d("LoginActivity", "FCM Token saved successfully for: " + username);
             }
         });
     }

@@ -6,12 +6,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,6 +70,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(String title, String message, String navigateTo, String senderUsername) {
+        // --- DEVICE VERSION CHECK AS REQUESTED ---
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13 and above
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "Notification skipped: POST_NOTIFICATIONS permission not granted on Android 13+");
+                return;
+            }
+        }
+
         Intent intent = new Intent(this, LauncherScreen.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         
@@ -82,7 +93,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (senderUsername != null) {
             notificationId = senderUsername.hashCode();
             
-            // Check if the notification is currently active in the panel
             boolean isShowing = false;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
@@ -94,7 +104,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
 
-            // If user cleared the notification manually, reset the history
             if (!isShowing) {
                 resetHistory(senderUsername);
             }
@@ -118,8 +127,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setPriority(NotificationCompat.PRIORITY_HIGH);
 
+        // CHANNEL CREATION (Version check for Oreo and above)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Match Requests", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Skill Swap Alerts", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notifications for match requests and messages");
+            channel.enableLights(true);
+            channel.setLightColor(Color.CYAN);
             notificationManager.createNotificationChannel(channel);
         }
 
