@@ -12,49 +12,69 @@
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:orientation="horizontal"
-        android:gravity="center"
+        android:gravity="start|center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
         <ImageView
+            android:id="@+id/btn_back_chat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_back_activity"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/avatar"
             android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/CircleImageView"
             android:background="@drawable/bg_avatar_circle"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_weight="1"
             android:layout_marginStart="12dp">
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Amira Khan"
+                android:text="User Name"
                 android:textColor="#DFFFF8"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Digital Marketing"
+                android:text="Job Title"
                 android:textColor="#02141C"
-                android:textSize="14sp"
+                android:textSize="11sp"
+                android:layout_marginTop="5dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
                 android:background="@drawable/bg_role_pill"/>
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_more_chat"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/delete"
+            android:padding="4dp"
+            app:tint="#DFFFF8"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
     </LinearLayout>
 
     <!-- MESSAGES LIST -->
@@ -66,46 +86,67 @@
         android:paddingEnd="12dp"
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toTopOf="@id/input_bar"
+        app:layout_constraintBottom_toTopOf="@+id/footer_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- INPUT BAR -->
-    <LinearLayout
-        android:id="@+id/input_bar"
+    <!-- FOOTER CONTAINER -->
+    <FrameLayout
+        android:id="@+id/footer_container"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="12dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/et_message"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_message_input"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:hint="Type a message"
-            android:textColor="#DFFFF8"
-            android:textColorHint="#2BA99F"
-            android:textSize="16sp"/>
+        <!-- INPUT BAR -->
+        <LinearLayout
+            android:id="@+id/input_bar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:visibility="visible">
 
-        <ImageButton
-            android:id="@+id/btn_send"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/bg_send_button"
-            android:src="@drawable/ic_send"
-            app:tint="#02141C"
-            android:contentDescription="Send"/>
-    </LinearLayout>
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_message_input"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:hint="Type a message"
+                android:textColor="#DFFFF8"
+                android:textColorHint="#2BA99F"
+                android:textSize="16sp"/>
+
+            <ImageButton
+                android:id="@+id/btn_send"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_send_button"
+                android:src="@drawable/ic_send"
+                app:tint="#02141C"
+                android:contentDescription="Send"/>
+        </LinearLayout>
+
+        <!-- UNMATCHED MESSAGE -->
+        <TextView
+            android:id="@+id/tv_unmatched_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:gravity="center"
+            android:text="You are unmatched with user match back to chat again.."
+            android:textColor="#2BA99F"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:visibility="gone"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

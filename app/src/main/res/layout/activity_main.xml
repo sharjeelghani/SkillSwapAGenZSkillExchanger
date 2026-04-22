@@ -9,17 +9,10 @@
     app:elevation="0dp"
     tools:context=".MainActivity">
 
-    <!-- Main content view -->
-    <!-- App bar -->
-
-
-    <!-- Main content -->
     <androidx.cardview.widget.CardView
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,6 +27,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <FrameLayout
@@ -52,8 +46,10 @@
                     </FrameLayout>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_app_title"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:paddingStart="10dp"
                         android:text="Skill Swap"
@@ -61,15 +57,43 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                </LinearLayout>
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/btn_search_header"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginEnd="10dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/searching"
+                        app:lottie_speed="1" />
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/gallery_screen"-->
-<!--                    android:layout_width="30dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_gravity="end"-->
-<!--                    android:layout_marginEnd="20dp"-->
-<!--                    android:src="@drawable/vec_gallery" />-->
+                    <RelativeLayout
+                        android:id="@+id/layout_messages_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginEnd="16dp">
+
+                        <ImageView
+                            android:id="@+id/btn_messages_header"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_messages"
+                            android:contentDescription="Messages" />
+
+                        <View
+                            android:id="@+id/dot_unread_messages"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
+                            android:layout_alignTop="@id/btn_messages_header"
+                            android:layout_alignEnd="@id/btn_messages_header"
+                            android:layout_marginTop="-1dp"
+                            android:layout_marginEnd="-1dp"
+                            android:background="@drawable/bg_unread_dot"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -91,12 +115,6 @@
                     android:paddingEnd="2dp"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <!--            <RelativeLayout-->
-                <!--                android:id="@+id/tabs_layout"-->
-                <!--                android:layout_width="match_parent"-->
-                <!--                android:layout_height="70dp"-->
-                <!--                android:background="#E6E6FA">-->
-
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabs"
                     android:layout_width="match_parent"
@@ -112,18 +130,6 @@
                     app:tabTextColor="#777777" />
 
 
-                <!--            </RelativeLayout>-->
-
-
-<!--                <com.airbnb.lottie.LottieAnimationView-->
-<!--                    android:id="@+id/no_internet"-->
-<!--                    android:layout_width="150dp"-->
-<!--                    android:layout_height="150dp"-->
-<!--                    android:layout_centerInParent="true"-->
-<!--                    android:visibility="gone"-->
-<!--                    app:lottie_autoPlay="true"-->
-<!--                    app:lottie_loop="true"-->
-<!--                    app:lottie_rawRes="@raw/no_internet_error" />-->
             </RelativeLayout>
 
 
@@ -133,9 +139,6 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <!-- ... -->
-
 
     <!-- Drawer view -->
     <com.google.android.material.navigation.NavigationView
@@ -199,20 +202,6 @@
                 android:background="@drawable/bg_reject"
                 android:elevation="10dp">
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <ImageView-->
-<!--                        android:layout_width="30dp"-->
-<!--                        android:layout_height="30dp"-->
-<!--                        android:layout_gravity="center_vertical"-->
-<!--                        android:layout_marginStart="20dp"-->
-<!--                        android:src="@drawable/ic_privacy">-->
-
-<!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -224,7 +213,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-<!--                </LinearLayout>-->
             </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/help_Support_nav"
@@ -237,20 +225,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -262,7 +236,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/session_rate_nav"
@@ -274,20 +247,6 @@
                     android:gravity="center"
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
-
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -301,7 +260,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/report_user_nav"
@@ -314,20 +272,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -339,7 +283,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/search_user_nav"
@@ -352,20 +295,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -377,7 +306,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/session_details_nav"
@@ -390,20 +318,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -415,7 +329,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/session_reminder_nav"
@@ -428,20 +341,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -453,8 +352,7 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
-                </RelativeLayout>
+            </RelativeLayout>
                     <RelativeLayout
                         android:id="@+id/chat_system_nav"
                         android:layout_width="match_parent"
@@ -465,20 +363,6 @@
                         android:gravity="center"
                         android:background="@drawable/bg_reject"
                         android:elevation="10dp">
-
-                        <!--                <LinearLayout-->
-                        <!--                    android:layout_width="match_parent"-->
-                        <!--                    android:layout_height="match_parent"-->
-                        <!--                    android:orientation="horizontal">-->
-
-                        <!--                    <ImageView-->
-                        <!--                        android:layout_width="30dp"-->
-                        <!--                        android:layout_height="30dp"-->
-                        <!--                        android:layout_gravity="center_vertical"-->
-                        <!--                        android:layout_marginStart="20dp"-->
-                        <!--                        android:src="@drawable/ic_privacy">-->
-
-                        <!--                    </ImageView>-->
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -491,7 +375,6 @@
                             android:textStyle="bold">
 
                         </TextView>
-                        <!--                </LinearLayout>-->
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -505,20 +388,6 @@
                         android:background="@drawable/bg_reject"
                         android:elevation="10dp">
 
-                        <!--                <LinearLayout-->
-                        <!--                    android:layout_width="match_parent"-->
-                        <!--                    android:layout_height="match_parent"-->
-                        <!--                    android:orientation="horizontal">-->
-
-                        <!--                    <ImageView-->
-                        <!--                        android:layout_width="30dp"-->
-                        <!--                        android:layout_height="30dp"-->
-                        <!--                        android:layout_gravity="center_vertical"-->
-                        <!--                        android:layout_marginStart="20dp"-->
-                        <!--                        android:src="@drawable/ic_privacy">-->
-
-                        <!--                    </ImageView>-->
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -530,7 +399,6 @@
                             android:textStyle="bold">
 
                         </TextView>
-                        <!--                </LinearLayout>-->
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -544,20 +412,6 @@
                         android:background="@drawable/bg_reject"
                         android:elevation="10dp">
 
-                        <!--                <LinearLayout-->
-                        <!--                    android:layout_width="match_parent"-->
-                        <!--                    android:layout_height="match_parent"-->
-                        <!--                    android:orientation="horizontal">-->
-
-                        <!--                    <ImageView-->
-                        <!--                        android:layout_width="30dp"-->
-                        <!--                        android:layout_height="30dp"-->
-                        <!--                        android:layout_gravity="center_vertical"-->
-                        <!--                        android:layout_marginStart="20dp"-->
-                        <!--                        android:src="@drawable/ic_privacy">-->
-
-                        <!--                    </ImageView>-->
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -569,7 +423,6 @@
                             android:textStyle="bold">
 
                         </TextView>
-                        <!--                </LinearLayout>-->
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -583,20 +436,6 @@
                     android:background="@drawable/bg_reject"
                     android:elevation="10dp">
 
-                    <!--                <LinearLayout-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="match_parent"-->
-                    <!--                    android:orientation="horizontal">-->
-
-                    <!--                    <ImageView-->
-                    <!--                        android:layout_width="30dp"-->
-                    <!--                        android:layout_height="30dp"-->
-                    <!--                        android:layout_gravity="center_vertical"-->
-                    <!--                        android:layout_marginStart="20dp"-->
-                    <!--                        android:src="@drawable/ic_privacy">-->
-
-                    <!--                    </ImageView>-->
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -608,7 +447,6 @@
                         android:textStyle="bold">
 
                     </TextView>
-                    <!--                </LinearLayout>-->
                 </RelativeLayout>
 
 

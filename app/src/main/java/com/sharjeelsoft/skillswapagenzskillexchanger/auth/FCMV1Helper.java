@@ -36,6 +36,16 @@ public class FCMV1Helper {
     }
 
     public void sendNotification(String targetToken, String title, String body, String navigateTo) {
+        sendInternal(targetToken, title, body, navigateTo, null, null, false);
+    }
+
+    public void sendChatNotification(String targetToken, String title, String body, String navigateTo, String messageId, String senderUsername) {
+        // For chats, we use data-only payload to ensure onMessageReceived is called even in background
+        // this allows us to mark the message as "delivered" in the database.
+        sendInternal(targetToken, title, body, navigateTo, messageId, senderUsername, true);
+    }
+
+    private void sendInternal(String targetToken, String title, String body, String navigateTo, String messageId, String senderUsername, boolean dataOnly) {
         new Thread(() -> {
             try {
                 String token = getAccessToken();
@@ -46,32 +56,38 @@ public class FCMV1Helper {
 
                 OkHttpClient client = new OkHttpClient();
                 
-                JSONObject notification = new JSONObject();
-                notification.put("title", title);
-                notification.put("body", body);
-                
                 JSONObject data = new JSONObject();
                 if (navigateTo != null) {
                     data.put("navigate_to", navigateTo);
                 }
                 data.put("title", title);
                 data.put("body", body);
+                if (messageId != null) data.put("message_id", messageId);
+                if (senderUsername != null) data.put("sender_username", senderUsername);
 
                 JSONObject messageObject = new JSONObject();
                 messageObject.put("token", targetToken);
-                messageObject.put("notification", notification);
+                
+                if (!dataOnly) {
+                    JSONObject notification = new JSONObject();
+                    notification.put("title", title);
+                    notification.put("body", body);
+                    messageObject.put("notification", notification);
+                }
+                
                 messageObject.put("data", data);
 
                 // HIGH IMPORTANCE: Android specific configuration
                 JSONObject androidNotification = new JSONObject();
                 androidNotification.put("notification_priority", "PRIORITY_MAX");
                 androidNotification.put("sound", "default");
-                // This MUST match the CHANNEL_ID in MyFirebaseMessagingService
                 androidNotification.put("channel_id", "match_requests_channel");
 
                 JSONObject androidConfig = new JSONObject();
                 androidConfig.put("priority", "high");
-                androidConfig.put("notification", androidNotification);
+                if (!dataOnly) {
+                    androidConfig.put("notification", androidNotification);
+                }
                 
                 messageObject.put("android", androidConfig);
 
@@ -169,7 +185,6 @@ public class FCMV1Helper {
     }
 
     private String loadJSONFromAsset() {
-        // Try exact name and common variants found in assets
         String[] variants = {"service_account.json", "service_account.json.json"};
         for (String name : variants) {
             try (InputStream is = context.getAssets().open(name)) {
@@ -181,16 +196,14 @@ public class FCMV1Helper {
                 }
             } catch (Exception ignored) {}
         }
-        Log.e(TAG, "FAILED TO LOAD service_account.json from assets!");
         return "";
     }
 
     private PrivateKey getPrivateKey(String key) throws Exception {
-        // Robust cleaning for private key PEM string
         String privateKeyPEM = key
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", "") // Removes all whitespace including \n, \r, and spaces
+                .replaceAll("\\s", "")
                 .trim();
 
         byte[] encoded = Base64.decode(privateKeyPEM, Base64.DEFAULT);

@@ -4,6 +4,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,11 +52,21 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String time = DateFormat.format("h:mm a", msg.getTimestamp()).toString();
 
         if (holder instanceof OutgoingHolder) {
-            ((OutgoingHolder) holder).message.setText(msg.getText());
-            ((OutgoingHolder) holder).time.setText(time);
+            OutgoingHolder outgoing = (OutgoingHolder) holder;
+            outgoing.message.setText(msg.getText());
+            outgoing.time.setText(time);
+
+            if (msg.isRead()) {
+                outgoing.status.setImageResource(R.drawable.double_check_read_dark);
+            } else if (msg.isDelivered()) {
+                outgoing.status.setImageResource(R.drawable.double_check_delivered_dark);
+            } else {
+                outgoing.status.setImageResource(R.drawable.check_notdelivered_dark);
+            }
         } else {
-            ((IncomingHolder) holder).message.setText(msg.getText());
-            ((IncomingHolder) holder).time.setText(time);
+            IncomingHolder incoming = (IncomingHolder) holder;
+            incoming.message.setText(msg.getText());
+            incoming.time.setText(time);
         }
     }
 
@@ -75,10 +86,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class OutgoingHolder extends RecyclerView.ViewHolder {
         TextView message, time;
+        ImageView status;
         OutgoingHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.tv_message);
             time    = itemView.findViewById(R.id.tv_time);
+            status  = itemView.findViewById(R.id.img_status);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger.models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
+import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ViewProfileActivity;
 
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,12 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestAdapte
 
         holder.btnConfirm.setOnClickListener(v -> listener.onConfirm(user));
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(user));
+
+        holder.ivProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewProfileActivity.class);
+            intent.putExtra("userName", user.getUsername());
+            context.startActivity(intent);
+        });
     }
 
     @Override

@@ -40,10 +40,11 @@ public class SkillMatchmakingFragment extends Fragment {
     private List<String> myLearningInterests = new ArrayList<>();
     private List<String> myTeachingSkills = new ArrayList<>();
     private List<String> sentRequests = new ArrayList<>();
+    private List<String> receivedRequests = new ArrayList<>();
     private List<String> connections = new ArrayList<>();
     private int currentIndex = 0;
 
-    private TextView tvName;
+    private TextView tvName, tvRequestStatus;
     private ImageView imgAvatar;
     private ChipGroup cgTeachingMatches, cgLearningMatches;
     private TextView btnConnect;
@@ -54,6 +55,7 @@ public class SkillMatchmakingFragment extends Fragment {
     private DatabaseReference usersRef;
     private ValueEventListener usersListener;
     private FCMV1Helper fcmv1Helper;
+    private String currentUserFullName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,6 +68,7 @@ public class SkillMatchmakingFragment extends Fragment {
 
         // --- bind views ---
         tvName = view.findViewById(R.id.tv_name);
+        tvRequestStatus = view.findViewById(R.id.tv_request_status);
         imgAvatar = view.findViewById(R.id.img_avatar);
         cgTeachingMatches = view.findViewById(R.id.cg_teaching_matches);
         cgLearningMatches = view.findViewById(R.id.cg_learning_matches);
@@ -76,7 +79,7 @@ public class SkillMatchmakingFragment extends Fragment {
         layoutLoading = view.findViewById(R.id.layout_loading);
 
         // --- button handlers ---
-        btnConnect.setOnClickListener(v -> sendMatchRequest());
+        btnConnect.setOnClickListener(v -> handleConnectAction());
         btnPass.setOnClickListener(v -> goToNextMatch());
 
         btnViewProfile.setOnClickListener(v -> {
@@ -93,10 +96,19 @@ public class SkillMatchmakingFragment extends Fragment {
         return view;
     }
 
-    private void sendMatchRequest() {
+    private void handleConnectAction() {
         if (userList.isEmpty() || currentIndex >= userList.size()) return;
-
         HelperClass targetUser = userList.get(currentIndex);
+        String targetUsername = targetUser.getUsername();
+
+        if (receivedRequests.contains(targetUsername)) {
+            acceptMatchRequest(targetUser);
+        } else {
+            sendMatchRequest(targetUser);
+        }
+    }
+
+    private void sendMatchRequest(HelperClass targetUser) {
         String currentUsername = sharedPrefs.getStringValue("username");
         String targetUsername = targetUser.getUsername();
         String targetFcmToken = targetUser.getFcmToken();
@@ -108,10 +120,11 @@ public class SkillMatchmakingFragment extends Fragment {
 
         // Prepare Notification
         String notiId = dbRef.child("user").child(targetUsername).child("notifications").push().getKey();
+        String senderDisplayName = (currentUserFullName != null && !currentUserFullName.isEmpty()) ? currentUserFullName : currentUsername;
         NotificationModel notification = new NotificationModel(
                 notiId,
                 "New Match Request",
-                "You have a new connection request from " + currentUsername + "!",
+                "You have a new connection request from " + senderDisplayName + "!",
                 currentUsername,
                 timestamp,
                 "match_request"
@@ -132,15 +145,50 @@ public class SkillMatchmakingFragment extends Fragment {
                 if (targetFcmToken != null && !targetFcmToken.isEmpty()) {
                     fcmv1Helper.sendNotification(targetFcmToken, notification.getTitle(), notification.getMessage(), "requests");
                 }
+            }
+        });
+    }
 
-                // Remove from local list so it doesn't show again in this session immediately
-                userList.remove(currentIndex);
-                if (userList.isEmpty()) {
-                    matchCard.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "No more users found", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (currentIndex >= userList.size()) currentIndex = 0;
-                    showMatch(currentIndex);
+    private void acceptMatchRequest(HelperClass targetUser) {
+        String currentUsername = sharedPrefs.getStringValue("username");
+        String targetUsername = targetUser.getUsername();
+        String targetFcmToken = targetUser.getFcmToken();
+
+        if (currentUsername == null || targetUsername == null) return;
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        long timestamp = System.currentTimeMillis();
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("user/" + currentUsername + "/allConnections/" + targetUsername, true);
+        updates.put("user/" + targetUsername + "/allConnections/" + currentUsername, true);
+        updates.put("user/" + currentUsername + "/matchRequests/received/" + targetUsername, null);
+        updates.put("user/" + targetUsername + "/matchRequests/sent/" + currentUsername, null);
+
+        // Prepare Notification for the original sender
+        String notiId = dbRef.child("user").child(targetUsername).child("notifications").push().getKey();
+        String senderDisplayName = (currentUserFullName != null && !currentUserFullName.isEmpty()) ? currentUserFullName : currentUsername;
+        String message = "Your match request has been accepted by " + senderDisplayName;
+        NotificationModel notification = new NotificationModel(
+                notiId,
+                "Match Request Accepted",
+                message,
+                currentUsername,
+                timestamp,
+                "match_accepted"
+        );
+
+        if (notiId != null) {
+            updates.put("user/" + targetUsername + "/notifications/" + notiId, notification);
+        }
+
+        dbRef.updateChildren(updates).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Connected with " + targetUser.getFullName(), Toast.LENGTH_SHORT).show();
+
+                // Trigger Real-time Push Notification via FCM V1
+                if (targetFcmToken != null && !targetFcmToken.isEmpty()) {
+                    fcmv1Helper.sendNotification(targetFcmToken, "Match Request Accepted", message, "alerts");
                 }
             }
         });
@@ -191,16 +239,21 @@ public class SkillMatchmakingFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!isAdded()) return;
                 
+                // Track currently shown user to maintain position if possible
+                String shownUsername = (userList != null && !userList.isEmpty() && currentIndex < userList.size()) ? userList.get(currentIndex).getUsername() : null;
+
                 userList.clear();
                 myLearningInterests.clear();
                 myTeachingSkills.clear();
                 sentRequests.clear();
+                receivedRequests.clear();
                 connections.clear();
 
                 DataSnapshot me = snapshot.child(currentLoggedInUser);
                 if (me.exists()) {
                     HelperClass uMe = me.getValue(HelperClass.class);
                     if (uMe != null) {
+                        currentUserFullName = uMe.getFullName();
                         if (uMe.getLearningInterests() != null) {
                             myLearningInterests.addAll(uMe.getLearningInterests());
                         }
@@ -212,6 +265,12 @@ public class SkillMatchmakingFragment extends Fragment {
                     if (me.hasChild("matchRequests/sent")) {
                         for (DataSnapshot ds : me.child("matchRequests/sent").getChildren()) {
                             sentRequests.add(ds.getKey());
+                        }
+                    }
+                    // Get received requests
+                    if (me.hasChild("matchRequests/received")) {
+                        for (DataSnapshot ds : me.child("matchRequests/received").getChildren()) {
+                            receivedRequests.add(ds.getKey());
                         }
                     }
                     // Get already connected users
@@ -265,6 +324,17 @@ public class SkillMatchmakingFragment extends Fragment {
 
                 if (!userList.isEmpty()) {
                     matchCard.setVisibility(View.VISIBLE);
+                    
+                    // Try to restore position
+                    if (shownUsername != null) {
+                        for (int i = 0; i < userList.size(); i++) {
+                            if (userList.get(i).getUsername().equals(shownUsername)) {
+                                currentIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                    
                     if (currentIndex >= userList.size()) currentIndex = 0;
                     showMatch(currentIndex);
                 } else {
@@ -289,6 +359,16 @@ public class SkillMatchmakingFragment extends Fragment {
         if (user == null) return;
 
         tvName.setText(user.getFullName() != null ? user.getFullName() : "NA");
+
+        // Requested you for connection text logic
+        if (receivedRequests.contains(user.getUsername())) {
+            tvRequestStatus.setVisibility(View.VISIBLE);
+            tvRequestStatus.setText("Requested you for conneciton!");
+            btnConnect.setText("Accept Request");
+        } else {
+            tvRequestStatus.setVisibility(View.GONE);
+            btnConnect.setText("Connect");
+        }
 
         // --- Matched Teaching Skills ---
         cgTeachingMatches.removeAllViews();
@@ -330,6 +410,8 @@ public class SkillMatchmakingFragment extends Fragment {
         chip.setChipStrokeColor(ColorStateList.valueOf(getResources().getColor(R.color.teal_light)));
         chip.setChipStrokeWidth(3);
         chip.setChipCornerRadius(50);
+        chip.setClickable(false);
+        chip.setFocusable(false);
         group.addView(chip);
     }
 

@@ -6,30 +6,50 @@
     android:orientation="vertical"
     android:gravity="end"
     android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:paddingBottom="4dp"
+    android:paddingEnd="12dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="@drawable/bg_bubble_outgoing"
         android:gravity="end">
 
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_bubble_outgoing"
             android:padding="14dp"
             android:textColor="#02141C"
             android:textSize="16sp"/>
+        <ImageView
+            android:id="@+id/img_status"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/check_notdelivered_dark"
+            android:contentDescription="status" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_time"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="2dp"
-        android:text="9:45 AM"
-        android:textColor="#2BA99F"
-        android:textSize="12sp"/>
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9:45 AM"
+            android:textColor="#2BA99F"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
 </LinearLayout>

@@ -95,6 +95,22 @@
                 android:textStyle="bold"
                 android:textSize="22sp"/>
 
+            <!-- REQUEST STATUS TEXT -->
+            <TextView
+                android:id="@+id/tv_request_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:text="Requested you for conneciton!"
+                android:textColor="#042825"
+                android:textSize="14sp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
+                android:textStyle="italic"
+                android:background="@drawable/bg_role_pill"
+                android:visibility="gone"/>
+
             <!-- MATCHED TEACHING SKILLS -->
             <TextView
                 android:layout_width="match_parent"

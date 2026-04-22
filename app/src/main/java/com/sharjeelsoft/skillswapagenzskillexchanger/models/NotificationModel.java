@@ -7,6 +7,7 @@ public class NotificationModel {
     private String senderId;
     private long timestamp;
     private String type; // e.g., "match_request"
+    private boolean read;
 
     public NotificationModel() {
     }
@@ -18,6 +19,7 @@ public class NotificationModel {
         this.senderId = senderId;
         this.timestamp = timestamp;
         this.type = type;
+        this.read = false;
     }
 
     public String getId() { return id; }
@@ -26,4 +28,6 @@ public class NotificationModel {
     public String getSenderId() { return senderId; }
     public long getTimestamp() { return timestamp; }
     public String getType() { return type; }
+    public boolean isRead() { return read; }
+    public void setRead(boolean read) { this.read = read; }
 }

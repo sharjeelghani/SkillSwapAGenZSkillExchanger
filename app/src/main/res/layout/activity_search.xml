@@ -7,6 +7,32 @@
     android:background="#031A18"
     android:padding="20dp">
 
+    <!-- Header with Back Button -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/btn_back_search"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_back_activity"
+            android:contentDescription="Back"
+            app:tint="#6CF5D4"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Search Users"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
     <!-- Search Bar -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="No user found"
+            android:text="No Match user found"
             android:textColor="#5CD9C0"
             android:textSize="18sp"
             android:visibility="gone"/>

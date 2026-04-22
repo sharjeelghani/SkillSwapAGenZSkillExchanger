@@ -30,6 +30,7 @@ public class HelperClass {
     Map<String, Object> matchRequests;
     Map<String, Object> notifications;
     Map<String, Object> allConnections;
+    Map<String, Object> recentChats;
 
     public String getUsername() { return username; }
     public void setUsername(Object username) { this.username = username == null ? null : String.valueOf(username); }
@@ -59,20 +60,31 @@ public class HelperClass {
     public String getSignupStage() { return signupStage; }
     public void setSignupStage(Object signupStage) { this.signupStage = signupStage == null ? null : String.valueOf(signupStage); }
     
+    // Standard getters/setters for Firebase (supports both isSignedUp and signedUp keys)
+    public boolean getIsSignedUp() { return isSignedUp; }
+    public void setIsSignedUp(boolean signedUp) { isSignedUp = signedUp; }
     public boolean isSignedUp() { return isSignedUp; }
     public void setSignedUp(boolean signedUp) { isSignedUp = signedUp; }
-    
+
     public boolean getIsCNICVerified() { return isCNICVerified; }
     public void setIsCNICVerified(boolean CNICVerified) { isCNICVerified = CNICVerified; }
-    
+    public boolean isCnicverified() { return isCNICVerified; }
+    public void setCnicverified(boolean cnicverified) { isCNICVerified = cnicverified; }
+
     public boolean getIsDataUpdated() { return isDataUpdated; }
     public void setIsDataUpdated(boolean dataUpdated) { isDataUpdated = dataUpdated; }
-    
+    public boolean isDataUpdated() { return isDataUpdated; }
+    public void setDataUpdated(boolean dataUpdated) { isDataUpdated = dataUpdated; }
+
     public boolean getIsSkillsTested() { return isSkillsTested; }
     public void setIsSkillsTested(boolean skillsTested) { isSkillsTested = skillsTested; }
-    
+    public boolean isSkillsTested() { return isSkillsTested; }
+    public void setSkillsTested(boolean skillsTested) { isSkillsTested = skillsTested; }
+
     public boolean getIsAccountSet() { return isAccountSet; }
     public void setIsAccountSet(boolean accountSet) { isAccountSet = accountSet; }
+    public boolean isAccountSet() { return isAccountSet; }
+    public void setAccountSet(boolean accountSet) { isAccountSet = accountSet; }
 
     public String getGender() { return gender; }
     public void setGender(Object gender) { this.gender = gender == null ? null : String.valueOf(gender); }
@@ -95,21 +107,26 @@ public class HelperClass {
     public List<String> getPassedSkills() { return passedSkills; }
     public void setPassedSkills(List<String> passedSkills) { this.passedSkills = passedSkills; }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public void setProfileImageUrl(Object profileImageUrl) {
-        this.profileImageUrl = profileImageUrl == null ? null : String.valueOf(profileImageUrl);
-    }
+    public String getProfileImageUrl() { return profileImageUrl; }
+    public void setProfileImageUrl(Object profileImageUrl) { this.profileImageUrl = profileImageUrl == null ? null : String.valueOf(profileImageUrl); }
 
     public String getFcmToken() { return fcmToken; }
     public void setFcmToken(Object fcmToken) { this.fcmToken = fcmToken == null ? null : String.valueOf(fcmToken); }
 
-    // Firebase mapping setters
+//    public int getReportCount() { return reportCount; }
+//    public void setReportCount(int reportCount) { this.reportCount = reportCount; }
+
+    public Map<String, Object> getMatchRequests() { return matchRequests; }
     public void setMatchRequests(Map<String, Object> matchRequests) { this.matchRequests = matchRequests; }
+
+    public Map<String, Object> getNotifications() { return notifications; }
     public void setNotifications(Map<String, Object> notifications) { this.notifications = notifications; }
+
+    public Map<String, Object> getAllConnections() { return allConnections; }
     public void setAllConnections(Map<String, Object> allConnections) { this.allConnections = allConnections; }
+
+    public Map<String, Object> getRecentChats() { return recentChats; }
+    public void setRecentChats(Map<String, Object> recentChats) { this.recentChats = recentChats; }
 
     public HelperClass(String username, String fullName, String email, String password, String contact, String dateofbirth, String country) {
         this.username = username;
@@ -130,6 +147,5 @@ public class HelperClass {
         this.isAccountSet = false;
     }
 
-    public HelperClass() {
-    }
+    public HelperClass() {}
 }

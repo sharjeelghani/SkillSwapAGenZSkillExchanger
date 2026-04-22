@@ -1,5 +1,6 @@
 package com.sharjeelsoft.skillswapagenzskillexchanger.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ public class ProfileFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    private TextView tvName, tvLocation, tvJob;
+    private TextView tvName, tvLocation, tvJob, btnMyConnections;
     private ImageView profilePic;
     private MySharedprefsClass sharedPrefs;
     private DatabaseReference userRef;
@@ -52,6 +53,7 @@ public class ProfileFragment extends Fragment {
         tvLocation = view.findViewById(R.id.location);
         tvJob = view.findViewById(R.id.tv_job);
         profilePic = view.findViewById(R.id.profile_pic);
+        btnMyConnections = view.findViewById(R.id.btn_my_connections);
 
         sharedPrefs = new MySharedprefsClass(requireContext());
         String username = sharedPrefs.getStringValue("username");
@@ -60,6 +62,11 @@ public class ProfileFragment extends Fragment {
             userRef = FirebaseDatabase.getInstance().getReference("user").child(username);
             loadUserData();
         }
+
+        btnMyConnections.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), AllConnectionsActivity.class);
+            startActivity(intent);
+        });
 
         setupViewPager();
     }

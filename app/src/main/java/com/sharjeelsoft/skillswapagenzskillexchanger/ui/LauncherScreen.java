@@ -31,8 +31,13 @@ public class LauncherScreen extends AppCompatActivity {
         context = getApplicationContext();
         loginprefsClass = new MySharedprefsClass(context);
 
-
         new Handler().postDelayed(this::checkUserProgress, 2000);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     private void checkUserProgress() {
@@ -65,14 +70,14 @@ public class LauncherScreen extends AppCompatActivity {
 
                         switch (stage) {
                             case "CNIC_PENDING":
-                                Intent cnicIntent = new Intent(LauncherScreen.this, ActivityCNICVarification.class);
+                                Intent cnicIntent = createBaseIntent(ActivityCNICVarification.class);
                                 cnicIntent.putExtra("username", username);
                                 cnicIntent.putExtra("fullName", snapshot.child("fullName").getValue(String.class));
                                 startActivity(cnicIntent);
                                 finish();
                                 break;
                             case "DATA_PENDING":
-                                Intent dataIntent = new Intent(LauncherScreen.this, DataCllectionActivity.class);
+                                Intent dataIntent = createBaseIntent(DataCllectionActivity.class);
                                 dataIntent.putExtra("username", username);
                                 startActivity(dataIntent);
                                 finish();
@@ -83,7 +88,7 @@ public class LauncherScreen extends AppCompatActivity {
                                 for (DataSnapshot child : snapshot.child("teachingSkills").getChildren()) {
                                     teaching.add(String.valueOf(child.getValue()));
                                 }
-                                Intent skillsIntent = new Intent(LauncherScreen.this, SkillSelectionActivity.class);
+                                Intent skillsIntent = createBaseIntent(SkillSelectionActivity.class);
                                 skillsIntent.putExtra("username", username);
                                 skillsIntent.putStringArrayListExtra("teachingSkills", teaching);
                                 startActivity(skillsIntent);
@@ -96,19 +101,16 @@ public class LauncherScreen extends AppCompatActivity {
                                 navigateTo(MainActivity.class);
                                 break;
                             default:
-                                // Use the unified check for unrecognized stages
                                 handleStatusBasedNavigation(isLogin);
                                 break;
                         }
                     } else {
-                        // User data doesn't exist in Firebase, check local status
                         handleStatusBasedNavigation(isLogin);
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    // Firebase error, fallback to local status
                     handleStatusBasedNavigation(isLogin);
                 }
             });
@@ -117,17 +119,12 @@ public class LauncherScreen extends AppCompatActivity {
         }
     }
 
-    /**
-     * Unified navigation logic based on the isLogin preference.
-     * This ensures the "check" works correctly when Firebase data is missing or corrupted.
-     */
     private void handleStatusBasedNavigation(String isLogin) {
         if (isLogin.equals("new_user")) {
             navigateTo(SignUpActivity.class);
         } else if (isLogin.equals("signed_up")) {
             navigateTo(LoginActivity.class);
         } else if (isLogin.equals("logged_in")) {
-            // If already logged in but stage is unknown, go to Main
             navigateTo(MainActivity.class);
         } else if (isLogin.equals("admin_in")) {
             navigateTo(AdminMainActivity.class);
@@ -136,13 +133,16 @@ public class LauncherScreen extends AppCompatActivity {
         }
     }
 
-    private void navigateTo(Class<?> target) {
+    private Intent createBaseIntent(Class<?> target) {
         Intent intent = new Intent(LauncherScreen.this, target);
-        // Pass notification extras if any
         if (getIntent().hasExtra("navigate_to")) {
             intent.putExtra("navigate_to", getIntent().getStringExtra("navigate_to"));
         }
-        startActivity(intent);
+        return intent;
+    }
+
+    private void navigateTo(Class<?> target) {
+        startActivity(createBaseIntent(target));
         finish();
     }
 }

@@ -20,9 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
+import com.sharjeelsoft.skillswapagenzskillexchanger.auth.FCMV1Helper;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.HelperClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import com.sharjeelsoft.skillswapagenzskillexchanger.models.MatchRequestAdapter;
+import com.sharjeelsoft.skillswapagenzskillexchanger.models.NotificationModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +42,9 @@ public class MatchRequestsFragment extends Fragment {
 
     private DatabaseReference usersRef;
     private String currentUsername;
+    private String currentUserFullName;
     private MySharedprefsClass sharedPrefs;
+    private FCMV1Helper fcmv1Helper;
 
     @Nullable
     @Override
@@ -55,10 +59,26 @@ public class MatchRequestsFragment extends Fragment {
         sharedPrefs = new MySharedprefsClass(requireContext());
         currentUsername = sharedPrefs.getStringValue("username");
         usersRef = FirebaseDatabase.getInstance().getReference("user");
+        fcmv1Helper = new FCMV1Helper(requireContext());
 
+        loadCurrentUserDetails();
         loadMatchRequests();
 
         return view;
+    }
+
+    private void loadCurrentUserDetails() {
+        if (currentUsername == null || currentUsername.equals("new_user")) return;
+        usersRef.child(currentUsername).child("fullName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    currentUserFullName = snapshot.getValue(String.class);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     private void loadMatchRequests() {
@@ -80,7 +100,15 @@ public class MatchRequestsFragment extends Fragment {
 
                     for (DataSnapshot requestSnapshot : snapshot.getChildren()) {
                         String senderUsername = requestSnapshot.getKey();
-                        Long timestamp = requestSnapshot.getValue(Long.class);
+                        
+                        // Fix for crash: Handle both primitive Long and Map structure
+                        Long timestamp = 0L;
+                        Object val = requestSnapshot.getValue();
+                        if (val instanceof Long) {
+                            timestamp = (Long) val;
+                        } else if (requestSnapshot.hasChild("timestamp")) {
+                            timestamp = requestSnapshot.child("timestamp").getValue(Long.class);
+                        }
                         
                         if (senderUsername != null) {
                             requestTimestamps.put(senderUsername, timestamp);
@@ -143,7 +171,9 @@ public class MatchRequestsFragment extends Fragment {
 
     private void acceptRequest(HelperClass sender) {
         String senderUsername = sender.getUsername();
+        String senderFcmToken = sender.getFcmToken();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        long timestamp = System.currentTimeMillis();
 
         Map<String, Object> updates = new HashMap<>();
         // Add to connections
@@ -154,9 +184,30 @@ public class MatchRequestsFragment extends Fragment {
         updates.put("user/" + currentUsername + "/matchRequests/received/" + senderUsername, null);
         updates.put("user/" + senderUsername + "/matchRequests/sent/" + currentUsername, null);
 
+        // Prepare Notification for the original sender
+        String notiId = db.child("user").child(senderUsername).child("notifications").push().getKey();
+        String message = "Your match request has been accepted by " + (currentUserFullName != null ? currentUserFullName : currentUsername);
+        NotificationModel notification = new NotificationModel(
+                notiId,
+                "Match Request Accepted",
+                message,
+                currentUsername,
+                timestamp,
+                "match_accepted"
+        );
+
+        if (notiId != null) {
+            updates.put("user/" + senderUsername + "/notifications/" + notiId, notification);
+        }
+
         db.updateChildren(updates).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(getContext(), "Connected with " + sender.getFullName(), Toast.LENGTH_SHORT).show();
+                
+                // Trigger Real-time Push Notification via FCM V1
+                if (senderFcmToken != null && !senderFcmToken.isEmpty()) {
+                    fcmv1Helper.sendNotification(senderFcmToken, "Match Request Accepted", message, "alerts");
+                }
             }
         });
     }

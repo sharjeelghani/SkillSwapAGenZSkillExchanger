@@ -317,7 +317,7 @@ public class SignUpActivity extends AppCompatActivity {
         HelperClass helperClass = new HelperClass(userName, FullName, Email, Password, Contact, Dateofbirth, country);
         // Stage 1: Signed Up -> Moving to CNIC
         helperClass.setSignupStage("CNIC_PENDING");
-        helperClass.setSignedUp(true);
+        helperClass.setIsSignedUp(true);
 
         references.child(userName).setValue(helperClass).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -343,6 +343,16 @@ public class SignUpActivity extends AppCompatActivity {
         if (userName.isEmpty()) {
             username.setError("User name is required");
             username.requestFocus();
+            return false;
+        }
+        if (Pattern.compile("[A-Z]").matcher(userName).find()) {
+            password.setError("Username must contain only small letters");
+            password.requestFocus();
+            return false;
+        }
+        if (!Pattern.compile("^[a-z0-9_]*$").matcher(userName).matches()) {
+            password.setError("Username cannot contain symbols except underscore (_)");
+            password.requestFocus();
             return false;
         }
         if (FullName.isEmpty()) {
