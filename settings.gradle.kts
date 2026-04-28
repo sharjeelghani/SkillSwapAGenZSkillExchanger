@@ -20,6 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-
 rootProject.name = "SkillSwapAGenZSkillExchanger"
 include(":app")
