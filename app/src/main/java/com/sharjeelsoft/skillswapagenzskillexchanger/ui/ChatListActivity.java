@@ -63,7 +63,6 @@ public class ChatListActivity extends AppCompatActivity {
             timeUpdateHandler.postDelayed(this, 60000); // Update every minute
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

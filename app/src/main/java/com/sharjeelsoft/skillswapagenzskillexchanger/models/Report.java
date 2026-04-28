@@ -9,7 +9,6 @@ public class Report {
     private String additionalDetails;
     private long timestamp;
 
-
     @Exclude
     private int reportCount;
 

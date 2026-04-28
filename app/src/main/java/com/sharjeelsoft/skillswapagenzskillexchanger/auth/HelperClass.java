@@ -121,7 +121,6 @@ public class HelperClass {
 
     public Map<String, Object> getNotifications() { return notifications; }
     public void setNotifications(Map<String, Object> notifications) { this.notifications = notifications; }
-
     public Map<String, Object> getAllConnections() { return allConnections; }
     public void setAllConnections(Map<String, Object> allConnections) { this.allConnections = allConnections; }
 

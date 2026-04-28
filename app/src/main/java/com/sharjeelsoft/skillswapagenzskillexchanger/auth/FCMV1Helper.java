@@ -26,7 +26,6 @@ public class FCMV1Helper {
     private static final String TAG = "FCMV1Helper";
     private static final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
     private static final String TOKEN_SERVER_URL = "https://oauth2.googleapis.com/token";
-
     private final Context context;
     private String accessToken;
     private long expireTime;

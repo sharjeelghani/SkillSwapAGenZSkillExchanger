@@ -138,7 +138,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
-
     private String getAggregatedMessage(String senderUsername, String newMessage) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String history = prefs.getString(senderUsername, "");

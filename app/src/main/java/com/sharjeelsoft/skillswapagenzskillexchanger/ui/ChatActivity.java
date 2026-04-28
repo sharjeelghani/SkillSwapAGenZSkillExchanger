@@ -65,7 +65,6 @@ public class ChatActivity extends AppCompatActivity {
             finish();
             return;
         }
-
         MySharedprefsClass sharedPrefs = new MySharedprefsClass(this);
         currentUsername = sharedPrefs.getStringValue("username");
         chatId = getChatId(currentUsername, targetUsername);

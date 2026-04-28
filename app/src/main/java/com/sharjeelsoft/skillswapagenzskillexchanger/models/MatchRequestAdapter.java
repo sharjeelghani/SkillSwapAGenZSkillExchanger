@@ -31,7 +31,6 @@ public class MatchRequestAdapter extends RecyclerView.Adapter<MatchRequestAdapte
         void onConfirm(HelperClass user);
         void onDelete(HelperClass user);
     }
-
     public MatchRequestAdapter(List<HelperClass> userList, Map<String, Long> timestamps, Context context, OnActionClickListener listener) {
         this.userList = userList;
         this.timestamps = timestamps;

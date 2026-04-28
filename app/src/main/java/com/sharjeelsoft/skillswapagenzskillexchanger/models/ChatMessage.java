@@ -9,7 +9,6 @@ public class ChatMessage {
     private boolean delivered;
 
     public ChatMessage() { } // required for Firebase
-
     public ChatMessage(String id, String text, String senderId, long timestamp) {
         this.id = id;
         this.text = text;

@@ -11,7 +11,6 @@ public class NotificationModel {
 
     public NotificationModel() {
     }
-
     public NotificationModel(String id, String title, String message, String senderId, long timestamp, String type) {
         this.id = id;
         this.title = title;

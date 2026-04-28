@@ -26,7 +26,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.messages = messages;
         this.currentUserId = currentUserId;
     }
-
     @Override
     public int getItemViewType(int position) {
         ChatMessage msg = messages.get(position);

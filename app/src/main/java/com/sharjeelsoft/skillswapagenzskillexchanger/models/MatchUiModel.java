@@ -16,7 +16,6 @@ public class MatchUiModel {
         this.secondarySkill = secondarySkill;
         this.photoRes = photoRes;
     }
-
     public String getName() {
         return name;
     }
