@@ -370,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+
             String token = task.getResult();
             FirebaseDatabase.getInstance().getReference("user")
                     .child(username).child("fcmToken").setValue(token);
