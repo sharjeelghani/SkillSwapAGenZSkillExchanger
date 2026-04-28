@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             return;
         }
-
         setContentView(R.layout.activity_login);
         loginemail=findViewById(R.id.et_email);
         signupRedirectText=findViewById(R.id.btn_signup);

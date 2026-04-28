@@ -211,7 +211,6 @@ public class MatchRequestsFragment extends Fragment {
             }
         });
     }
-
     private void deleteRequest(HelperClass sender) {
         String senderUsername = sender.getUsername();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
