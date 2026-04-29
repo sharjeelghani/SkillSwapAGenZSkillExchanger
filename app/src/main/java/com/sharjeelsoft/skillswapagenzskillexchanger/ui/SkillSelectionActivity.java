@@ -22,7 +22,6 @@ public class SkillSelectionActivity extends AppCompatActivity {
     private ArrayList<String> passedSkills;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

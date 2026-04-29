@@ -45,6 +45,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private FCMV1Helper fcmv1Helper;
     private HelperClass viewedUser;
 
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {

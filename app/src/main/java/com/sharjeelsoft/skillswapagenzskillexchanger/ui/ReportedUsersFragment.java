@@ -34,6 +34,7 @@ public class ReportedUsersFragment extends Fragment implements ReportedUsersAdap
     private List<Report> reportList;
     private DatabaseReference reportsRef;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

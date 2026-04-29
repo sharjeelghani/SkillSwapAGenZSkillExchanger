@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 
 public class Help_Support_Activity extends AppCompatActivity {
-
     private LinearLayout faq1, faq2, faq3, faq4, faq5;
     private TextView ans1, ans2, ans3, ans4, ans5;
     private View emailButton, chatButton;

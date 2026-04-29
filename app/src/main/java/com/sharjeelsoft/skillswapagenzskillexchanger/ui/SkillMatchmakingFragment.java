@@ -43,7 +43,6 @@ public class SkillMatchmakingFragment extends Fragment {
     private List<String> receivedRequests = new ArrayList<>();
     private List<String> connections = new ArrayList<>();
     private int currentIndex = 0;
-
     private TextView tvName, tvRequestStatus;
     private ImageView imgAvatar;
     private ChipGroup cgTeachingMatches, cgLearningMatches;

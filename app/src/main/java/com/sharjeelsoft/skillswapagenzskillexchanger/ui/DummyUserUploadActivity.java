@@ -18,7 +18,6 @@ import java.util.Map;
 public class DummyUserUploadActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

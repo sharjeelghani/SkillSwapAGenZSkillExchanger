@@ -6,7 +6,6 @@ public class MatchUiModel {
     private final String primarySkill;
     private final String secondarySkill;
     private final int photoRes; // drawable resource id
-
     public MatchUiModel(String name,
                         String primarySkill,
                         String secondarySkill,

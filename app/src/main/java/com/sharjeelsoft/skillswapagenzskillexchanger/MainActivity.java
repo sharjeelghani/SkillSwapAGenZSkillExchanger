@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     public ViewPager viewPager;
     private View contentView;
     private TabLayout tabLayout;
-
     public LottieAnimationView drawer_icon, btn_search_header;
     public ImageView btn_messages_header;
     public View dotUnreadMessages;

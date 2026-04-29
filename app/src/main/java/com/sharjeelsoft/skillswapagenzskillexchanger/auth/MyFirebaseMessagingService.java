@@ -151,7 +151,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String getAggregatedMessage(String senderUsername, String newMessage) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String history = prefs.getString(senderUsername, "");
-        
         if (history.isEmpty()) {
             history = newMessage;
         } else {

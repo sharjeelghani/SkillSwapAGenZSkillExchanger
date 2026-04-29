@@ -16,6 +16,7 @@ public class SettingsActivity extends AppCompatActivity {
     LinearLayout rowAccount, rowHelp;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

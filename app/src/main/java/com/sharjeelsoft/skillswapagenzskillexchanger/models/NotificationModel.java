@@ -8,7 +8,6 @@ public class NotificationModel {
     private long timestamp;
     private String type; // e.g., "match_request"
     private boolean read;
-
     public NotificationModel() {
     }
     public NotificationModel(String id, String title, String message, String senderId, long timestamp, String type) {

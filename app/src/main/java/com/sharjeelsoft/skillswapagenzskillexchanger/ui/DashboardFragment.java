@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
-
     private TextView tvMySkillsCount;
     private TextView tvMatchesCount;
     private TextView tvSessionsCount;

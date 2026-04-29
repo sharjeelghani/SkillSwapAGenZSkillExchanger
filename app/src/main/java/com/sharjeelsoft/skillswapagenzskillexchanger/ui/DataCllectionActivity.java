@@ -32,7 +32,6 @@ import java.util.Map;
 
 public class DataCllectionActivity extends AppCompatActivity {
     private static final String TAG = "UserOnboarding";
-
     private RadioGroup rgGender;
     private ChipGroup cgTeaching, cgLearning;
     private EditText etQualifications, etCurrentJob, etExperience;

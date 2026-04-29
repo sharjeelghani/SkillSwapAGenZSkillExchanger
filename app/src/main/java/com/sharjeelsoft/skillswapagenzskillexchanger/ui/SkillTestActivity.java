@@ -40,6 +40,7 @@ import okhttp3.Response;
 
 public class SkillTestActivity extends AppCompatActivity {
 
+
     private static final String TAG = "SkillTestActivity";
 
     private String API_KEY = "";

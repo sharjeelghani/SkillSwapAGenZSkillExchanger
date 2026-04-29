@@ -33,6 +33,7 @@ public class SessionsFragment extends Fragment {
     private DatabaseReference sessionsRef;
     private String currentUsername;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

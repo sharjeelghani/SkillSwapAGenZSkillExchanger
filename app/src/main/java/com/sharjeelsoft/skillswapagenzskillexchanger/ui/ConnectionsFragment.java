@@ -313,7 +313,6 @@ public class ConnectionsFragment extends Fragment {
             }
         });
     }
-
     private String getChatId(String u1, String u2) {
         return u1.compareTo(u2) < 0 ? u1 + "_" + u2 : u2 + "_" + u1;
     }

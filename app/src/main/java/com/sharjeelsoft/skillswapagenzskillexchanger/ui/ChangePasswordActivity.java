@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +23,7 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.auth.MySharedprefsClass;
 import java.util.regex.Pattern;
 
 public class ChangePasswordActivity extends AppCompatActivity {
+
 
     private EditText etCurrent, etNew, etMatch;
     private ImageView ivEyeCurrent, ivEyeNew, ivEyeMatch;

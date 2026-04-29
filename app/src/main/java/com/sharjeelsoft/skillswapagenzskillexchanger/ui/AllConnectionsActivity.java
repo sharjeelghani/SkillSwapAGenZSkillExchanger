@@ -35,7 +35,6 @@ public class AllConnectionsActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ConnectionAdapter adapter;
     private List<HelperClass> connectionList = new ArrayList<>();
-    
     private DatabaseReference usersRef;
     private String currentUsername;
     private MySharedprefsClass sharedPrefs;

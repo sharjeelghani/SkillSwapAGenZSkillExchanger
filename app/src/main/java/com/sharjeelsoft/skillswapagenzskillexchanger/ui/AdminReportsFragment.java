@@ -13,7 +13,6 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.R;
 public class AdminReportsFragment extends Fragment {
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

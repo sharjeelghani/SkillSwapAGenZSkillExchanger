@@ -10,6 +10,7 @@ public class SessionModel {
     private String status; // PENDING, COMPLETED, MISSED
     private long scheduledTimestamp;
 
+
     public SessionModel() {
     }
 

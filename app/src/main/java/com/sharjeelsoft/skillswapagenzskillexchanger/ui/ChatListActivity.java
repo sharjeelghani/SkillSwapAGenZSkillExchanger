@@ -52,7 +52,6 @@ public class ChatListActivity extends AppCompatActivity {
     private Set<String> historyUsers = new HashSet<>();
     private Map<String, Long> userClearedAtMap = new HashMap<>();
     private Map<String, DataSnapshot> lastChatSnapshots = new HashMap<>();
-
     private Handler timeUpdateHandler = new Handler();
     private Runnable timeUpdateRunnable = new Runnable() {
         @Override

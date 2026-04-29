@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private MySharedprefsClass sharedPrefs;
     private DatabaseReference userRef;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

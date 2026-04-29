@@ -26,6 +26,7 @@ public class ReportedUsersAdapter extends RecyclerView.Adapter<ReportedUsersAdap
         void onDeleteUser(Report report);
         void onSendWarning(Report report);
     }
+
     public ReportedUsersAdapter(List<Report> reportList, OnReportActionListener actionListener) {
         this.reportList = reportList;
         this.actionListener = actionListener;

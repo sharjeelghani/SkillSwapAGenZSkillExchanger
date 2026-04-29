@@ -21,7 +21,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ChatMessage> messages;
     private final String currentUserId;
-
     public ChatAdapter(List<ChatMessage> messages, String currentUserId) {
         this.messages = messages;
         this.currentUserId = currentUserId;

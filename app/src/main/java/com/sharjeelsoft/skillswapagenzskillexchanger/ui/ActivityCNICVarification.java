@@ -42,7 +42,6 @@ public class ActivityCNICVarification extends AppCompatActivity {
     private static final int PICK_CNIC_FRONT = 101;
     private static final int PICK_CNIC_BACK = 102;
     private static final int CAPTURE_SELFIE = 103;
-
     private LinearLayout cardCnicFront, cardCnicBack, cardSelfie;
     private ImageView imgProfile;
     private TextView btnCapture, btnVerify, tvName;

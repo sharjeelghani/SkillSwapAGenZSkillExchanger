@@ -7,7 +7,6 @@ public class ChatMessage {
     private long timestamp;
     private boolean read;
     private boolean delivered;
-
     public ChatMessage() { } // required for Firebase
     public ChatMessage(String id, String text, String senderId, long timestamp) {
         this.id = id;

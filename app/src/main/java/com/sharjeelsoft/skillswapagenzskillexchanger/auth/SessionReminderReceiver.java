@@ -21,7 +21,6 @@ public class SessionReminderReceiver extends BroadcastReceiver {
 
         showNotification(context, title, otherUserName);
     }
-
     private void showNotification(Context context, String title, String otherUserName) {
         String channelId = "session_reminder_channel";
         String message = "Your session '" + title + "' with " + otherUserName + " is just after 30 minutes make sure everything is ready!";

@@ -37,7 +37,6 @@ public class FCMV1Helper {
     public void sendNotification(String targetToken, String title, String body, String navigateTo) {
         sendInternal(targetToken, title, body, navigateTo, null, null, false);
     }
-
     public void sendChatNotification(String targetToken, String title, String body, String navigateTo, String messageId, String senderUsername) {
         // For chats, we use data-only payload to ensure onMessageReceived is called even in background
         // this allows us to mark the message as "delivered" in the database.

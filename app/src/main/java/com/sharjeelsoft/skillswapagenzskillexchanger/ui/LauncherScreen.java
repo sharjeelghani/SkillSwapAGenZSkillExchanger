@@ -33,6 +33,7 @@ public class LauncherScreen extends AppCompatActivity {
 
         new Handler().postDelayed(this::checkUserProgress, 2000);
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

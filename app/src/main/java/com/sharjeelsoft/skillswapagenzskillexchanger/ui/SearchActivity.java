@@ -35,7 +35,6 @@ public class SearchActivity extends AppCompatActivity {
     private TextView tvNoUserFound;
     private ProgressBar progressBar;
     private ImageView btnBack;
-    
     private DatabaseReference usersRef;
     private List<HelperClass> matchedUsersList = new ArrayList<>();
     private List<String> myLearningInterests = new ArrayList<>();

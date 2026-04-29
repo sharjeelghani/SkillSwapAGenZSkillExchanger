@@ -19,7 +19,6 @@ public class AnalyticsService {
     private static AnalyticsService instance;
     private String currentUsername;
     private long sessionStartTime;
-
     private AnalyticsService(Context context) {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         analyticsRef = FirebaseDatabase.getInstance().getReference("analytics_data");

@@ -16,6 +16,7 @@ public class Report_User_Activity extends AppCompatActivity {
     private TextView additionalLabel;
     private EditText detailsInput;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

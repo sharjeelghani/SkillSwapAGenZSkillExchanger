@@ -53,7 +53,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private String currentUsername;
     private HelperClass currentUserData;
     private boolean isDataChanged = false;
-    
     private Uri imageUri;
     private ProgressDialog progressDialog;
     

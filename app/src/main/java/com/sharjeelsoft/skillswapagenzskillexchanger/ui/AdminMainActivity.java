@@ -28,6 +28,7 @@ public class AdminMainActivity extends AppCompatActivity {
     MySharedprefsClass AdminprefsClassLog;
     public LinearLayout logout_admin;
     public int fragPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

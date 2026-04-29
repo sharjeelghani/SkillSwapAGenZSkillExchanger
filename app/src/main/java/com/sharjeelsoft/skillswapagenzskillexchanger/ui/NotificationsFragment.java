@@ -30,6 +30,7 @@ import java.util.List;
 
 public class NotificationsFragment extends Fragment {
 
+
     private RecyclerView rvNotifications;
     private TextView tvNoNotifications, tvClearAll;
     private ProgressBar progressBar;

@@ -50,7 +50,6 @@ public class ProfileUpdateActivity extends AppCompatActivity {
     private DatabaseReference userRef;
     private String currentUsername;
     private HelperClass currentUserData;
-    
     private Uri imageUri;
     private ProgressDialog progressDialog;
 
