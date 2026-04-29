@@ -45,6 +45,7 @@ import com.sharjeelsoft.skillswapagenzskillexchanger.models.ChatMessage;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ActivityCNICVarification;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ChatListActivity;
+import com.sharjeelsoft.skillswapagenzskillexchanger.ui.ConnectionsFragment;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.DashboardFragment;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.DataCllectionActivity;
 import com.sharjeelsoft.skillswapagenzskillexchanger.ui.Help_Support_Activity;
@@ -226,15 +227,12 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean hasUnread = false;
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    // Logic: Assuming "read" field in notification. If not exist, any new notification counts as unread.
-                    // To properly implement "disappears when fragment is opened", we track the last time user opened it.
-                    // For now, let's assume existence of un-deleted notifications for simple visibility.
                     if (!ds.hasChild("read") || Boolean.FALSE.equals(ds.child("read").getValue(Boolean.class))) {
                         hasUnread = true;
                         break;
                     }
                 }
-                updateTabBadge(2, hasUnread);
+                updateTabBadge(3, hasUnread);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -252,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                updateTabBadge(3, hasNew);
+                updateTabBadge(4, hasNew);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -269,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     private void markNotificationsAsRead() {
         notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -325,9 +324,9 @@ public class MainActivity extends AppCompatActivity {
             String destination = intent.getStringExtra("navigate_to");
             if ("requests".equals(destination)) {
                 if (viewPager != null) {
-                    viewPager.setCurrentItem(3);
+                    viewPager.setCurrentItem(4);
                 } else {
-                    fragPosition = 3;
+                    fragPosition = 4;
                 }
             } else if (destination != null && destination.startsWith("chat_")) {
                 String senderUsername = destination.replace("chat_", "");
@@ -377,8 +376,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SetUpPager() {
-        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.notification_sel, R.drawable.ic_matches, R.drawable.user_sel};
-        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.notification_unsel, R.drawable.ic_matches_unsel, R.drawable.user_unsel};
+        int[] SELECTED_ICONS = {R.drawable.home_sel, R.drawable.dashboard_sel, R.drawable.ic_users, R.drawable.notification_sel, R.drawable.ic_matches, R.drawable.user_sel};
+        int[] UNSELECTED_ICONS = {R.drawable.home_unsel, R.drawable.dashboard_unsel, R.drawable.ic_users, R.drawable.notification_unsel, R.drawable.ic_matches_unsel, R.drawable.user_unsel};
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
@@ -421,8 +420,8 @@ public class MainActivity extends AppCompatActivity {
                 fragPosition = position;
                 
                 // Disappear dots when fragments are opened
-                if (position == 2) markNotificationsAsRead();
-                if (position == 3) markMatchRequestsAsRead();
+                if (position == 3) markNotificationsAsRead();
+                if (position == 4) markMatchRequestsAsRead();
 
                 View customView = tab.getCustomView();
                 if (customView != null) {
@@ -459,16 +458,17 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setOffscreenPageLimit(6);
         tabLayout.getTabAt(fragPosition).select();
     }
 
     private String getTabTitle(int position) {
         switch (position) {
             case 1: return "Dashboard";
-            case 2: return "Alerts";
-            case 3: return "Requests";
-            case 4: return "Profile";
+            case 2: return "Connections";
+            case 3: return "Alerts";
+            case 4: return "Requests";
+            case 5: return "Profile";
             default: return "Home";
         }
     }
@@ -478,13 +478,14 @@ public class MainActivity extends AppCompatActivity {
         @NonNull @Override public Fragment getItem(int position) {
             switch (position) {
                 case 1: return new DashboardFragment();
-                case 2: return new NotificationsFragment();
-                case 3: return new MatchRequestsFragment();
-                case 4: return new ProfileFragment();
+                case 2: return new ConnectionsFragment();
+                case 3: return new NotificationsFragment();
+                case 4: return new MatchRequestsFragment();
+                case 5: return new ProfileFragment();
                 default: return new SkillMatchmakingFragment();
             }
         }
-        @Override public int getCount() { return 5; }
+        @Override public int getCount() { return 6; }
     }
 
     private void setupDrawerClicks() {

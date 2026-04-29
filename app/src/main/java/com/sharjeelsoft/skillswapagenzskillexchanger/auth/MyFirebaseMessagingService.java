@@ -39,9 +39,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String messageId = null;
         String senderUsername = null;
 
+        // --- ANDROID VERSION CHECK FOR PAYLOAD TYPE ---
+        // For Android 13+ (Tiramisu), we prioritize notification payload to ensure the system handles permissions correctly.
+        // For Android 12 and below, we rely on the data payload for full background control.
+
+        if (remoteMessage.getNotification() != null) {
+            title = remoteMessage.getNotification().getTitle();
+            body = remoteMessage.getNotification().getBody();
+        }
+
         if (remoteMessage.getData().size() > 0) {
-            title = remoteMessage.getData().get("title");
-            body = remoteMessage.getData().get("body");
+            if (title == null) title = remoteMessage.getData().get("title");
+            if (body == null) body = remoteMessage.getData().get("body");
             navigateTo = remoteMessage.getData().get("navigate_to");
             messageId = remoteMessage.getData().get("message_id");
             senderUsername = remoteMessage.getData().get("sender_username");
@@ -70,10 +79,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(String title, String message, String navigateTo, String senderUsername) {
-        // --- DEVICE VERSION CHECK AS REQUESTED ---
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13 and above
+        // --- DEVICE VERSION CHECK FOR ANDROID 13+ PERMISSIONS ---
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                Log.w(TAG, "Notification skipped: POST_NOTIFICATIONS permission not granted on Android 13+");
+                Log.w(TAG, "Notification skipped: Permission denied on Android 13+");
                 return;
             }
         }
@@ -127,7 +136,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        // CHANNEL CREATION (Version check for Oreo and above)
+        // --- CHANNEL CREATION (Android 8.0+) ---
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Skill Swap Alerts", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Notifications for match requests and messages");
@@ -138,6 +147,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
+
     private String getAggregatedMessage(String senderUsername, String newMessage) {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String history = prefs.getString(senderUsername, "");

@@ -14,20 +14,23 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp">
+
         <FrameLayout
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_gravity="center"
-        android:background="@drawable/profile_ring"
-        android:padding="4dp">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/img_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/man"
-            app:shapeAppearanceOverlay="@style/CircleImageView" />
-    </FrameLayout>
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="@drawable/profile_ring"
+            android:padding="3dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_profile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/man"
+                app:shapeAppearanceOverlay="@style/CircleImageView" />
+        </FrameLayout>
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
@@ -44,11 +47,23 @@
             android:id="@+id/btn_view_profile"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/bg_btn_view_profile"
             android:gravity="center"
             android:text="View Profile"
             android:textColor="#8BFDE5"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_schedule_session"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_btn_connect"
+            android:gravity="center"
+            android:text="Schedule Session"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
             android:textStyle="bold" />
 

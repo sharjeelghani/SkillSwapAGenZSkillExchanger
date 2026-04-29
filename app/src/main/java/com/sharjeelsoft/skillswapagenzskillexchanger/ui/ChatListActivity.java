@@ -63,6 +63,7 @@ public class ChatListActivity extends AppCompatActivity {
             timeUpdateHandler.postDelayed(this, 60000); // Update every minute
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,7 +177,6 @@ public class ChatListActivity extends AppCompatActivity {
                 long clearedAt = snapshot.exists() ? snapshot.getValue(Long.class) : 0;
                 userClearedAtMap.put(otherUser, clearedAt);
                 
-                // Real-time update: If metadata changes (chat cleared), re-process existing snapshot
                 if (lastChatSnapshots.containsKey(otherUser)) {
                     processChatData(otherUser, lastChatSnapshots.get(otherUser));
                 }
@@ -229,10 +229,38 @@ public class ChatListActivity extends AppCompatActivity {
         Map<String, Object> statusUpdates = new HashMap<>();
 
         for (DataSnapshot ds : chatSnapshot.getChildren()) {
-            ChatMessage msg = ds.getValue(ChatMessage.class);
-            if (msg != null) {
-                // FILTER: Only consider messages newer than the last clear time
-                if (msg.getTimestamp() > clearedAt) {
+            if (ds.hasChild("isSessionRequest")) {
+                // Handle Session Request Preview
+                Long timestamp = ds.child("timestamp").getValue(Long.class);
+                if (timestamp != null && timestamp > clearedAt) {
+                    hasVisibleMessages = true;
+                    lastTime = timestamp;
+                    String senderId = ds.child("senderId").getValue(String.class);
+                    String status = ds.child("status").getValue(String.class);
+                    boolean read = ds.hasChild("read") && Boolean.TRUE.equals(ds.child("read").getValue(Boolean.class));
+                    
+                    if (currentUsername.equals(senderId)) {
+                        lastMsgText = "You sent a Session Request";
+                        isLastMsgFromMe = true;
+                        isRead = read;
+                    } else {
+                        isLastMsgFromMe = false;
+                        if ("PENDING".equals(status)) {
+                            lastMsgText = "You have a Session Request!";
+                        } else {
+                            lastMsgText = "Session Request " + status.toLowerCase();
+                        }
+                        if (!read) unreadCount++;
+                        
+                        if (ds.hasChild("delivered") && !Boolean.TRUE.equals(ds.child("delivered").getValue(Boolean.class))) {
+                            // statusUpdates.put(ds.getKey() + "/delivered", true); // handled in background by FCM service
+                        }
+                    }
+                }
+            } else {
+                // Handle normal ChatMessage
+                ChatMessage msg = ds.getValue(ChatMessage.class);
+                if (msg != null && msg.getTimestamp() > clearedAt) {
                     hasVisibleMessages = true;
                     lastTime = msg.getTimestamp();
                     if (msg.getSenderId().equals(currentUsername)) {
@@ -252,7 +280,6 @@ public class ChatListActivity extends AppCompatActivity {
             }
         }
 
-        // Real-time revert: If no messages are newer than clearedAt, show default prompt
         if (!hasVisibleMessages) {
             lastMsgText = "You can now chat with each other!";
             lastTime = 0;

@@ -137,9 +137,17 @@ public class DashboardFragment extends Fragment {
                 }
                 tvMatchesCount.setText(String.valueOf(matchCount));
 
-                // 3. Sessions Count
-                // Logic for upcoming sessions can be added here once session data structure is clear
-                // For now, keeping it as is or setting to 0 if not implemented.
+                // 3. Upcomming Sessions Count (Pending sessions only)
+                int pendingSessionsCount = 0;
+                if (meSnapshot.hasChild("sessions")) {
+                    for (DataSnapshot sessionSnap : meSnapshot.child("sessions").getChildren()) {
+                        String status = sessionSnap.child("status").getValue(String.class);
+                        if ("PENDING".equals(status)) {
+                            pendingSessionsCount++;
+                        }
+                    }
+                }
+                tvSessionsCount.setText(String.valueOf(pendingSessionsCount));
             }
 
             @Override

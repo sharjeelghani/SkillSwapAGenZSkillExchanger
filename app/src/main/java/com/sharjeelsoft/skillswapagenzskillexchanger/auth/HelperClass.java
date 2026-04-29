@@ -25,6 +25,7 @@ public class HelperClass {
     String profileImageUrl;
     List<String> passedSkills;
     String fcmToken;
+    int reportCount;
     
     // Complex fields mapping
     Map<String, Object> matchRequests;
@@ -45,7 +46,6 @@ public class HelperClass {
     public void setCountry(Object country) { this.Country = country == null ? null : String.valueOf(country); }
     
     public String getPassword() { return password; }
-
     public void setPassword(Object password) { this.password = password == null ? null : String.valueOf(password); }
     
     public String getContact() { return contact; }
@@ -113,14 +113,15 @@ public class HelperClass {
     public String getFcmToken() { return fcmToken; }
     public void setFcmToken(Object fcmToken) { this.fcmToken = fcmToken == null ? null : String.valueOf(fcmToken); }
 
-//    public int getReportCount() { return reportCount; }
-//    public void setReportCount(int reportCount) { this.reportCount = reportCount; }
+    public int getReportCount() { return reportCount; }
+    public void setReportCount(int reportCount) { this.reportCount = reportCount; }
 
     public Map<String, Object> getMatchRequests() { return matchRequests; }
     public void setMatchRequests(Map<String, Object> matchRequests) { this.matchRequests = matchRequests; }
 
     public Map<String, Object> getNotifications() { return notifications; }
     public void setNotifications(Map<String, Object> notifications) { this.notifications = notifications; }
+
     public Map<String, Object> getAllConnections() { return allConnections; }
     public void setAllConnections(Map<String, Object> allConnections) { this.allConnections = allConnections; }
 
@@ -136,8 +137,6 @@ public class HelperClass {
         this.contact = contact;
         this.dateofbirth = dateofbirth;
         this.verified = false;
-
-        // Default stages
         this.signupStage = "CNIC_PENDING";
         this.isSignedUp = true;
         this.isCNICVerified = false;
